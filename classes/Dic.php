@@ -21,10 +21,13 @@
 
 namespace Maps;
 
+use Plib\SystemChecker;
 use Plib\View;
 
 class Dic
 {
+    public const VERSION = "1.0-dev";
+
     public static function mainCommand(): MainCommand
     {
         return new MainCommand(self::view());
@@ -35,6 +38,16 @@ class Dic
         global $pth;
         return new MapCommand(
             $pth["folder"]["plugins"] . "maps/",
+            self::view()
+        );
+    }
+
+    public static function infoCommand(): InfoCommand
+    {
+        global $pth;
+        return new InfoCommand(
+            $pth["folder"]["plugins"] . "maps/",
+            new SystemChecker(),
             self::view()
         );
     }

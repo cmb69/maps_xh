@@ -1,3 +1,8 @@
 #map {
     height: 180px;
 }
+
+/* plugin info */
+
+article.maps_plugininfo {}
+article.maps_pluginfo section.maps_syscheck {}
