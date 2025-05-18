@@ -19,16 +19,22 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Maps\Dic;
+namespace Maps;
 
-if (!defined("CMSIMPLE_XH_VERSION")) {
-    http_response_code(403);
-    exit;
-}
+use Plib\Response;
+use Plib\View;
 
-function maps(): string
+class MainCommand
 {
-    return Dic::mapCommand()()();
-}
+    private View $view;
 
-Dic::mainCommand()()();
+    public function __construct(View $view)
+    {
+        $this->view = $view;
+    }
+
+    public function __invoke(): Response
+    {
+        return Response::create()->withHjs($this->view->render("leaflet", []));
+    }
+}

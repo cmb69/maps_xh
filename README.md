@@ -55,6 +55,14 @@ The look of Maps_XH can be customized under `Stylesheet`.
 
 ## Usage
 
+To display a map on a page:
+
+    {{{maps}}}
+
+To display a map in the template:
+
+    <?=maps()?>
+
 ## Troubleshooting
 
 Report bugs and ask for support either on

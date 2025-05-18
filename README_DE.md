@@ -55,6 +55,14 @@ Das Aussehen von Maps_XH kann unter `Stylesheet` angepasst werden.
 
 ## Verwendung
 
+Um eine Landkarte auf einer Seite anzuzeigen:
+
+    {{{maps}}}
+
+Um eine Landkarte im Template anzuzeigen:
+
+    <?=maps()?>
+
 ## Fehlerbehebung
 
 Melden Sie Programmfehler und stellen Sie Supportanfragen entweder auf

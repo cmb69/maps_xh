@@ -21,6 +21,27 @@
 
 namespace Maps;
 
+use Plib\View;
+
 class Dic
 {
+    public static function mainCommand(): MainCommand
+    {
+        return new MainCommand(self::view());
+    }
+
+    public static function mapCommand(): MapCommand
+    {
+        global $pth;
+        return new MapCommand(
+            $pth["folder"]["plugins"] . "maps/",
+            self::view()
+        );
+    }
+
+    private static function view(): View
+    {
+        global $pth, $plugin_tx;
+        return new View($pth["folder"]["plugins"] . "maps/views/", $plugin_tx["maps"]);
+    }
 }

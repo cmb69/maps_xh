@@ -19,16 +19,29 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Maps\Dic;
+namespace Maps;
 
-if (!defined("CMSIMPLE_XH_VERSION")) {
-    http_response_code(403);
-    exit;
-}
+use Plib\Response;
+use Plib\View;
 
-function maps(): string
+class MapCommand
 {
-    return Dic::mapCommand()()();
-}
+    private string $pluginFolder;
 
-Dic::mainCommand()()();
+    private View $view;
+
+    public function __construct(
+        string $pluginFolder,
+        View $view
+    ) {
+        $this->pluginFolder = $pluginFolder;
+        $this->view = $view;
+    }
+
+    public function __invoke(): Response
+    {
+        return Response::create($this->view->render("map", [
+            "script" => $this->pluginFolder . "maps.js",
+        ]));
+    }
+}
