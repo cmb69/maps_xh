@@ -20,6 +20,7 @@
  */
 
 use Maps\Dic;
+use Plib\Request;
 
 if (!defined("CMSIMPLE_XH_VERSION")) {
     http_response_code(403);
@@ -28,7 +29,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
 
 function maps(): string
 {
-    return Dic::mapCommand()()();
+    return Dic::mapCommand()(Request::current())();
 }
 
 Dic::mainCommand()()();

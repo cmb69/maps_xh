@@ -4,6 +4,7 @@ namespace Maps;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeRequest;
 use Plib\View;
 
 class MapCommandTest extends TestCase
@@ -24,7 +25,24 @@ class MapCommandTest extends TestCase
 
     public function testShowsMap(): void
     {
-        $response = $this->sut()();
+        $request = new FakeRequest();
+        $response = $this->sut()($request);
         Approvals::verifyHtml($response->output());
+    }
+
+    public function testDoesNotShowPrivacyFormIfConfigured(): void
+    {
+        $this->conf["tile_privacy"] = "";
+        $request = new FakeRequest();
+        $response = $this->sut()($request);
+        $this->assertStringNotContainsString("<form", $response->output());
+    }
+
+    public function testAgreementSetsCookieAndRedirects(): void
+    {
+        $request = new FakeRequest(["post" => ["maps_agree" => "1"]]);
+        $response = $this->sut()($request);
+        $this->assertEquals(["maps_agreed", "1", 0], $response->cookie());
+        $this->assertSame("http://example.com/", $response->location());
     }
 }

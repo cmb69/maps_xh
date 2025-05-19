@@ -1,3 +1,7 @@
 
-<div id="map" data-maps-conf='{"tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>"}'></div>
 <script type="module" src="../maps.js"></script>
+<div id="map" data-maps-conf='{"tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>","loadTiles":false}'></div>
+<form method="post">
+  <p>To display the map, tile images need to be fetched from a third-party server. Do you agree?</p>
+  <button name="maps_agree" value="1">I agree!</button>
+</form>

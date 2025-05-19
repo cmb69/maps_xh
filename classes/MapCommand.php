@@ -21,6 +21,7 @@
 
 namespace Maps;
 
+use Plib\Request;
 use Plib\Response;
 use Plib\View;
 
@@ -44,20 +45,36 @@ class MapCommand
         $this->view = $view;
     }
 
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
+        if ($request->post("maps_agree")) {
+            return $this->agree($request);
+        }
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",
-            "conf" => $this->jsConf(),
+            "conf" => $this->jsConf($request),
+            "privacy" => $this->tilePrivacy($request),
         ]));
     }
 
     /** @return array<string,mixed> */
-    private function jsConf(): array
+    private function jsConf(Request $request): array
     {
         return [
             "tileUrl" => $this->conf["tile_url"],
             "tileAttribution" => $this->view->plain("tile_attribution"),
+            "loadTiles" => !$this->tilePrivacy($request),
         ];
+    }
+
+    private function tilePrivacy(Request $request): bool
+    {
+        return $this->conf["tile_privacy"] && !$request->cookie("maps_agreed");
+    }
+
+    private function agree(Request $request): Response
+    {
+        return Response::redirect($request->url()->absolute())
+            ->withCookie("maps_agreed", "1", 0);
     }
 }
