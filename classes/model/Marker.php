@@ -28,19 +28,31 @@ final class Marker
 {
     private float $latitude;
     private float $longitude;
+    private ?string $info;
+    private bool $showInfo;
 
     public static function fromXml(DOMElement $elt): self
     {
+        $info = null;
+        $showInfo = false;
+        foreach ($elt->getElementsByTagName("info") as $node) {
+            $info = $node->textContent;
+            $showInfo = $node->hasAttribute("show");
+        }
         return new self(
             (float) $elt->getAttribute("latitude"),
-            (float) $elt->getAttribute("longitude")
+            (float) $elt->getAttribute("longitude"),
+            $info,
+            $showInfo
         );
     }
 
-    public function __construct(float $latitude, float $longitude)
+    public function __construct(float $latitude, float $longitude, ?string $info, bool $showInfo)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->info = $info;
+        $this->showInfo = $showInfo;
     }
 
     public function latitude(): float
@@ -53,11 +65,30 @@ final class Marker
         return $this->longitude;
     }
 
+    public function info(): ?string
+    {
+        return $this->info;
+    }
+
+    public function showInfo(): bool
+    {
+        return $this->showInfo;
+    }
+
     public function toXml(DOMDocument $doc): DOMElement
     {
         $elt = $doc->createElement("marker");
         $elt->setAttribute("latitude", (string) $this->latitude);
         $elt->setAttribute("longitude", (string) $this->longitude);
+        $info = $doc->createElement("info");
+        if ($this->showInfo) {
+            $info->setAttribute("show", "");
+        }
+        if ($this->info !== null) {
+            $text = $doc->createTextNode($this->info);
+            $info->appendChild($text);
+        }
+        $elt->appendChild($info);
         return $elt;
     }
 }

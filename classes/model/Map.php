@@ -129,9 +129,9 @@ final class Map implements Document
         $this->maxZoom = $value;
     }
 
-    public function addMarker(float $latitude, float $longitude): Marker
+    public function addMarker(float $latitude, float $longitude, string $info, bool $showInfo): Marker
     {
-        $marker = new Marker($latitude, $longitude);
+        $marker = new Marker($latitude, $longitude, $info, $showInfo);
         $this->markers[] = $marker;
         return $marker;
     }

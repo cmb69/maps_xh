@@ -8,6 +8,12 @@
     <element name="marker">
       <attribute name="latitude"/>
       <attribute name="longitude"/>
+      <element name="info">
+        <optional>
+          <attribute name="show"/>
+        </optional>
+        <text/>
+      </element>
     </element>
   </zeroOrMore>
 </element>

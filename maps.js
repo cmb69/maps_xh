@@ -8,5 +8,9 @@ if (conf.loadTiles) {
     }).addTo(map);
 }
 for (var marker of conf.markers) {
-    L.marker([marker[0], marker[1]]).addTo(map);
+    var m = L.marker([marker[0], marker[1]]).addTo(map);
+    m.bindPopup(marker[2]);
+    if (marker[3]) {
+        m.openPopup();
+    }
 }

@@ -87,12 +87,12 @@ class MapCommand
         return $this->conf["tile_privacy"] && !$request->cookie("maps_agreed");
     }
 
-    /** @return list<array{float,float}> */
+    /** @return list<array{float,float,?string,bool}> */
     private function markerTuples(Map $map): array
     {
         $tuples = [];
         foreach ($map->markers() as $marker) {
-            $tuples[] = [$marker->latitude(), $marker->longitude()];
+            $tuples[] = [$marker->latitude(), $marker->longitude(), $marker->info(), $marker->showInfo()];
         }
         return $tuples;
     }
