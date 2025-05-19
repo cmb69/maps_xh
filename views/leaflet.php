@@ -6,8 +6,11 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
 
 /**
  * @var View $this
+ * @var string $leaflet_base
+ * @var string $js_integrity
+ * @var string $css_integrity
  */
 ?>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="<?=$this->esc($leaflet_base)?>leaflet.css" <?=$this->raw($css_integrity)?> crossorigin="">
+<script src="<?=$this->esc($leaflet_base)?>leaflet.js" <?=$this->raw($js_integrity)?> crossorigin=""></script>

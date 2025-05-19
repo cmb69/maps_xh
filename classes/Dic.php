@@ -30,7 +30,12 @@ class Dic
 
     public static function mainCommand(): MainCommand
     {
-        return new MainCommand(self::view());
+        global $pth, $plugin_cf;
+        return new MainCommand(
+            $pth["folder"]["plugins"] . "maps/",
+            $plugin_cf["maps"],
+            self::view()
+        );
     }
 
     public static function mapCommand(): MapCommand

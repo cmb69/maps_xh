@@ -26,15 +26,34 @@ use Plib\View;
 
 class MainCommand
 {
+    private string $pluginFolder;
+
+    /** @var array<string,string> */
+    private array $conf;
+
     private View $view;
 
-    public function __construct(View $view)
-    {
+    /** @param array<string,string> $conf */
+    public function __construct(
+        string $pluginFolder,
+        array $conf,
+        View $view
+    ) {
+        $this->pluginFolder = $pluginFolder;
+        $this->conf = $conf;
         $this->view = $view;
     }
 
     public function __invoke(): Response
     {
-        return Response::create()->withHjs($this->view->render("leaflet", []));
+        return Response::create()->withHjs($this->view->render("leaflet", [
+            "leaflet_base" => $this->conf["leaflet_url"] ?: $this->pluginFolder . "leaflet/",
+            "js_integrity" => $this->conf["leaflet_js_integrity"]
+                ? "integrity=\"{$this->conf["leaflet_js_integrity"]}\""
+                : "",
+            "css_integrity" => $this->conf["leaflet_css_integrity"]
+                ? "integrity=\"{$this->conf["leaflet_css_integrity"]}\""
+                : "",
+        ]));
     }
 }
