@@ -26,6 +26,7 @@ class MapCommandTest extends TestCase
         $map->setLongitude(51.505);
         $map->setZoom(13);
         $map->setMaxZoom(19);
+        $map->addMarker(51.505, -0.09);
         $this->store->commit();
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);
     }

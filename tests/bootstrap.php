@@ -15,6 +15,7 @@ require_once "../plib/classes/FakeRequest.php";
 require_once "../plib/classes/FakeSystemChecker.php";
 
 require_once "./classes/model/Map.php";
+require_once "./classes/model/Marker.php";
 require_once "./classes/Dic.php";
 require_once "./classes/InfoCommand.php";
 require_once "./classes/MainCommand.php";

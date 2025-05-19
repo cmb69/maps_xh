@@ -78,12 +78,23 @@ class MapCommand
             "longitude" => $map->longitude(),
             "zoom" => $map->zoom(),
             "maxZoom" => $map->maxZoom(),
+            "markers" => $this->markerTuples($map),
         ];
     }
 
     private function tilePrivacy(Request $request): bool
     {
         return $this->conf["tile_privacy"] && !$request->cookie("maps_agreed");
+    }
+
+    /** @return list<array{float,float}> */
+    private function markerTuples(Map $map): array
+    {
+        $tuples = [];
+        foreach ($map->markers() as $marker) {
+            $tuples[] = [$marker->latitude(), $marker->longitude()];
+        }
+        return $tuples;
     }
 
     private function agree(Request $request): Response

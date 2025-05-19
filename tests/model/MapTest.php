@@ -9,6 +9,7 @@ class MapTest extends TestCase
     public function testCanRoundtrip(): void
     {
         $map = new Map(51.505, -0.09, 13, 19);
+        $map->addMarker(51.505, -0.09);
         $actual = Map::fromString($map->toString(), "");
         $this->assertEquals($map, $actual);
     }

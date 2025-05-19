@@ -4,4 +4,10 @@
   <attribute name="longitude"/>
   <attribute name="zoom"/>
   <attribute name="maxZoom"/>
+  <zeroOrMore>
+    <element name="marker">
+      <attribute name="latitude"/>
+      <attribute name="longitude"/>
+    </element>
+  </zeroOrMore>
 </element>

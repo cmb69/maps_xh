@@ -7,3 +7,6 @@ if (conf.loadTiles) {
         attribution: conf.tileAttribution,
     }).addTo(map);
 }
+for (var marker of conf.markers) {
+    L.marker([marker[0], marker[1]]).addTo(map);
+}

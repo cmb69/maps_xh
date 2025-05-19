@@ -23,6 +23,7 @@ namespace Maps\Model;
 
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use Plib\Document;
 use Plib\DocumentStore;
 
@@ -32,6 +33,8 @@ final class Map implements Document
     private float $longitude;
     private int $zoom;
     private int $maxZoom;
+    /** @var list<Marker> */
+    private array $markers = [];
 
     public static function fromString(string $contents, string $key): ?self
     {
@@ -52,6 +55,13 @@ final class Map implements Document
         $that->longitude = (float) $map->getAttribute("longitude");
         $that->zoom = (int) $map->getAttribute("zoom");
         $that->maxZoom = (int) $map->getAttribute("maxZoom");
+        foreach ($map->childNodes as $childNode) {
+            assert($childNode instanceof DOMNode);
+            if ($childNode->nodeName === "marker") {
+                assert($childNode instanceof DOMElement);
+                $that->markers[] = Marker::fromXml($childNode);
+            }
+        }
         return $that;
     }
 
@@ -93,6 +103,12 @@ final class Map implements Document
         return $this->maxZoom;
     }
 
+    /** @return list<Marker> */
+    public function markers(): array
+    {
+        return $this->markers;
+    }
+
     public function setLatitude(float $value): void
     {
         $this->latitude = $value;
@@ -113,6 +129,13 @@ final class Map implements Document
         $this->maxZoom = $value;
     }
 
+    public function addMarker(float $latitude, float $longitude): Marker
+    {
+        $marker = new Marker($latitude, $longitude);
+        $this->markers[] = $marker;
+        return $marker;
+    }
+
     public function toString(): string
     {
         $doc = new DOMDocument('1.0', 'UTF-8');
@@ -122,6 +145,9 @@ final class Map implements Document
         $map->setAttribute("zoom", (string) $this->zoom);
         $map->setAttribute("maxZoom", (string) $this->maxZoom);
         $doc->appendChild($map);
+        foreach ($this->markers as $marker) {
+            $map->appendChild($marker->toXml($doc));
+        }
         if (!$doc->relaxNGValidate(__DIR__ . "/../../map.rng")) {
             return "";
         }
