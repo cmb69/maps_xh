@@ -35,9 +35,10 @@ class Dic
 
     public static function mapCommand(): MapCommand
     {
-        global $pth;
+        global $pth, $plugin_cf;
         return new MapCommand(
             $pth["folder"]["plugins"] . "maps/",
+            $plugin_cf["maps"],
             self::view()
         );
     }

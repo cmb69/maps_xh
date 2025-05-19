@@ -28,13 +28,19 @@ class MapCommand
 {
     private string $pluginFolder;
 
+    /** @var array<string,string> */
+    private array $conf;
+
     private View $view;
 
+    /** @param array<string,string> $conf */
     public function __construct(
         string $pluginFolder,
+        array $conf,
         View $view
     ) {
         $this->pluginFolder = $pluginFolder;
+        $this->conf = $conf;
         $this->view = $view;
     }
 
@@ -42,6 +48,16 @@ class MapCommand
     {
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",
+            "conf" => $this->jsConf(),
         ]));
+    }
+
+    /** @return array<string,mixed> */
+    private function jsConf(): array
+    {
+        return [
+            "tileUrl" => $this->conf["tile_url"],
+            "tileAttribution" => $this->view->plain("tile_attribution"),
+        ];
     }
 }
