@@ -53,7 +53,7 @@ class InfoCommand
                 $this->checkWritability($this->pluginFolder . "css/"),
                 $this->checkWritability($this->pluginFolder . "languages/"),
             ]
-        ]));
+        ]))->withTitle("Maps " . $this->view->esc(Dic::VERSION));
     }
 
     private function checkPhpVersion(string $version): string

@@ -27,6 +27,7 @@ class InfoCommandTest extends TestCase
     public function testRendersPluginInfo(): void
     {
         $response = $this->sut()();
+        $this->assertSame("Maps 1.0-dev", $response->title());
         Approvals::verifyHtml($response->output());
     }
 }
