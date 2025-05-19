@@ -21,6 +21,7 @@
 
 namespace Maps;
 
+use Plib\DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -44,6 +45,7 @@ class Dic
         return new MapCommand(
             $pth["folder"]["plugins"] . "maps/",
             $plugin_cf["maps"],
+            new DocumentStore($pth["folder"]["content"] . "maps/"),
             self::view()
         );
     }

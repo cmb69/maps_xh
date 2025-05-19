@@ -60,12 +60,57 @@ final class Map implements Document
         return $store->retrieve("$name.xml", self::class);
     }
 
+    public static function update(string $name, DocumentStore $store): ?self
+    {
+        return $store->update("$name.xml", self::class);
+    }
+
     public function __construct(float $longitude, float $latitude, int $zoom, int $maxZoom)
     {
         $this->longitude = $longitude;
         $this->latitude = $latitude;
         $this->zoom = $zoom;
         $this->maxZoom = $maxZoom;
+    }
+
+    public function longitude(): float
+    {
+        return $this->longitude;
+    }
+
+    public function latitude(): float
+    {
+        return $this->latitude;
+    }
+
+    public function zoom(): int
+    {
+        return $this->zoom;
+    }
+
+    public function maxZoom(): int
+    {
+        return $this->maxZoom;
+    }
+
+    public function setLongitude(float $value): void
+    {
+        $this->longitude = $value;
+    }
+
+    public function setLatitude(float $value): void
+    {
+        $this->latitude = $value;
+    }
+
+    public function setZoom(int $value): void
+    {
+        $this->zoom = $value;
+    }
+
+    public function setMaxZoom(int $value): void
+    {
+        $this->maxZoom = $value;
     }
 
     public function toString(): string

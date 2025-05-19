@@ -3,30 +3,42 @@
 namespace Maps;
 
 use ApprovalTests\Approvals;
+use Maps\Model\Map;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Plib\DocumentStore;
 use Plib\FakeRequest;
 use Plib\View;
 
 class MapCommandTest extends TestCase
 {
     private array $conf;
+    private DocumentStore $store;
     private View $view;
 
     public function setUp(): void
     {
+        vfsStream::setup("root");
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["maps"];
+        $this->store = new DocumentStore(vfsStream::url("root/"));
+        $map = Map::update("london", $this->store);
+        $map->setLongitude(51.505);
+        $map->setLatitude(-0.09);
+        $map->setZoom(13);
+        $map->setMaxZoom(19);
+        $this->store->commit();
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);
     }
 
     private function sut(): MapCommand
     {
-        return new MapCommand("../", $this->conf, $this->view);
+        return new MapCommand("../", $this->conf, $this->store, $this->view);
     }
 
     public function testShowsMap(): void
     {
         $request = new FakeRequest();
-        $response = $this->sut()($request);
+        $response = $this->sut()("london", $request);
         Approvals::verifyHtml($response->output());
     }
 
@@ -34,14 +46,14 @@ class MapCommandTest extends TestCase
     {
         $this->conf["tile_privacy"] = "";
         $request = new FakeRequest();
-        $response = $this->sut()($request);
+        $response = $this->sut()("london", $request);
         $this->assertStringNotContainsString("<form", $response->output());
     }
 
     public function testAgreementSetsCookieAndRedirects(): void
     {
         $request = new FakeRequest(["post" => ["maps_agree" => "1"]]);
-        $response = $this->sut()($request);
+        $response = $this->sut()("london", $request);
         $this->assertEquals(["maps_agreed", "1", 0], $response->cookie());
         $this->assertSame("http://example.com/", $response->location());
     }

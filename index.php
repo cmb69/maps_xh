@@ -27,9 +27,9 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
     exit;
 }
 
-function maps(): string
+function maps(string $name): string
 {
-    return Dic::mapCommand()(Request::current())();
+    return Dic::mapCommand()($name, Request::current())();
 }
 
 Dic::mainCommand()()();

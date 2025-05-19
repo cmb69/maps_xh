@@ -57,11 +57,14 @@ Das Aussehen von Maps_XH kann unter `Stylesheet` angepasst werden.
 
 Um eine Landkarte auf einer Seite anzuzeigen:
 
-    {{{maps}}}
+    {{{maps('name')}}}
 
 Um eine Landkarte im Template anzuzeigen:
 
-    <?=maps()?>
+    <?=maps('name')?>
+
+Wobei `name` der Basisname einer passenden XML-Datei ist, die im Unterorder
+`maps` des `content` Ordner von CMSimple_XH abgelegt wurde.
 
 ## Fehlerbehebung
 

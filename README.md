@@ -57,11 +57,14 @@ The look of Maps_XH can be customized under `Stylesheet`.
 
 To display a map on a page:
 
-    {{{maps}}}
+    {{{maps('name')}}}
 
 To display a map in the template:
 
-    <?=maps()?>
+    <?=maps('name')?>
+
+Where `name` is the basename of a suitable XML file you have stored in the subfolder
+`maps` of the `content` folder of CMSimple_XH.
 
 ## Troubleshooting
 

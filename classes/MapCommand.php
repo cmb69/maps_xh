@@ -21,6 +21,8 @@
 
 namespace Maps;
 
+use Maps\Model\Map;
+use Plib\DocumentStore;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
@@ -32,38 +34,50 @@ class MapCommand
     /** @var array<string,string> */
     private array $conf;
 
+    private DocumentStore $store;
+
     private View $view;
 
     /** @param array<string,string> $conf */
     public function __construct(
         string $pluginFolder,
         array $conf,
+        DocumentStore $store,
         View $view
     ) {
         $this->pluginFolder = $pluginFolder;
         $this->conf = $conf;
+        $this->store = $store;
         $this->view = $view;
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(string $name, Request $request): Response
     {
         if ($request->post("maps_agree")) {
             return $this->agree($request);
         }
+        $map = Map::retrieve($name, $this->store);
+        if ($map === null) {
+            return Response::create("invalid map");
+        }
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",
-            "conf" => $this->jsConf($request),
+            "conf" => $this->jsConf($request, $map),
             "privacy" => $this->tilePrivacy($request),
         ]));
     }
 
     /** @return array<string,mixed> */
-    private function jsConf(Request $request): array
+    private function jsConf(Request $request, Map $map): array
     {
         return [
             "tileUrl" => $this->conf["tile_url"],
             "tileAttribution" => $this->view->plain("tile_attribution"),
             "loadTiles" => !$this->tilePrivacy($request),
+            "longitude" => $map->longitude(),
+            "latitude" => $map->latitude(),
+            "zoom" => $map->zoom(),
+            "maxZoom" => $map->maxZoom(),
         ];
     }
 
