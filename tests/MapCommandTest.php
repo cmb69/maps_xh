@@ -22,8 +22,8 @@ class MapCommandTest extends TestCase
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["maps"];
         $this->store = new DocumentStore(vfsStream::url("root/"));
         $map = Map::update("london", $this->store);
-        $map->setLongitude(51.505);
         $map->setLatitude(-0.09);
+        $map->setLongitude(51.505);
         $map->setZoom(13);
         $map->setMaxZoom(19);
         $this->store->commit();

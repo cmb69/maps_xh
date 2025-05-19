@@ -28,8 +28,8 @@ use Plib\DocumentStore;
 
 final class Map implements Document
 {
-    private float $longitude;
     private float $latitude;
+    private float $longitude;
     private int $zoom;
     private int $maxZoom;
 
@@ -48,8 +48,8 @@ final class Map implements Document
         }
         assert($doc->documentElement instanceof DOMElement);
         $map = $doc->documentElement;
-        $that->longitude = (float) $map->getAttribute("longitude");
         $that->latitude = (float) $map->getAttribute("latitude");
+        $that->longitude = (float) $map->getAttribute("longitude");
         $that->zoom = (int) $map->getAttribute("zoom");
         $that->maxZoom = (int) $map->getAttribute("maxZoom");
         return $that;
@@ -65,22 +65,22 @@ final class Map implements Document
         return $store->update("$name.xml", self::class);
     }
 
-    public function __construct(float $longitude, float $latitude, int $zoom, int $maxZoom)
+    public function __construct(float $latitude, float $longitude, int $zoom, int $maxZoom)
     {
-        $this->longitude = $longitude;
         $this->latitude = $latitude;
+        $this->longitude = $longitude;
         $this->zoom = $zoom;
         $this->maxZoom = $maxZoom;
-    }
-
-    public function longitude(): float
-    {
-        return $this->longitude;
     }
 
     public function latitude(): float
     {
         return $this->latitude;
+    }
+
+    public function longitude(): float
+    {
+        return $this->longitude;
     }
 
     public function zoom(): int
@@ -93,14 +93,14 @@ final class Map implements Document
         return $this->maxZoom;
     }
 
-    public function setLongitude(float $value): void
-    {
-        $this->longitude = $value;
-    }
-
     public function setLatitude(float $value): void
     {
         $this->latitude = $value;
+    }
+
+    public function setLongitude(float $value): void
+    {
+        $this->longitude = $value;
     }
 
     public function setZoom(int $value): void
@@ -117,8 +117,8 @@ final class Map implements Document
     {
         $doc = new DOMDocument('1.0', 'UTF-8');
         $map = $doc->createElement('map');
-        $map->setAttribute("longitude", (string) $this->longitude);
         $map->setAttribute("latitude", (string) $this->latitude);
+        $map->setAttribute("longitude", (string) $this->longitude);
         $map->setAttribute("zoom", (string) $this->zoom);
         $map->setAttribute("maxZoom", (string) $this->maxZoom);
         $doc->appendChild($map);

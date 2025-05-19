@@ -74,8 +74,8 @@ class MapCommand
             "tileUrl" => $this->conf["tile_url"],
             "tileAttribution" => $this->view->plain("tile_attribution"),
             "loadTiles" => !$this->tilePrivacy($request),
-            "longitude" => $map->longitude(),
             "latitude" => $map->latitude(),
+            "longitude" => $map->longitude(),
             "zoom" => $map->zoom(),
             "maxZoom" => $map->maxZoom(),
         ];
