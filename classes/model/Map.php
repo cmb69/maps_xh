@@ -30,6 +30,7 @@ use Plib\DocumentStore2 as DocumentStore;
 final class Map implements Document
 {
     private string $name;
+    private string $title;
     private float $latitude;
     private float $longitude;
     private int $zoom;
@@ -40,7 +41,7 @@ final class Map implements Document
 
     public static function new(string $key): self
     {
-        return new self(basename($key, ".xml"), 0, 0, 0, 0, "1/1");
+        return new self(basename($key, ".xml"), "", 0, 0, 0, 0, "1/1");
     }
 
     public static function fromString(string $contents, string $key): ?self
@@ -59,6 +60,7 @@ final class Map implements Document
         $map = $doc->documentElement;
         $that = new self(
             basename($key, ".xml"),
+            $map->getAttribute("title"),
             (float) $map->getAttribute("latitude"),
             (float) $map->getAttribute("longitude"),
             (int) $map->getAttribute("zoom"),
@@ -94,6 +96,7 @@ final class Map implements Document
 
     public function __construct(
         string $name,
+        string $title,
         float $latitude,
         float $longitude,
         int $zoom,
@@ -101,6 +104,7 @@ final class Map implements Document
         string $aspectRatio
     ) {
         $this->name = $name;
+        $this->title = $title;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->zoom = $zoom;
@@ -111,6 +115,11 @@ final class Map implements Document
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function title(): string
+    {
+        return $this->title;
     }
 
     public function latitude(): float
@@ -142,6 +151,11 @@ final class Map implements Document
     public function markers(): array
     {
         return $this->markers;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     public function setCoordinates(float $latitude, float $longitude): void
@@ -177,6 +191,7 @@ final class Map implements Document
     {
         $doc = new DOMDocument('1.0', 'UTF-8');
         $map = $doc->createElement('map');
+        $map->setAttribute("title", $this->title);
         $map->setAttribute("latitude", (string) $this->latitude);
         $map->setAttribute("longitude", (string) $this->longitude);
         $map->setAttribute("zoom", (string) $this->zoom);

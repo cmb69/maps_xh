@@ -26,6 +26,10 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
       <input name="name" value="<?=$this->esc($map->name)?>" <?=$this->esc($name_disabled)?> required pattern="[a-z0-9\-]+">
     </label>
     <label>
+      <span><?=$this->text("label_title")?></span>
+      <input name="title" value="<?=$this->esc($map->title)?>" required>
+    </label>
+    <label>
       <span><?=$this->text("label_latitude")?></span>
       <span class="maps_help"><?=$this->text("help_latitude")?></span>
       <input type="number" name="latitude" value="<?=$this->esc($map->latitude)?>" min="-90" max="90" step="any">

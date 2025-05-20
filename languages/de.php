@@ -14,6 +14,7 @@ $plugin_tx['maps']['label_max_zoom']="Max. Zoom";
 $plugin_tx['maps']['label_name']="Name";
 $plugin_tx['maps']['label_new']="Neu";
 $plugin_tx['maps']['label_save']="Speichern";
+$plugin_tx['maps']['label_title']="Überschrift";
 $plugin_tx['maps']['label_zoom']="Zoom";
 
 $plugin_tx['maps']['help_aspect_ratio']="(Breite/Höhe)";

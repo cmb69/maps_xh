@@ -80,7 +80,7 @@ class MapAdminCommand
         if ($request->post("maps_do") !== null) {
             return $this->doCreate($request);
         }
-        $dto = new MapDto("", 0, 0, 0, 0, "1/1", "");
+        $dto = new MapDto("", "", 0, 0, 0, 0, "1/1", "");
         return $this->respondWithEditor(true, $dto);
     }
 
@@ -149,6 +149,7 @@ class MapAdminCommand
         }
         return new MapDto(
             $map->name(),
+            $map->title(),
             $map->latitude(),
             $map->longitude(),
             $map->zoom(),
@@ -162,6 +163,7 @@ class MapAdminCommand
     {
         return new MapDto(
             $request->post("name") ?? $request->get("maps_map") ?? "",
+            $request->post("title") ?? "",
             (float) ($request->post("latitude") ?? ""),
             (float) ($request->post("longitude") ?? ""),
             (int) ($request->post("zoom") ?? ""),
@@ -173,6 +175,7 @@ class MapAdminCommand
 
     private function updateMapFromDto(Map $map, MapDto $dto): void
     {
+        $map->setTitle($dto->title);
         $map->setCoordinates((float) $dto->latitude, (float) $dto->longitude);
         $map->setZoom((int) $dto->zoom, (int) $dto->maxZoom);
         $map->setAspectRatio($dto->aspectRatio);

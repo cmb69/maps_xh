@@ -63,6 +63,7 @@ class MapCommand
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",
             "conf" => $this->jsConf($request, $map),
+            "title" => $map->title(),
             "aspectRatio" => $map->aspectRatio(),
             "privacy" => $this->tilePrivacy($request),
         ]));

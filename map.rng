@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <element name="map" xmlns="http://relaxng.org/ns/structure/1.0">
+  <attribute name="title"/>
   <attribute name="latitude"/>
   <attribute name="longitude"/>
   <attribute name="zoom"/>

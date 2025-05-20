@@ -24,6 +24,7 @@ namespace Maps;
 class MapDto
 {
     public string $name;
+    public string $title;
     public float $latitude;
     public float $longitude;
     public int $zoom;
@@ -33,6 +34,7 @@ class MapDto
 
     public function __construct(
         string $name,
+        string $title,
         float $latitude,
         float $longitude,
         int $zoom,
@@ -41,6 +43,7 @@ class MapDto
         string $markers
     ) {
         $this->name = $name;
+        $this->title = $title;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->zoom = $zoom;

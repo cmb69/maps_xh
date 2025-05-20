@@ -1,3 +1,10 @@
+/* maps */
+
+figure.maps_map {}
+figure.maps_map figcaption {
+    font-size: larger;
+}
+
 /* maps administration */
 
 article.maps_admin {}
