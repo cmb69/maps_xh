@@ -45,6 +45,11 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
       <input type="number" name="max_zoom" value="<?=$this->esc($map->maxZoom)?>" min="0" max="20">
     </label>
     <label>
+      <span><?=$this->text("label_aspect_ratio")?></span>
+      <span class="maps_help"><?=$this->text("help_aspect_ratio")?></span>
+      <input name="aspect_ratio" value="<?=$this->esc($map->aspectRatio)?>" required pattern="\d+/\d+">
+    </label>
+    <label>
       <span><?=$this->text("label_markers")?></span>
       <span class="maps_help"><?=$this->text("help_markers")?></span>
       <textarea name="markers"><?=$this->esc($map->markers)?></textarea>

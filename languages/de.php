@@ -5,6 +5,7 @@ $plugin_tx['maps']['tile_attribution']="&copy; <a href=\"http://www.openstreetma
 $plugin_tx['maps']['menu_main']="Verwaltung";
 
 $plugin_tx['maps']['label_agree']="Ich stimme zu!";
+$plugin_tx['maps']['label_aspect_ratio']="Seitenverhältnis";
 $plugin_tx['maps']['label_edit']="Bearbeiten";
 $plugin_tx['maps']['label_latitude']="Breitengrad";
 $plugin_tx['maps']['label_longitude']="Längengrad";
@@ -15,6 +16,7 @@ $plugin_tx['maps']['label_new']="Neu";
 $plugin_tx['maps']['label_save']="Speichern";
 $plugin_tx['maps']['label_zoom']="Zoom";
 
+$plugin_tx['maps']['help_aspect_ratio']="(Breite/Höhe)";
 $plugin_tx['maps']['help_latitude']="(zwischen -90 und 90)";
 $plugin_tx['maps']['help_longitude']="(zwischen -180 und 180)";
 $plugin_tx['maps']['help_markers']="(Breitengrad|Längengrad|Info|anzeigen; eine Markierung pro Zeile)";

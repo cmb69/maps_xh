@@ -27,6 +27,11 @@
       <input type="number" name="max_zoom" value="0" min="0" max="20">
     </label>
     <label>
+      <span>Aspect Ratio</span>
+      <span class="maps_help">(with/height)</span>
+      <input name="aspect_ratio" value="1/1" required pattern="\d+/\d+">
+    </label>
+    <label>
       <span>Markers</span>
       <span class="maps_help">(latitude|longitude|info|show; one marker per line)</span>
       <textarea name="markers">0|0|basic info|1

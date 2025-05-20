@@ -28,6 +28,7 @@ class MapDto
     public float $longitude;
     public int $zoom;
     public int $maxZoom;
+    public string $aspectRatio;
     public string $markers;
 
     public function __construct(
@@ -36,6 +37,7 @@ class MapDto
         float $longitude,
         int $zoom,
         int $maxZoom,
+        string $aspectRatio,
         string $markers
     ) {
         $this->name = $name;
@@ -43,6 +45,7 @@ class MapDto
         $this->longitude = $longitude;
         $this->zoom = $zoom;
         $this->maxZoom = $maxZoom;
+        $this->aspectRatio = $aspectRatio;
         $this->markers = $markers;
     }
 }

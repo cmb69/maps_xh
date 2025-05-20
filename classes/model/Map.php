@@ -34,12 +34,13 @@ final class Map implements Document
     private float $longitude;
     private int $zoom;
     private int $maxZoom;
+    private string $aspectRatio;
     /** @var list<Marker> */
     private array $markers = [];
 
     public static function new(string $key): self
     {
-        return new self(basename($key, ".xml"), 0, 0, 0, 0);
+        return new self(basename($key, ".xml"), 0, 0, 0, 0, "1/1");
     }
 
     public static function fromString(string $contents, string $key): ?self
@@ -61,7 +62,8 @@ final class Map implements Document
             (float) $map->getAttribute("latitude"),
             (float) $map->getAttribute("longitude"),
             (int) $map->getAttribute("zoom"),
-            (int) $map->getAttribute("maxZoom")
+            (int) $map->getAttribute("maxZoom"),
+            $map->getAttribute("aspectRatio")
         );
         foreach ($map->childNodes as $childNode) {
             assert($childNode instanceof DOMNode);
@@ -90,13 +92,20 @@ final class Map implements Document
         return $store->update("$name.xml", self::class);
     }
 
-    public function __construct(string $name, float $latitude, float $longitude, int $zoom, int $maxZoom)
-    {
+    public function __construct(
+        string $name,
+        float $latitude,
+        float $longitude,
+        int $zoom,
+        int $maxZoom,
+        string $aspectRatio
+    ) {
         $this->name = $name;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->zoom = $zoom;
         $this->maxZoom = $maxZoom;
+        $this->aspectRatio = $aspectRatio;
     }
 
     public function name(): string
@@ -124,6 +133,11 @@ final class Map implements Document
         return $this->maxZoom;
     }
 
+    public function aspectRatio(): string
+    {
+        return $this->aspectRatio;
+    }
+
     /** @return list<Marker> */
     public function markers(): array
     {
@@ -140,6 +154,11 @@ final class Map implements Document
     {
         $this->zoom = $zoom;
         $this->maxZoom = $maxZoom;
+    }
+
+    public function setAspectRatio(string $aspectRatio): void
+    {
+        $this->aspectRatio = $aspectRatio;
     }
 
     public function purgeMarkers(): void
@@ -162,6 +181,7 @@ final class Map implements Document
         $map->setAttribute("longitude", (string) $this->longitude);
         $map->setAttribute("zoom", (string) $this->zoom);
         $map->setAttribute("maxZoom", (string) $this->maxZoom);
+        $map->setAttribute("aspectRatio", $this->aspectRatio);
         $doc->appendChild($map);
         foreach ($this->markers as $marker) {
             $map->appendChild($marker->toXml($doc));

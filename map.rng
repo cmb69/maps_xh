@@ -4,6 +4,7 @@
   <attribute name="longitude"/>
   <attribute name="zoom"/>
   <attribute name="maxZoom"/>
+  <attribute name="aspectRatio"/>
   <zeroOrMore>
     <element name="marker">
       <attribute name="latitude"/>

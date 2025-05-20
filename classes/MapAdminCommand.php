@@ -80,7 +80,7 @@ class MapAdminCommand
         if ($request->post("maps_do") !== null) {
             return $this->doCreate($request);
         }
-        $dto = new MapDto("", 0, 0, 0, 0, "");
+        $dto = new MapDto("", 0, 0, 0, 0, "1/1", "");
         return $this->respondWithEditor(true, $dto);
     }
 
@@ -153,6 +153,7 @@ class MapAdminCommand
             $map->longitude(),
             $map->zoom(),
             $map->maxZoom(),
+            $map->aspectRatio(),
             implode("\n", $lines) . "\n"
         );
     }
@@ -165,6 +166,7 @@ class MapAdminCommand
             (float) ($request->post("longitude") ?? ""),
             (int) ($request->post("zoom") ?? ""),
             (int) ($request->post("max_zoom") ?? ""),
+            $request->post("aspect_ratio") ?? "",
             $request->post("markers") ?? ""
         );
     }
@@ -173,6 +175,7 @@ class MapAdminCommand
     {
         $map->setCoordinates((float) $dto->latitude, (float) $dto->longitude);
         $map->setZoom((int) $dto->zoom, (int) $dto->maxZoom);
+        $map->setAspectRatio($dto->aspectRatio);
         $map->purgeMarkers();
         $lines = preg_split('/\r?\n/', $dto->markers);
         if ($lines === false) {
