@@ -10,6 +10,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
  * @var list<string> $errors
  * @var string $name_disabled
  * @var MapDto $map
+ * @var string $token
  */
 ?>
 
@@ -51,5 +52,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
     <p class="maps_controls">
       <button name="maps_do"><?=$this->text("label_save")?></button>
     </p>
+    <input type="hidden" name="maps_token" value="<?=$this->esc($token)?>">
   </form>
 </article>

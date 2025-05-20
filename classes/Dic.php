@@ -21,6 +21,7 @@
 
 namespace Maps;
 
+use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;
@@ -64,6 +65,7 @@ class Dic
     {
         return new MapAdminCommand(
             new DocumentStore(self::contentFolder()),
+            new CsrfProtector(),
             self::view()
         );
     }

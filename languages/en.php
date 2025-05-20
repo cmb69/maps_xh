@@ -23,6 +23,7 @@ $plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="To display the map, tile images need to be fetched from a third-party server. Do you agree?";
 
+$plugin_tx['maps']['error_not_authorized']="You are not authorized to conduct this action!";
 $plugin_tx['maps']['error_no_map']="You have not selected a map!";
 $plugin_tx['maps']['error_missing_map']="There is no “%s” map!";
 $plugin_tx['maps']['error_save']="Cannot save the map!";

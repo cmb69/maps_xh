@@ -23,6 +23,7 @@ $plugin_tx['maps']['help_zoom']="(zwischen 0 und 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="Um die Landkarte anzuzeigen, müssen Kachelbilder von einem Server einer Drittpartei geladen werden. Stimmen Sie dem zu?";
 
+$plugin_tx['maps']['error_not_authorized']="Sie sind nicht befugt diese Aktion durchzuführen!";
 $plugin_tx['maps']['error_no_map']="Sie haben keine Landkarte ausgewählt!";
 $plugin_tx['maps']['error_missing_map']="Die Landkarte „%s“ gibt es nicht!";
 $plugin_tx['maps']['error_save']="Die Landkarte kann nicht gespeichert werden!";

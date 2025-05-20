@@ -5,7 +5,9 @@ namespace Maps;
 use ApprovalTests\Approvals;
 use Maps\Model\Map;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\FakeRequest;
 use Plib\View;
@@ -13,6 +15,8 @@ use Plib\View;
 class MapAdminCommandTest extends TestCase
 {
     private DocumentStore $store;
+    /** @var CsrfProtector&Stub */
+    private $csrfProtector;
     private View $view;
 
     public function setUp(): void
@@ -22,12 +26,14 @@ class MapAdminCommandTest extends TestCase
         $map = Map::create("london", $this->store);
         $map->addMarker(0, 0, "basic info", true);
         $this->store->commit();
+        $this->csrfProtector = $this->createStub(CsrfProtector::class);
+        $this->csrfProtector->method("token")->willReturn("0123456789ABCDEF");
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);
     }
 
     private function sut(): MapAdminCommand
     {
-        return new MapAdminCommand($this->store, $this->view);
+        return new MapAdminCommand($this->store, $this->csrfProtector, $this->view);
     }
 
     public function testRendersOverview(): void
@@ -48,6 +54,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testCreatesNewMap(): void
     {
+        $this->csrfProtector->method("check")->willReturn(true);
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=create",
             "post" => [
@@ -60,8 +67,23 @@ class MapAdminCommandTest extends TestCase
         $this->assertSame("http://example.com/?&maps&admin=plugin_main", $response->location());
     }
 
+    public function testCreatingIsCsrfProtected(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(false);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create",
+            "post" => [
+                "maps_do" => "",
+                "name" => "new",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You are not authorized to conduct this action!", $response->output());
+    }
+
     public function testReportsFailureToSaveNewMap(): void
     {
+        $this->csrfProtector->method("check")->willReturn(true);
         vfsStream::setQuota(0);
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=create",
@@ -105,6 +127,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testUpdatesMap(): void
     {
+        $this->csrfProtector->method("check")->willReturn(true);
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",
             "post" => [
@@ -120,6 +143,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testsReportsMissingMapWhenUpdating(): void
     {
+        $this->csrfProtector->method("check")->willReturn(true);
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=does-not-exist",
             "post" => [
@@ -132,6 +156,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testsReportsThatNoMapIsSelectedWhenUpdating(): void
     {
+        $this->csrfProtector->method("check")->willReturn(true);
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update",
             "post" => [
@@ -142,8 +167,23 @@ class MapAdminCommandTest extends TestCase
         $this->assertStringContainsString("You have not selected a map!", $response->output());
     }
 
+    public function testUpdateIsCsrfProtected(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(false);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",
+            "post" => [
+                "maps_do" => "",
+                "markers" => "0|0|more info|",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You are not authorized to conduct this action!", $response->output());
+    }
+
     public function testReportsFailureToUpdateMap(): void
     {
+        $this->csrfProtector->method("check")->willReturn(true);
         vfsStream::setQuota(0);
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",

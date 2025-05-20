@@ -22,6 +22,7 @@
 namespace Maps;
 
 use Maps\Model\Map;
+use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\Request;
 use Plib\Response;
@@ -30,11 +31,13 @@ use Plib\View;
 class MapAdminCommand
 {
     private DocumentStore $store;
+    private CsrfProtector $csrfProtector;
     private View $view;
 
-    public function __construct(DocumentStore $store, View $view)
+    public function __construct(DocumentStore $store, CsrfProtector $csrfProtector, View $view)
     {
         $this->store = $store;
+        $this->csrfProtector = $csrfProtector;
         $this->view = $view;
     }
 
@@ -85,6 +88,10 @@ class MapAdminCommand
     {
         $map = Map::create($request->post("name") ?? "", $this->store);
         $dto = $this->dtoFromRequest($request);
+        if (!$this->csrfProtector->check($request->post("maps_token"))) {
+            $this->store->rollback();
+            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_not_authorized")]);
+        }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
             return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_save")]);
@@ -122,6 +129,10 @@ class MapAdminCommand
             ]);
         }
         $dto = $this->dtoFromRequest($request);
+        if (!$this->csrfProtector->check($request->post("maps_token"))) {
+            $this->store->rollback();
+            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_not_authorized")]);
+        }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
             return $this->respondWithEditor(false, $dto, [$this->view->message("fail", "error_save")]);
@@ -192,6 +203,7 @@ class MapAdminCommand
             "errors" => $errors,
             "name_disabled" => $new ? "" : "disabled",
             "map" => $dto,
+            "token" => $this->csrfProtector->token(),
         ]))->withTitle("Maps – " . $this->view->text("menu_main"));
     }
 }
