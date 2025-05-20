@@ -17,6 +17,10 @@ article.map_edit span.maps_help {
     font-size: smaller;
     font-weight: normal;
 }
+article.map_edit form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
 article.map_edit input,
 article.map_edit textarea {
     display: block;
@@ -24,6 +28,7 @@ article.map_edit textarea {
 article.map_edit table {
     width: 100%;
     table-layout: fixed;
+    grid-column: 1/3;
 }
 article.map_edit table caption {
     font-size: larger;
@@ -49,6 +54,9 @@ article.map_edit table td:nth-child(5) {
 article.map_edit table input,
 article.map_edit table textarea {
     width: 100%;
+}
+article.map_edit p.maps_controls {
+    grid-column: 1/3;
 }
 
 article.maps_admin p.maps_controls,

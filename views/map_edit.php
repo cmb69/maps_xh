@@ -41,6 +41,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
       <span><?=$this->text("label_longitude")?></span>
       <span class="maps_help"><?=$this->text("help_longitude")?></span>
       <input type="number" name="longitude" value="<?=$this->esc($map->longitude)?>" min="-180" max="180" step="any">
+    </label>
     <label>
       <span><?=$this->text("label_zoom")?></span>
       <span class="maps_help"><?=$this->text("help_zoom")?></span>
