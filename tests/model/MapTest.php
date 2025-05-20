@@ -4,6 +4,7 @@ namespace Maps\Model;
 
 use PHPUnit\Framework\TestCase;
 
+/** @small */
 class MapTest extends TestCase
 {
     public function testCanRoundtrip(): void
