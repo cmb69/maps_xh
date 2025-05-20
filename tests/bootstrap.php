@@ -19,6 +19,8 @@ require_once "./classes/model/Marker.php";
 require_once "./classes/Dic.php";
 require_once "./classes/InfoCommand.php";
 require_once "./classes/MainCommand.php";
+require_once "./classes/MapAdminCommand.php";
 require_once "./classes/MapCommand.php";
+require_once "./classes/MapDto.php";
 
 const CMSIMPLE_XH_VERSION = "1.8";

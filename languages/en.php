@@ -2,9 +2,28 @@
 
 $plugin_tx['maps']['tile_attribution']="&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>";
 
+$plugin_tx['maps']['menu_main']="Administration";
+
 $plugin_tx['maps']['label_agree']="I agree!";
+$plugin_tx['maps']['label_edit']="Edit";
+$plugin_tx['maps']['label_latitude']="Latitude";
+$plugin_tx['maps']['label_longitude']="Longitude";
+$plugin_tx['maps']['label_markers']="Markers";
+$plugin_tx['maps']['label_max_zoom']="Max. Zoom";
+$plugin_tx['maps']['label_name']="Name";
+$plugin_tx['maps']['label_new']="New";
+$plugin_tx['maps']['label_save']="Save";
+$plugin_tx['maps']['label_zoom']="Zoom";
+
+$plugin_tx['maps']['help_latitude']="(between -90 and 90)";
+$plugin_tx['maps']['help_longitude']="(between -180 and 180)";
+$plugin_tx['maps']['help_markers']="(latitude|longitude|info|show; one marker per line)";
+$plugin_tx['maps']['help_name']="(only a-z, 0-9, and hyhpens)";
+$plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="To display the map, tile images need to be fetched from a third-party server. Do you agree?";
+
+$plugin_tx['maps']['error_save']="Cannot save the map!";
 
 $plugin_tx['maps']['syscheck_title']="System Check";
 $plugin_tx['maps']['syscheck_phpversion']="PHP version ≥ %s: %s";

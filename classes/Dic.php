@@ -45,7 +45,7 @@ class Dic
         return new MapCommand(
             $pth["folder"]["plugins"] . "maps/",
             $plugin_cf["maps"],
-            new DocumentStore($pth["folder"]["content"] . "maps/"),
+            new DocumentStore(self::contentFolder()),
             self::view()
         );
     }
@@ -58,6 +58,20 @@ class Dic
             new SystemChecker(),
             self::view()
         );
+    }
+
+    public static function mapAdminCommand(): MapAdminCommand
+    {
+        return new MapAdminCommand(
+            new DocumentStore(self::contentFolder()),
+            self::view()
+        );
+    }
+
+    private static function contentFolder(): string
+    {
+        global $pth;
+        return $pth["folder"]["content"] . "maps/";
     }
 
     private static function view(): View

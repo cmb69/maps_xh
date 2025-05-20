@@ -22,10 +22,8 @@ class MapCommandTest extends TestCase
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["maps"];
         $this->store = new DocumentStore(vfsStream::url("root/"));
         $map = Map::update("london", $this->store);
-        $map->setLatitude(-0.09);
-        $map->setLongitude(51.505);
-        $map->setZoom(13);
-        $map->setMaxZoom(19);
+        $map->setCoordinates(-0.09, 51.505);
+        $map->setZoom(13, 19);
         $map->addMarker(51.505, -0.09, "some info", true);
         $this->store->commit();
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);

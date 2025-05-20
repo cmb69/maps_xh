@@ -19,30 +19,30 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Maps\Dic;
-use Plib\Request;
+namespace Maps;
 
-if (!defined("CMSIMPLE_XH_VERSION")) {
-    http_response_code(403);
-    exit;
-}
+class MapDto
+{
+    public string $name;
+    public float $latitude;
+    public float $longitude;
+    public int $zoom;
+    public int $maxZoom;
+    public string $markers;
 
-/**
- * @var string $admin
- * @var string $o
- */
-
-XH_registerStandardPluginMenuItems(true);
-if (XH_wantsPluginAdministration("maps")) {
-    $o .= print_plugin_admin("on");
-    switch ($admin) {
-        case "":
-            $o .= Dic::infoCommand()()();
-            break;
-        case "plugin_main":
-            $o .= Dic::mapAdminCommand()(Request::current())();
-            break;
-        default:
-            $o .= plugin_admin_common();
+    public function __construct(
+        string $name,
+        float $latitude,
+        float $longitude,
+        int $zoom,
+        int $maxZoom,
+        string $markers
+    ) {
+        $this->name = $name;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->zoom = $zoom;
+        $this->maxZoom = $maxZoom;
+        $this->markers = $markers;
     }
 }

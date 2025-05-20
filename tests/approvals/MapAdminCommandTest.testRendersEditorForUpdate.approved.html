@@ -1,0 +1,39 @@
+
+<article class="map_edit">
+  <h1>Maps – Administration</h1>
+  <form method="post">
+    <label>
+      <span>Name</span>
+      <span class="maps_help">(only a-z, 0-9, and hyhpens)</span>
+      <input name="name" value="london" disabled required pattern="[a-z0-9\-]+">
+    </label>
+    <label>
+      <span>Latitude</span>
+      <span class="maps_help">(between -90 and 90)</span>
+      <input type="number" name="latitude" value="0" min="-90" max="90" step="any">
+    </label>
+    <label>
+      <span>Longitude</span>
+      <span class="maps_help">(between -180 and 180)</span>
+      <input type="number" name="longitude" value="0" min="-180" max="180" step="any">
+    <label>
+      <span>Zoom</span>
+      <span class="maps_help">(between 0 and 20)</span>
+      <input type="number" name="zoom" value="0" min="0" max="20">
+    </label>
+    <label>
+      <span>Max. Zoom</span>
+      <span class="maps_help">(between 0 and 20)</span>
+      <input type="number" name="max_zoom" value="0" min="0" max="20">
+    </label>
+    <label>
+      <span>Markers</span>
+      <span class="maps_help">(latitude|longitude|info|show; one marker per line)</span>
+      <textarea name="markers">0|0|basic info|1
+</textarea>
+    </label>
+    <p class="maps_controls">
+      <button name="maps_do">Save</button>
+    </p>
+  </form>
+</article>

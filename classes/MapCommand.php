@@ -57,9 +57,6 @@ class MapCommand
             return $this->agree($request);
         }
         $map = Map::retrieve($name, $this->store);
-        if ($map === null) {
-            return Response::create("invalid map");
-        }
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",
             "conf" => $this->jsConf($request, $map),

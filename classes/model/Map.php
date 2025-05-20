@@ -29,6 +29,7 @@ use Plib\DocumentStore;
 
 final class Map implements Document
 {
+    private string $name;
     private float $latitude;
     private float $longitude;
     private int $zoom;
@@ -36,9 +37,9 @@ final class Map implements Document
     /** @var list<Marker> */
     private array $markers = [];
 
-    public static function fromString(string $contents, string $key): ?self
+    public static function fromString(string $contents, string $key): self
     {
-        $that = new self(0, 0, 0, 0);
+        $that = new self(basename($key, ".xml"), 0, 0, 0, 0);
         if ($contents === "") {
             return $that;
         }
@@ -65,22 +66,32 @@ final class Map implements Document
         return $that;
     }
 
-    public static function retrieve(string $name, DocumentStore $store): ?self
+    public static function retrieve(string $name, DocumentStore $store): self
     {
-        return $store->retrieve("$name.xml", self::class);
+        $that = $store->retrieve("$name.xml", self::class);
+        assert($that instanceof self);
+        return $that;
     }
 
-    public static function update(string $name, DocumentStore $store): ?self
+    public static function update(string $name, DocumentStore $store): self
     {
-        return $store->update("$name.xml", self::class);
+        $that = $store->update("$name.xml", self::class);
+        assert($that instanceof self);
+        return $that;
     }
 
-    public function __construct(float $latitude, float $longitude, int $zoom, int $maxZoom)
+    public function __construct(string $name, float $latitude, float $longitude, int $zoom, int $maxZoom)
     {
+        $this->name = $name;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->zoom = $zoom;
         $this->maxZoom = $maxZoom;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
     }
 
     public function latitude(): float
@@ -109,24 +120,21 @@ final class Map implements Document
         return $this->markers;
     }
 
-    public function setLatitude(float $value): void
+    public function setCoordinates(float $latitude, float $longitude): void
     {
-        $this->latitude = $value;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
     }
 
-    public function setLongitude(float $value): void
+    public function setZoom(int $zoom, int $maxZoom): void
     {
-        $this->longitude = $value;
+        $this->zoom = $zoom;
+        $this->maxZoom = $maxZoom;
     }
 
-    public function setZoom(int $value): void
+    public function purgeMarkers(): void
     {
-        $this->zoom = $value;
-    }
-
-    public function setMaxZoom(int $value): void
-    {
-        $this->maxZoom = $value;
+        $this->markers = [];
     }
 
     public function addMarker(float $latitude, float $longitude, string $info, bool $showInfo): Marker

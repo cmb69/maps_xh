@@ -2,9 +2,28 @@
 
 $plugin_tx['maps']['tile_attribution']="&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>";
 
+$plugin_tx['maps']['menu_main']="Verwaltung";
+
 $plugin_tx['maps']['label_agree']="Ich stimme zu!";
+$plugin_tx['maps']['label_edit']="Bearbeiten";
+$plugin_tx['maps']['label_latitude']="Breitengrad";
+$plugin_tx['maps']['label_longitude']="Längengrad";
+$plugin_tx['maps']['label_markers']="Markierungen";
+$plugin_tx['maps']['label_max_zoom']="Max. Zoom";
+$plugin_tx['maps']['label_name']="Name";
+$plugin_tx['maps']['label_new']="Neu";
+$plugin_tx['maps']['label_save']="Speichern";
+$plugin_tx['maps']['label_zoom']="Zoom";
+
+$plugin_tx['maps']['help_latitude']="(zwischen -90 und 90)";
+$plugin_tx['maps']['help_longitude']="(zwischen -180 und 180)";
+$plugin_tx['maps']['help_markers']="(Breitengrad|Längengrad|Info|anzeigen; eine Markierung pro Zeile)";
+$plugin_tx['maps']['help_name']="(nur a-z, 0-9 und Bindestriche)";
+$plugin_tx['maps']['help_zoom']="(zwischen 0 und 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="Um die Landkarte anzuzeigen, müssen Kachelbilder von einem Server einer Drittpartei geladen werden. Stimmen Sie dem zu?";
+
+$plugin_tx['maps']['error_save']="Die Landkarte kann nicht gespeichert werden!";
 
 $plugin_tx['maps']['syscheck_title']="System-Prüfung";
 $plugin_tx['maps']['syscheck_phpversion']="PHP Version ≥ %s: %s";

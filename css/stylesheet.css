@@ -2,6 +2,33 @@
     height: 180px;
 }
 
+/* maps administration */
+
+article.maps_admin {}
+article.maps_admin ul {
+    list-style: none;
+}
+
+article.map_edit {}
+article.map_edit span.maps_help {
+    font-size: small;
+}
+article.map_edit input,
+article.map_edit textarea {
+    display: block;
+}
+article.map_edit textarea {
+    width: 100%;
+    height: 7em;
+}
+
+article.maps_admin p.maps_controls,
+article.map_edit p.maps_controls {
+    margin: 1em 0;
+    display: flex;
+    justify-content: right;
+}
+
 /* plugin info */
 
 article.maps_plugininfo {}
