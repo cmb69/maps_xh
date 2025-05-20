@@ -301,6 +301,7 @@ class MapAdminCommand
             "name" => $map->name(),
             "geojson" => $geojson,
             "template" =>  $template,
+            "token" => $this->csrfProtector->token(),
         ]))->withTitle("Maps – " . $this->view->text("label_import"));
     }
 }

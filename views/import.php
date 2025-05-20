@@ -8,6 +8,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
  * @var View $this
  * @var list<string> $errors
  * @var string $name
+ * @var string $token
  */
 ?>
 
@@ -45,5 +46,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
     <p class="maps_controls">
       <button name="maps_do"><?=$this->text("label_import")?></button>
     </p>
+    <input type="hidden" name="maps_token" value="<?=$this->esc($token)?>">
   </form>
 </article>
