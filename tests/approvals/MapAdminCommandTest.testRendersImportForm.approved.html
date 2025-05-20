@@ -1,0 +1,34 @@
+
+<article class="map_import">
+  <h1>Maps – Import</h1>
+  <form method="post">
+    <p>
+      <label>
+        <span>Name</span>
+        <input name="name" value="london" disabled>
+      </label>
+    </p>
+    <p>
+      <label>
+        <span>GeoJSON</span>
+        <textarea name="geojson" requrired></textarea>
+      </label>
+    </p>
+    <p>
+      <label>
+        <span>Template</span>
+        <span class="maps_help">(HTML with {property} placeholders)</span>
+        <textarea name="template" required></textarea>
+      </label>
+    </p>
+    <p>
+      <label>
+        <input type="checkbox" name="replace">
+        <span>Replace existing markers</span>
+      </label>
+    </p>
+    <p class="maps_controls">
+      <button name="maps_do">Import</button>
+    </p>
+  </form>
+</article>

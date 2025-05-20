@@ -9,6 +9,8 @@ $plugin_tx['maps']['label_agree']="I agree!";
 $plugin_tx['maps']['label_aspect_ratio']="Aspect Ratio";
 $plugin_tx['maps']['label_delete_marker']="Delete this marker";
 $plugin_tx['maps']['label_edit']="Edit";
+$plugin_tx['maps']['label_geojson']="GeoJSON";
+$plugin_tx['maps']['label_import']="Import";
 $plugin_tx['maps']['label_info']="Info";
 $plugin_tx['maps']['label_latitude']="Latitude";
 $plugin_tx['maps']['label_longitude']="Longitude";
@@ -16,8 +18,10 @@ $plugin_tx['maps']['label_markers']="Markers";
 $plugin_tx['maps']['label_max_zoom']="Max. Zoom";
 $plugin_tx['maps']['label_name']="Name";
 $plugin_tx['maps']['label_new']="New";
+$plugin_tx['maps']['label_replace_markers']="Replace existing markers";
 $plugin_tx['maps']['label_save']="Save";
 $plugin_tx['maps']['label_show']="Show";
+$plugin_tx['maps']['label_template']="Template";
 $plugin_tx['maps']['label_title']="Title";
 $plugin_tx['maps']['label_zoom']="Zoom";
 
@@ -26,12 +30,14 @@ $plugin_tx['maps']['help_info']="(arbitrary HTML)";
 $plugin_tx['maps']['help_latitude']="(between -90 and 90)";
 $plugin_tx['maps']['help_longitude']="(between -180 and 180)";
 $plugin_tx['maps']['help_name']="(only a-z, 0-9, and hyhpens)";
+$plugin_tx['maps']['help_template']="(HTML with {property} placeholders)";
 $plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="To display the map, tile images need to be fetched from a third-party server. Do you agree?";
 
 $plugin_tx['maps']['error_not_authorized']="You are not authorized to conduct this action!";
 $plugin_tx['maps']['error_no_map']="You have not selected a map!";
+$plugin_tx['maps']['error_geojson']="This GeoJSON is not supported!";
 $plugin_tx['maps']['error_load']="Cannot load the map “%s”!";
 $plugin_tx['maps']['error_save']="Cannot save the map!";
 

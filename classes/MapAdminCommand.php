@@ -56,6 +56,8 @@ class MapAdminCommand
                 return $this->create($request);
             case "update":
                 return $this->update($request);
+            case "import":
+                return $this->import($request);
         }
     }
 
@@ -146,6 +148,55 @@ class MapAdminCommand
         return Response::redirect($request->url()->without("action")->absolute());
     }
 
+    private function import(Request $request): Response
+    {
+        if ($request->post("maps_do") !== null) {
+            return $this->doImport($request);
+        }
+        if ($request->get("maps_map") === null) {
+            return $this->respondWithOverview($request, [$this->view->message("fail", "error_no_map")]);
+        }
+        $map = Map::read($request->get("maps_map"), $this->store);
+        if ($map === null) {
+            return $this->respondWithOverview($request, [
+                $this->view->message("fail", "error_load", $request->get("maps_map"))
+            ]);
+        }
+        return $this->respondWithImportForm($map, "", "");
+    }
+
+    private function doImport(Request $request): Response
+    {
+        if ($request->get("maps_map") === null) {
+            return $this->respondWithOverview($request, [$this->view->message("fail", "error_no_map")]);
+        }
+        $map = Map::update($request->get("maps_map"), $this->store);
+        if ($map === null) {
+            return $this->respondWithOverview($request, [
+                $this->view->message("fail", "error_load", $request->get("maps_map"))
+            ]);
+        }
+        $geojson = $request->post("geojson") ?? "";
+        $template = $request->post("template") ?? "";
+        if (!$this->csrfProtector->check($request->post("maps_token"))) {
+            $this->store->rollback();
+            $errors = [$this->view->message("fail", "error_not_authorized")];
+            return $this->respondWithImportForm($map, $geojson, $template, $errors);
+        }
+        $json = json_decode($geojson, true);
+        if (!is_array($json) || !array_key_exists("features", $json) || !is_array($json["features"])) {
+            $this->store->rollback();
+            $errors = [$this->view->message("fail", "error_geojson")];
+            return $this->respondWithImportForm($map, $geojson, $template, $errors);
+        }
+        $this->importMarkers($map, $json["features"], $template);
+        if (!$this->store->commit()) {
+            $errors = [$this->view->message("fail", "error_save")];
+            return $this->respondWithImportForm($map, $geojson, $template, $errors);
+        }
+        return Response::redirect($request->url()->without("action")->absolute());
+    }
+
     private function mapToDto(Map $map): MapDto
     {
         $markers = [];
@@ -216,6 +267,34 @@ class MapAdminCommand
         }
     }
 
+    /** @param array<mixed> $features */
+    private function importMarkers(Map $map, array $features, string $template): void
+    {
+        preg_match_all('/{([a-zA-Z]+)}/', $template, $matches, PREG_SET_ORDER);
+        foreach ($features as $feature) {
+            if (
+                is_array($feature)
+                && array_key_exists("geometry", $feature)
+                && is_array($geometry = $feature["geometry"])
+                && array_key_exists("type", $geometry) && $geometry["type"] === "Point"
+                && array_key_exists("coordinates", $geometry)
+                && is_array($coordinates = $geometry["coordinates"])
+                && array_key_exists("properties", $feature)
+                && is_array($properties = $feature["properties"])
+            ) {
+                [$longitude, $latitude] = $coordinates;
+                $replacements = [];
+                foreach ($matches as $match) {
+                    if (array_key_exists($match[1], $properties)) {
+                        $replacements[$match[0]] = $properties[$match[1]];
+                    }
+                }
+                $info = strtr($template, $replacements);
+                $map->addMarker($latitude, $longitude, $info, false);
+            }
+        }
+    }
+
     /** @param list<string> $errors */
     private function respondWithOverview(Request $request, array $errors = []): Response
     {
@@ -239,6 +318,17 @@ class MapAdminCommand
             "markers" => $markers,
             "token" => $this->csrfProtector->token(),
             "script" => $this->pluginFolder . "admin.js",
-        ]))->withTitle("Maps – " . $this->view->text("menu_main"));
+        ]))->withTitle("Maps – " . $this->view->text("label_edit"));
+    }
+
+    /** @param list<string> $errors */
+    private function respondWithImportForm(Map $map, string $geojson, string $template, array $errors = []): Response
+    {
+        return Response::create($this->view->render("import", [
+            "errors" => $errors,
+            "name" => $map->name(),
+            "geojson" => $geojson,
+            "template" =>  $template,
+        ]))->withTitle("Maps – " . $this->view->text("label_import"));
     }
 }
