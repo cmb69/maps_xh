@@ -28,4 +28,9 @@ class DicTest extends TestCase
     {
         $this->assertInstanceOf(InfoCommand::class, Dic::infoCommand());
     }
+
+    public function testMakesMapAdminCommand(): void
+    {
+        $this->assertInstanceOf(MapAdminCommand::class, Dic::mapAdminCommand());
+    }
 }
