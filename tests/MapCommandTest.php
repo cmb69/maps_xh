@@ -46,7 +46,7 @@ class MapCommandTest extends TestCase
     {
         $request = new FakeRequest();
         $response = $this->sut()("does-not-exist", $request);
-        $this->assertStringContainsString("There is no “does-not-exist” map!", $response->output());
+        $this->assertStringContainsString("Cannot load the map “does-not-exist”!", $response->output());
     }
 
     public function testDoesNotShowPrivacyFormIfConfigured(): void

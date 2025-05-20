@@ -122,7 +122,7 @@ class MapAdminCommandTest extends TestCase
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=does-not-exist",
         ]);
         $response = $this->sut()($request);
-        $this->assertStringContainsString("There is no “does-not-exist” map!", $response->output());
+        $this->assertStringContainsString("Cannot load the map “does-not-exist”!", $response->output());
     }
 
     public function testUpdatesMap(): void
@@ -151,7 +151,7 @@ class MapAdminCommandTest extends TestCase
             ],
         ]);
         $response = $this->sut()($request);
-        $this->assertStringContainsString("There is no “does-not-exist” map!", $response->output());
+        $this->assertStringContainsString("Cannot load the map “does-not-exist”!", $response->output());
     }
 
     public function testsReportsThatNoMapIsSelectedWhenUpdating(): void

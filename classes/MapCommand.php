@@ -58,7 +58,7 @@ class MapCommand
         }
         $map = Map::read($name, $this->store);
         if ($map === null) {
-            return Response::create($this->view->message("fail", "error_missing_map", $name));
+            return Response::create($this->view->message("fail", "error_load", $name));
         }
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",

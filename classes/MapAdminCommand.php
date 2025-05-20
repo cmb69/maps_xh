@@ -94,7 +94,7 @@ class MapAdminCommand
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
-            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_save")]);
+            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_save", $dto->name)]);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -110,7 +110,7 @@ class MapAdminCommand
         $map = Map::read($request->get("maps_map"), $this->store);
         if ($map === null) {
             return $this->respondWithOverview($request, [
-                $this->view->message("fail", "error_missing_map", $request->get("maps_map"))
+                $this->view->message("fail", "error_load", $request->get("maps_map"))
             ]);
         }
         $dto = $this->mapToDto($map);
@@ -125,7 +125,7 @@ class MapAdminCommand
         $map = Map::update($request->get("maps_map"), $this->store);
         if ($map === null) {
             return $this->respondWithOverview($request, [
-                $this->view->message("fail", "error_missing_map", $request->get("maps_map"))
+                $this->view->message("fail", "error_load", $request->get("maps_map"))
             ]);
         }
         $dto = $this->dtoFromRequest($request);
@@ -135,7 +135,7 @@ class MapAdminCommand
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
-            return $this->respondWithEditor(false, $dto, [$this->view->message("fail", "error_save")]);
+            return $this->respondWithEditor(false, $dto, [$this->view->message("fail", "error_save", $dto->name)]);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
