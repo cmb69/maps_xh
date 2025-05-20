@@ -22,7 +22,7 @@
 namespace Maps;
 
 use Maps\Model\Map;
-use Plib\DocumentStore;
+use Plib\DocumentStore2 as DocumentStore;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
@@ -86,7 +86,7 @@ class MapAdminCommand
 
     private function doCreate(Request $request): Response
     {
-        $map = Map::update($request->post("name") ?? "", $this->store);
+        $map = Map::create($request->post("name") ?? "", $this->store);
         $dto = $this->dtoFromRequest($request);
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
@@ -103,7 +103,10 @@ class MapAdminCommand
         if ($request->get("maps_map") === null) {
             return Response::create("no map selected");
         }
-        $map = Map::retrieve($request->get("maps_map"), $this->store);
+        $map = Map::read($request->get("maps_map"), $this->store);
+        if ($map === null) {
+            return Response::create("no such map");
+        }
         $dto = $this->mapToDto($map);
         return $this->respondWithEditor(false, $dto);
     }
@@ -111,6 +114,9 @@ class MapAdminCommand
     private function doUpdate(Request $request): Response
     {
         $map = Map::update($request->get("maps_map") ?? "", $this->store);
+        if ($map === null) {
+            return Response::create("no such map");
+        }
         $dto = $this->dtoFromRequest($request);
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {

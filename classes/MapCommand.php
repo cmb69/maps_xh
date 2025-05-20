@@ -22,7 +22,7 @@
 namespace Maps;
 
 use Maps\Model\Map;
-use Plib\DocumentStore;
+use Plib\DocumentStore2 as DocumentStore;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
@@ -56,7 +56,10 @@ class MapCommand
         if ($request->post("maps_agree")) {
             return $this->agree($request);
         }
-        $map = Map::retrieve($name, $this->store);
+        $map = Map::read($name, $this->store);
+        if ($map === null) {
+            return Response::create("no such map");
+        }
         return Response::create($this->view->render("map", [
             "script" => $this->pluginFolder . "maps.js",
             "conf" => $this->jsConf($request, $map),

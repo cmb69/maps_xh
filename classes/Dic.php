@@ -21,7 +21,7 @@
 
 namespace Maps;
 
-use Plib\DocumentStore;
+use Plib\DocumentStore2 as DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;
 

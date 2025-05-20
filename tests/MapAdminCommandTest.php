@@ -6,7 +6,7 @@ use ApprovalTests\Approvals;
 use Maps\Model\Map;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Plib\DocumentStore;
+use Plib\DocumentStore2 as DocumentStore;
 use Plib\FakeRequest;
 use Plib\View;
 
@@ -19,7 +19,7 @@ class MapAdminCommandTest extends TestCase
     {
         vfsStream::setup("root");
         $this->store = new DocumentStore(vfsStream::url("root/"));
-        $map = Map::update("london", $this->store);
+        $map = Map::create("london", $this->store);
         $map->addMarker(0, 0, "basic info", true);
         $this->store->commit();
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);
@@ -94,7 +94,7 @@ class MapAdminCommandTest extends TestCase
             ],
         ]);
         $response = $this->sut()($request);
-        $map = Map::retrieve("london", $this->store);
+        $map = Map::read("london", $this->store);
         $this->assertCount(1, $map->markers());
         $this->assertSame("http://example.com/?&maps&admin=plugin_main&maps_map=london", $response->location());
     }

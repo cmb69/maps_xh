@@ -24,8 +24,8 @@ namespace Maps\Model;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
-use Plib\Document;
-use Plib\DocumentStore;
+use Plib\Document2 as Document;
+use Plib\DocumentStore2 as DocumentStore;
 
 final class Map implements Document
 {
@@ -37,25 +37,32 @@ final class Map implements Document
     /** @var list<Marker> */
     private array $markers = [];
 
-    public static function fromString(string $contents, string $key): self
+    public static function new(string $key): self
     {
-        $that = new self(basename($key, ".xml"), 0, 0, 0, 0);
+        return new self(basename($key, ".xml"), 0, 0, 0, 0);
+    }
+
+    public static function fromString(string $contents, string $key): ?self
+    {
         if ($contents === "") {
-            return $that;
+            return null;
         }
         $doc = new DOMDocument("1.0", "UTF-8");
         if (!$doc->loadXML($contents)) {
-            return $that;
+            return null;
         }
         if (!$doc->relaxNGValidate(__DIR__ . "/../../map.rng")) {
-            return $that;
+            return null;
         }
         assert($doc->documentElement instanceof DOMElement);
         $map = $doc->documentElement;
-        $that->latitude = (float) $map->getAttribute("latitude");
-        $that->longitude = (float) $map->getAttribute("longitude");
-        $that->zoom = (int) $map->getAttribute("zoom");
-        $that->maxZoom = (int) $map->getAttribute("maxZoom");
+        $that = new self(
+            basename($key, ".xml"),
+            (float) $map->getAttribute("latitude"),
+            (float) $map->getAttribute("longitude"),
+            (int) $map->getAttribute("zoom"),
+            (int) $map->getAttribute("maxZoom")
+        );
         foreach ($map->childNodes as $childNode) {
             assert($childNode instanceof DOMNode);
             if ($childNode->nodeName === "marker") {
@@ -66,18 +73,21 @@ final class Map implements Document
         return $that;
     }
 
-    public static function retrieve(string $name, DocumentStore $store): self
+    public static function create(string $name, DocumentStore $store): self
     {
-        $that = $store->retrieve("$name.xml", self::class);
+        $that = $store->create("$name.xml", self::class);
         assert($that instanceof self);
         return $that;
     }
 
-    public static function update(string $name, DocumentStore $store): self
+    public static function read(string $name, DocumentStore $store): ?self
     {
-        $that = $store->update("$name.xml", self::class);
-        assert($that instanceof self);
-        return $that;
+        return $store->read("$name.xml", self::class);
+    }
+
+    public static function update(string $name, DocumentStore $store): ?self
+    {
+        return $store->update("$name.xml", self::class);
     }
 
     public function __construct(string $name, float $latitude, float $longitude, int $zoom, int $maxZoom)

@@ -6,7 +6,7 @@ use ApprovalTests\Approvals;
 use Maps\Model\Map;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Plib\DocumentStore;
+use Plib\DocumentStore2 as DocumentStore;
 use Plib\FakeRequest;
 use Plib\View;
 
@@ -21,7 +21,7 @@ class MapCommandTest extends TestCase
         vfsStream::setup("root");
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["maps"];
         $this->store = new DocumentStore(vfsStream::url("root/"));
-        $map = Map::update("london", $this->store);
+        $map = Map::create("london", $this->store);
         $map->setCoordinates(-0.09, 51.505);
         $map->setZoom(13, 19);
         $map->addMarker(51.505, -0.09, "some info", true);
