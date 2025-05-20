@@ -132,7 +132,7 @@ class MapAdminCommandTest extends TestCase
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",
             "post" => [
                 "maps_do" => "",
-                "markers" => "0|0|more info|",
+                "markers" => '[{"latitude":0,"longitude":0,"info":"more info","show":false}]',
             ],
         ]);
         $response = $this->sut()($request);

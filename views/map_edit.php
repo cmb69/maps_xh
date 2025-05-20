@@ -55,7 +55,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
     </label>
     <label>
       <span><?=$this->text("label_markers")?></span>
-      <span class="maps_help"><?=$this->text("help_markers")?></span>
       <textarea name="markers"><?=$this->esc($map->markers)?></textarea>
     </label>
     <p class="maps_controls">

@@ -20,7 +20,6 @@ $plugin_tx['maps']['label_zoom']="Zoom";
 $plugin_tx['maps']['help_aspect_ratio']="(Breite/Höhe)";
 $plugin_tx['maps']['help_latitude']="(zwischen -90 und 90)";
 $plugin_tx['maps']['help_longitude']="(zwischen -180 und 180)";
-$plugin_tx['maps']['help_markers']="(Breitengrad|Längengrad|Info|anzeigen; eine Markierung pro Zeile)";
 $plugin_tx['maps']['help_name']="(nur a-z, 0-9 und Bindestriche)";
 $plugin_tx['maps']['help_zoom']="(zwischen 0 und 20)";
 

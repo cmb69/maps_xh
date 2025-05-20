@@ -20,7 +20,6 @@ $plugin_tx['maps']['label_zoom']="Zoom";
 $plugin_tx['maps']['help_aspect_ratio']="(with/height)";
 $plugin_tx['maps']['help_latitude']="(between -90 and 90)";
 $plugin_tx['maps']['help_longitude']="(between -180 and 180)";
-$plugin_tx['maps']['help_markers']="(latitude|longitude|info|show; one marker per line)";
 $plugin_tx['maps']['help_name']="(only a-z, 0-9, and hyhpens)";
 $plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 

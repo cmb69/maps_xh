@@ -37,9 +37,14 @@
     </label>
     <label>
       <span>Markers</span>
-      <span class="maps_help">(latitude|longitude|info|show; one marker per line)</span>
-      <textarea name="markers">0|0|basic info|1
-</textarea>
+      <textarea name="markers">[
+    {
+        &quot;latitude&quot;: 0,
+        &quot;longitude&quot;: 0,
+        &quot;info&quot;: &quot;basic info&quot;,
+        &quot;show&quot;: true
+    }
+]</textarea>
     </label>
     <p class="maps_controls">
       <button name="maps_do">Save</button>

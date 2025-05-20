@@ -142,10 +142,14 @@ class MapAdminCommand
 
     private function mapToDto(Map $map): MapDto
     {
-        $lines = [];
+        $markers = [];
         foreach ($map->markers() as $marker) {
-            $lines[] = $marker->latitude() .  "|" . $marker->longitude() . "|" . $marker->info()
-                . "|" . $marker->showInfo();
+            $markers[] = [
+                "latitude" => $marker->latitude(),
+                "longitude" => $marker->longitude(),
+                "info" => $marker->info(),
+                "show" => $marker->showInfo(),
+            ];
         }
         return new MapDto(
             $map->name(),
@@ -155,7 +159,7 @@ class MapAdminCommand
             $map->zoom(),
             $map->maxZoom(),
             $map->aspectRatio(),
-            implode("\n", $lines) . "\n"
+            (string) json_encode($markers, JSON_PRETTY_PRINT)
         );
     }
 
@@ -180,14 +184,15 @@ class MapAdminCommand
         $map->setZoom((int) $dto->zoom, (int) $dto->maxZoom);
         $map->setAspectRatio($dto->aspectRatio);
         $map->purgeMarkers();
-        $lines = preg_split('/\r?\n/', $dto->markers);
-        if ($lines === false) {
-            return;
-        }
-        foreach ($lines as $line) {
-            $fields = explode("|", $line);
-            if (count($fields) === 4) {
-                $map->addMarker((float) $fields[0], (float) $fields[1], $fields[2], (bool) $fields[3]);
+        $markers = json_decode($dto->markers);
+        if (is_array($markers)) {
+            foreach ($markers as $marker) {
+                $map->addMarker(
+                    (float) $marker->latitude,
+                    (float) $marker->longitude,
+                    $marker->info,
+                    (bool) $marker->show
+                );
             }
         }
     }
