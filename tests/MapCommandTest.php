@@ -41,6 +41,13 @@ class MapCommandTest extends TestCase
         Approvals::verifyHtml($response->output());
     }
 
+    public function testReportsNonExistingMap(): void
+    {
+        $request = new FakeRequest();
+        $response = $this->sut()("does-not-exist", $request);
+        $this->assertStringContainsString("There is no “does-not-exist” map!", $response->output());
+    }
+
     public function testDoesNotShowPrivacyFormIfConfigured(): void
     {
         $this->conf["tile_privacy"] = "";

@@ -84,6 +84,25 @@ class MapAdminCommandTest extends TestCase
         Approvals::verifyHtml($response->output());
     }
 
+    public function testsReportsThatNoMapIsSelected(): void
+    {
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=update",
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You have not selected a map!", $response->output());
+
+    }
+
+    public function testReportsMissingMap(): void
+    {
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=does-not-exist",
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("There is no “does-not-exist” map!", $response->output());
+    }
+
     public function testUpdatesMap(): void
     {
         $request = new FakeRequest([
@@ -97,6 +116,30 @@ class MapAdminCommandTest extends TestCase
         $map = Map::read("london", $this->store);
         $this->assertCount(1, $map->markers());
         $this->assertSame("http://example.com/?&maps&admin=plugin_main&maps_map=london", $response->location());
+    }
+
+    public function testsReportsMissingMapWhenUpdating(): void
+    {
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=does-not-exist",
+            "post" => [
+                "maps_do" => "",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("There is no “does-not-exist” map!", $response->output());
+    }
+
+    public function testsReportsThatNoMapIsSelectedWhenUpdating(): void
+    {
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=update",
+            "post" => [
+                "maps_do" => "",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You have not selected a map!", $response->output());
     }
 
     public function testReportsFailureToUpdateMap(): void

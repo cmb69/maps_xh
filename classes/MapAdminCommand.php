@@ -52,10 +52,7 @@ class MapAdminCommand
 
     private function read(Request $request): Response
     {
-        $maps = $this->store->find('/[a-z0-9\-]+\.xml$/');
-        return Response::create($this->view->render("maps_admin", [
-            "maps" => $this->mapDtos($request, $maps),
-        ]))->withTitle("Maps – " . $this->view->text("menu_main"));
+        return $this->respondWithOverview($request);
     }
 
     /**
@@ -101,11 +98,13 @@ class MapAdminCommand
             return $this->doUpdate($request);
         }
         if ($request->get("maps_map") === null) {
-            return Response::create("no map selected");
+            return $this->respondWithOverview($request, [$this->view->message("fail", "error_no_map")]);
         }
         $map = Map::read($request->get("maps_map"), $this->store);
         if ($map === null) {
-            return Response::create("no such map");
+            return $this->respondWithOverview($request, [
+                $this->view->message("fail", "error_missing_map", $request->get("maps_map"))
+            ]);
         }
         $dto = $this->mapToDto($map);
         return $this->respondWithEditor(false, $dto);
@@ -113,9 +112,14 @@ class MapAdminCommand
 
     private function doUpdate(Request $request): Response
     {
-        $map = Map::update($request->get("maps_map") ?? "", $this->store);
+        if ($request->get("maps_map") === null) {
+            return $this->respondWithOverview($request, [$this->view->message("fail", "error_no_map")]);
+        }
+        $map = Map::update($request->get("maps_map"), $this->store);
         if ($map === null) {
-            return Response::create("no such map");
+            return $this->respondWithOverview($request, [
+                $this->view->message("fail", "error_missing_map", $request->get("maps_map"))
+            ]);
         }
         $dto = $this->dtoFromRequest($request);
         $this->updateMapFromDto($map, $dto);
@@ -169,6 +173,16 @@ class MapAdminCommand
                 $map->addMarker((float) $fields[0], (float) $fields[1], $fields[2], (bool) $fields[3]);
             }
         }
+    }
+
+    /** @param list<string> $errors */
+    private function respondWithOverview(Request $request, array $errors = []): Response
+    {
+        $maps = $this->store->find('/[a-z0-9\-]+\.xml$/');
+        return Response::create($this->view->render("maps_admin", [
+            "errors" => $errors,
+            "maps" => $this->mapDtos($request, $maps),
+        ]))->withTitle("Maps – " . $this->view->text("menu_main"));
     }
 
     /** @param list<string> $errors */
