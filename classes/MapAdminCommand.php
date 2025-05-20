@@ -189,7 +189,7 @@ class MapAdminCommand
             $errors = [$this->view->message("fail", "error_geojson")];
             return $this->respondWithImportForm($map, $geojson, $template, $errors);
         }
-        $map->importGeoJsonFeatures($json["features"], $template);
+        $map->importGeoJsonFeatures($json["features"], $template, (bool) $request->post("replace"));
         if (!$this->store->commit()) {
             $errors = [$this->view->message("fail", "error_save")];
             return $this->respondWithImportForm($map, $geojson, $template, $errors);

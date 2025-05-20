@@ -188,10 +188,13 @@ final class Map implements Document
     }
 
     /** @param array<mixed> $features */
-    public function importGeoJsonFeatures(array $features, string $template): void
+    public function importGeoJsonFeatures(array $features, string $template, bool $replace): void
     {
         if (preg_match_all('/{([a-zA-Z]+)}/', $template, $matches, PREG_SET_ORDER) === false) {
             return;
+        }
+        if ($replace) {
+            $this->purgeMarkers();
         }
         foreach ($features as $feature) {
             if (
