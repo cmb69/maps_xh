@@ -189,7 +189,7 @@ class MapAdminCommand
             $errors = [$this->view->message("fail", "error_geojson")];
             return $this->respondWithImportForm($map, $geojson, $template, $errors);
         }
-        $this->importMarkers($map, $json["features"], $template);
+        $map->importGeoJsonFeatures($json["features"], $template);
         if (!$this->store->commit()) {
             $errors = [$this->view->message("fail", "error_save")];
             return $this->respondWithImportForm($map, $geojson, $template, $errors);
@@ -263,34 +263,6 @@ class MapAdminCommand
                     $marker->info,
                     (bool) $marker->show
                 );
-            }
-        }
-    }
-
-    /** @param array<mixed> $features */
-    private function importMarkers(Map $map, array $features, string $template): void
-    {
-        preg_match_all('/{([a-zA-Z]+)}/', $template, $matches, PREG_SET_ORDER);
-        foreach ($features as $feature) {
-            if (
-                is_array($feature)
-                && array_key_exists("geometry", $feature)
-                && is_array($geometry = $feature["geometry"])
-                && array_key_exists("type", $geometry) && $geometry["type"] === "Point"
-                && array_key_exists("coordinates", $geometry)
-                && is_array($coordinates = $geometry["coordinates"])
-                && array_key_exists("properties", $feature)
-                && is_array($properties = $feature["properties"])
-            ) {
-                [$longitude, $latitude] = $coordinates;
-                $replacements = [];
-                foreach ($matches as $match) {
-                    if (array_key_exists($match[1], $properties)) {
-                        $replacements[$match[0]] = $properties[$match[1]];
-                    }
-                }
-                $info = strtr($template, $replacements);
-                $map->addMarker($latitude, $longitude, $info, false);
             }
         }
     }

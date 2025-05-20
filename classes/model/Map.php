@@ -187,6 +187,36 @@ final class Map implements Document
         return $marker;
     }
 
+    /** @param array<mixed> $features */
+    public function importGeoJsonFeatures(array $features, string $template): void
+    {
+        if (preg_match_all('/{([a-zA-Z]+)}/', $template, $matches, PREG_SET_ORDER) === false) {
+            return;
+        }
+        foreach ($features as $feature) {
+            if (
+                is_array($feature)
+                && array_key_exists("geometry", $feature)
+                && is_array($geometry = $feature["geometry"])
+                && array_key_exists("type", $geometry) && $geometry["type"] === "Point"
+                && array_key_exists("coordinates", $geometry)
+                && is_array($coordinates = $geometry["coordinates"])
+                && array_key_exists("properties", $feature)
+                && is_array($properties = $feature["properties"])
+            ) {
+                [$longitude, $latitude] = $coordinates;
+                $replacements = [];
+                foreach ($matches as $match) {
+                    if (array_key_exists($match[1], $properties)) {
+                        $replacements[$match[0]] = $properties[$match[1]];
+                    }
+                }
+                $info = strtr($template, $replacements);
+                $this->addMarker($latitude, $longitude, $info, false);
+            }
+        }
+    }
+
     public function toString(): string
     {
         $doc = new DOMDocument('1.0', 'UTF-8');
