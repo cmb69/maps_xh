@@ -63,7 +63,9 @@ class Dic
 
     public static function mapAdminCommand(): MapAdminCommand
     {
+        global $pth;
         return new MapAdminCommand(
+            $pth["folder"]["plugins"] . "maps/",
             new DocumentStore(self::contentFolder()),
             new CsrfProtector(),
             self::view()

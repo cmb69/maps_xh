@@ -30,12 +30,18 @@ use Plib\View;
 
 class MapAdminCommand
 {
+    private string $pluginFolder;
     private DocumentStore $store;
     private CsrfProtector $csrfProtector;
     private View $view;
 
-    public function __construct(DocumentStore $store, CsrfProtector $csrfProtector, View $view)
-    {
+    public function __construct(
+        string $pluginFolder,
+        DocumentStore $store,
+        CsrfProtector $csrfProtector,
+        View $view
+    ) {
+        $this->pluginFolder = $pluginFolder;
         $this->store = $store;
         $this->csrfProtector = $csrfProtector;
         $this->view = $view;
@@ -81,7 +87,7 @@ class MapAdminCommand
             return $this->doCreate($request);
         }
         $dto = new MapDto("", "", 0, 0, 0, 0, "1/1", "");
-        return $this->respondWithEditor(true, $dto);
+        return $this->respondWithEditor(true, $dto, []);
     }
 
     private function doCreate(Request $request): Response
@@ -90,11 +96,11 @@ class MapAdminCommand
         $dto = $this->dtoFromRequest($request);
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
-            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_not_authorized")]);
+            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_not_authorized")]);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
-            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_save", $dto->name)]);
+            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_save", $dto->name)]);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -114,7 +120,7 @@ class MapAdminCommand
             ]);
         }
         $dto = $this->mapToDto($map);
-        return $this->respondWithEditor(false, $dto);
+        return $this->respondWithEditor(false, $dto, $this->markerDtos($map));
     }
 
     private function doUpdate(Request $request): Response
@@ -131,11 +137,11 @@ class MapAdminCommand
         $dto = $this->dtoFromRequest($request);
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
-            return $this->respondWithEditor(true, $dto, [$this->view->message("fail", "error_not_authorized")]);
+            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_not_authorized")]);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
-            return $this->respondWithEditor(false, $dto, [$this->view->message("fail", "error_save", $dto->name)]);
+            return $this->respondWithEditor(false, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_save", $dto->name)]);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -159,8 +165,21 @@ class MapAdminCommand
             $map->zoom(),
             $map->maxZoom(),
             $map->aspectRatio(),
-            (string) json_encode($markers, JSON_PRETTY_PRINT)
+            (string) json_encode($markers)
         );
+    }
+
+    /** @return iterable<object{latitude:float,longitude:float,info:string,show:string}> */
+    private function markerDtos(Map $map): iterable
+    {
+        foreach ($map->markers() as $marker) {
+            yield (object) [
+                "latitude" => $marker->latitude(),
+                "longitude" => $marker->longitude(),
+                "info" => $marker->info() ?? "",
+                "show" => $marker->showInfo() ? "checked" : "",
+            ];
+        }
     }
 
     private function dtoFromRequest(Request $request): MapDto
@@ -207,14 +226,19 @@ class MapAdminCommand
         ]))->withTitle("Maps – " . $this->view->text("menu_main"));
     }
 
-    /** @param list<string> $errors */
-    private function respondWithEditor(bool $new, MapDto $dto, array $errors = []): Response
+    /**
+     * @param iterable<object{latitude:float,longitude:float,info:string,show:string}> $markers
+     * @param list<string> $errors
+     */
+    private function respondWithEditor(bool $new, MapDto $dto, iterable $markers, array $errors = []): Response
     {
         return Response::create($this->view->render("map_edit", [
             "errors" => $errors,
             "name_disabled" => $new ? "" : "disabled",
             "map" => $dto,
+            "markers" => $markers,
             "token" => $this->csrfProtector->token(),
+            "script" => $this->pluginFolder . "admin.js",
         ]))->withTitle("Maps – " . $this->view->text("menu_main"));
     }
 }

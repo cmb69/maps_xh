@@ -33,7 +33,7 @@ class MapAdminCommandTest extends TestCase
 
     private function sut(): MapAdminCommand
     {
-        return new MapAdminCommand($this->store, $this->csrfProtector, $this->view);
+        return new MapAdminCommand("./", $this->store, $this->csrfProtector, $this->view);
     }
 
     public function testRendersOverview(): void

@@ -4,9 +4,12 @@ $plugin_tx['maps']['tile_attribution']="&copy; <a href=\"http://www.openstreetma
 
 $plugin_tx['maps']['menu_main']="Verwaltung";
 
+$plugin_tx['maps']['label_create_marker']="Markierung erzeugen";
 $plugin_tx['maps']['label_agree']="Ich stimme zu!";
 $plugin_tx['maps']['label_aspect_ratio']="Seitenverhältnis";
+$plugin_tx['maps']['label_delete_marker']="Diese Markierung löschen";
 $plugin_tx['maps']['label_edit']="Bearbeiten";
+$plugin_tx['maps']['label_info']="Info";
 $plugin_tx['maps']['label_latitude']="Breitengrad";
 $plugin_tx['maps']['label_longitude']="Längengrad";
 $plugin_tx['maps']['label_markers']="Markierungen";
@@ -14,10 +17,12 @@ $plugin_tx['maps']['label_max_zoom']="Max. Zoom";
 $plugin_tx['maps']['label_name']="Name";
 $plugin_tx['maps']['label_new']="Neu";
 $plugin_tx['maps']['label_save']="Speichern";
+$plugin_tx['maps']['label_show']="Zeigen";
 $plugin_tx['maps']['label_title']="Überschrift";
 $plugin_tx['maps']['label_zoom']="Zoom";
 
 $plugin_tx['maps']['help_aspect_ratio']="(Breite/Höhe)";
+$plugin_tx['maps']['help_info']="(beliebiges HTML)";
 $plugin_tx['maps']['help_latitude']="(zwischen -90 und 90)";
 $plugin_tx['maps']['help_longitude']="(zwischen -180 und 180)";
 $plugin_tx['maps']['help_name']="(nur a-z, 0-9 und Bindestriche)";
