@@ -198,7 +198,7 @@ class MapAdminCommand
             $errors = [$this->view->message("fail", "error_save")];
             return $this->respondWithImportForm($map, $geojson, $template, $errors);
         }
-        return Response::redirect($request->url()->without("action")->absolute());
+        return Response::redirect($request->url()->with("action", "update")->absolute());
     }
 
     private function mapToDto(Map $map): MapDto

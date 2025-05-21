@@ -34,7 +34,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
       <label>
         <span><?=$this->text("label_template")?></span>
         <span class="maps_help"><?=$this->text("help_template")?></span>
-        <textarea name="template" required></textarea>
+        <textarea name="template"></textarea>
       </label>
     </p>
     <p>
