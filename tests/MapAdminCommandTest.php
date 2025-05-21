@@ -238,7 +238,10 @@ class MapAdminCommandTest extends TestCase
         $response = $this->sut()($request);
         $map = Map::read("london", $this->store);
         $this->assertCount(2, $map->markers());
-        $this->assertSame("http://example.com/?&maps&admin=plugin_main&maps_map=london", $response->location());
+        $this->assertSame(
+            "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",
+            $response->location()
+        );
     }
 
     public function testsReportsThatNoMapIsSelectedWhenImporting(): void
