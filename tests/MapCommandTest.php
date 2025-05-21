@@ -32,7 +32,7 @@ class MapCommandTest extends TestCase
 
     private function sut(): MapCommand
     {
-        return new MapCommand("../", $this->conf, $this->store, $this->view);
+        return new MapCommand("./", $this->conf, $this->store, $this->view);
     }
 
     public function testShowsMap(): void

@@ -61,12 +61,20 @@ class MapCommand
             return Response::create($this->view->message("fail", "error_load", $name));
         }
         return Response::create($this->view->render("map", [
-            "script" => $this->pluginFolder . "maps.js",
+            "script" => $this->script(),
             "conf" => $this->jsConf($request, $map),
             "title" => $map->title(),
             "aspectRatio" => $map->aspectRatio(),
             "privacy" => $this->tilePrivacy($request),
         ]));
+    }
+
+    private function script(): string
+    {
+        if (is_file($this->pluginFolder . "maps.min.js")) {
+            return $this->pluginFolder . "maps.min.js";
+        }
+        return $this->pluginFolder . "maps.js";
     }
 
     /** @return array<string,mixed> */

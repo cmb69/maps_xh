@@ -293,8 +293,16 @@ class MapAdminCommand
             "map" => $dto,
             "markers" => $markers,
             "token" => $this->csrfProtector->token(),
-            "script" => $this->pluginFolder . "admin.js",
+            "script" => $this->script(),
         ]))->withTitle("Maps – " . $this->view->text("label_edit"));
+    }
+
+    private function script(): string
+    {
+        if (is_file($this->pluginFolder . "admin.min.js")) {
+            return $this->pluginFolder . "admin.min.js";
+        }
+        return $this->pluginFolder . "admin.js";
     }
 
     /** @param list<string> $errors */
