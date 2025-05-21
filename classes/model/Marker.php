@@ -85,8 +85,8 @@ final class Marker
             $info->setAttribute("show", "");
         }
         if ($this->info !== null) {
-            $text = $doc->createTextNode($this->info);
-            $info->appendChild($text);
+            $cdata = $doc->createCDATASection($this->info);
+            $info->appendChild($cdata);
         }
         $elt->appendChild($info);
         return $elt;
