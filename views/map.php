@@ -21,7 +21,9 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
 <?if ($privacy):?>
   <form method="post">
     <p><?=$this->text("message_tile_privacy")?></p>
-    <button name="maps_agree" value="1"><?=$this->text("label_agree")?></button>
+    <p class="maps_controls">
+      <button name="maps_agree" value="1"><?=$this->text("label_agree")?></button>
+    </p>
   </form>
 <?endif?>
 </figure>

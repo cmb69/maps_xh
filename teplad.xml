@@ -81,9 +81,25 @@
   <descriptions>
     <!-- description of the plugin, ca. 200 characters, you can use <br/>, <ol></ol>, <ul></ul>, <li></li>, <b></b>, <i></i>. -->
     <description lang="en">
+      The plugin facilitates displaying OpenStreetMap
+      maps on a CMSimple_XH website without needing to fiddle around with JavaScript.
+      Such maps are useful to show others where they can find you, but can be used
+      for other purposes as well.
+      The plugin provides data privacy by default; i.e. no data are transferred to
+      third-party servers prior to explicit agreement.
+      The maps can have an arbitrary amount of markers (optionally with info texts),
+      and there is basic support for importing GeoJSON features.
     </description>
     <!-- Beschreibung des Plugins, ca. 200 Zeichen, es können <br/>, <ol></ol>, <ul></ul>, <li></li>, <b></b>, <i></i> genutzt werden. -->
     <description lang="de">
+      Das Plugin ermöglicht die Anzeige von OpenStreetMap
+      Landkarten auf einer CMSimple_XH Website, ohne dass man etwas mit JavaScript basteln muss.
+      Solche Landkarten sind nützlich für eine "So können sie uns finden" Seite,
+      aber können auch für andere Zwecke genutzt werden.
+      Das Plugin ist per Voreinstellung auf Datenschutz ausgelegt, d.h. keine Daten
+      werden an fremde Server übermittelt, bevor nicht explizit zugestimmt wurde.
+      Die Landkarten können eine beliebige Anzahl von Markierungen (optional mit
+      Info-Text) enthalten, und grundlegender Import von GeoJSON Features ist möglich.
     </description>
     <!-- additional languages are possible, i.e. da, fr, pl, ... -->
     <!-- The use of this language is limited by the website where the repository is hosted. -->

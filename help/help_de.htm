@@ -30,12 +30,17 @@
 </head>
 <body>
 <h1 id="maps_xh">Maps_XH</h1>
+<p>Das Plugin ermöglicht die Anzeige von <a href="https://www.openstreetmap.org/">OpenStreetMap</a> Landkarten auf einer CMSimple_XH Website, ohne dass man etwas mit JavaScript basteln muss. Solche Landkarten sind nützlich für eine “So können sie uns finden” Seite, aber können auch für andere Zwecke genutzt werden. Das Plugin ist per Voreinstellung auf Datenschutz ausgelegt, d.h. keine Daten werden an fremde Server übermittelt, bevor nicht explizit zugestimmt wurde. Die Landkarten können eine beliebige Anzahl von Markierungen (optional mit Info-Text) enthalten, und grundlegender Import von GeoJSON Features ist möglich.</p>
 <ul>
 <li><a href="#voraussetzungen">Voraussetzungen</a></li>
 <li><a href="#download">Download</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#einstellungen">Einstellungen</a></li>
-<li><a href="#verwendung">Verwendung</a></li>
+<li><a href="#verwendung">Verwendung</a>
+<ul>
+<li><a href="#definition-von-landkarten">Definition von Landkarten</a></li>
+<li><a href="#import-von-geojson">Import von GeoJSON</a></li>
+</ul></li>
 <li><a href="#fehlerbehebung">Fehlerbehebung</a></li>
 <li><a href="#lizenz">Lizenz</a></li>
 <li><a href="#danksagung">Danksagung</a></li>
@@ -63,7 +68,20 @@
 <pre><code>{{{maps(&#39;name&#39;)}}}</code></pre>
 <p>Um eine Landkarte im Template anzuzeigen:</p>
 <pre><code>&lt;?=maps(&#39;name&#39;)?&gt;</code></pre>
-<p>Wobei <code>name</code> der Basisname einer passenden XML-Datei ist, die im Unterorder <code>maps</code> des <code>content</code> Ordner von CMSimple_XH abgelegt wurde.</p>
+<p>Wobei <code>name</code> der Name der Landkarte ist. Details sind unter <a href="#definition-von-landkarten">Definition von Landkarten</a> zu finden.</p>
+<p>Bei Wechsel in den Ansichtsmodus, wird, wenn der Kachel-Datenschutz aktiviert ist (<code>Plugins</code> → <code>Maps</code> → <code>Konfiguration</code> → <code>Tile</code> → <code>Privacy</code>), was empfohlen wird, nicht gleich die Karte, sondern nur ein grauer Bereich mit den Markierungen (falls welche definiert wurden) angezeigt. Darunter befindet sich ein Formular wo der Datenübertragung zunächst zugestimmt werden muss, um die Landkarte vollständig anzuzeigen. Dies verhält sich ebenso für Besucher der Website.</p>
+<p><strong>Bitte beachten Sie die Nutzungsbedingungen der Kachel-Anbieter.</strong> Das Plugin tut sein Möglichstest diese einzuhalten, aber schließlich liegt es an Ihnen dies sicherzustellen. Für den voreingestellten Kachel-Anbieter siehe <a href="https://operations.osmfoundation.org/policies/tiles/" class="uri">https://operations.osmfoundation.org/policies/tiles/</a>.</p>
+<h3 id="definition-von-landkarten">Definition von Landkarten</h3>
+<p>Im Plugin-Backend (<code>Plugins</code> → <code>Map</code> → <code>Administration</code>) können die Landkarten definiert werden. Die Benutzung sollte selbst erklärend sein, aber ein paar Hinweise scheinen angebracht:</p>
+<ul>
+<li><p>Jede Landkarte hat einen eindeutigen Namen, under dem sie im <code>content/</code> Ordner gespeichert wird. Der Name kann nur durch Umbennung der entsprechenden Datei per FTP geändert werden.</p></li>
+<li><p>Die Koordinaten (Breiten-/Längengrad) bestimmen den Mittelpunkt der Landkarte, und werden als Dezimalzahlen (nicht Grad und Bogenminuten) angegeben. Eine Websuche kann nützlich sein, um die Koordinaten für den gewünschten Ort zu finden.</p></li>
+<li><p>Zoom-Stufe 0 bedeutet die ganze Welt; Stufe 20 ist ungefähr ein Gebäude. <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">Definition der Zoom-Stufen</a>.</p></li>
+<li><p>Das Seitenverhältnis bestimmt die Höhe der Landkarte, wenn sie angezeigt wird. Ihre Breite ist immer 100%.</p></li>
+<li><p>Es kann eine beliebige Anzahl von Markierungen definiert werden, die an den angegebenen Koordinaten angezeigt werden. Diese Markierung können Info-Text enthalten, der angezeigt wird, wenn der Marker angeklickt wird, oder, wenn die entsprechende Checkbox angehakt ist, angezeigt wird, wenn die Karte angezeigt wird.</p></li>
+</ul>
+<h3 id="import-von-geojson">Import von GeoJSON</h3>
+<p>Der Import von sogenannten <a href="https://geojson.org/">GeoJSON</a> Features wird unterstützt; nur Punkte (points) werden berücksichtigt, und diese werden als Markierungen importiert. Das Import-Formular hat ein Feld für das <code>GeoJSON</code> (kopieren und einfügen kann nützlich sein), und ein <code>Template</code> Feld, das verwendet kann, um die Markierungsinfo mit Daten des GeoJSON Features zu befüllen. Das Template erwartet HTML mit Platzhaltern, die durch die sogenannten Eigenschaften (properties) des GeoJSON Features ersetzt werden. Existiert die Eigenschaft nicht, dann findet keine Ersetzung statt. Ein Platzhalter ist der Name einer Eigenschaft, der in geschweifte Klammern eingeschlossen ist, z.B. <code>{name}</code>. Es ist zu beachten, dass gewählt werden kann, dass bestehende Markierung ersetzt werden, was nützlich ist wenn ein aktualisiertes GeoJSON erneut import wird.</p>
 <h2 id="fehlerbehebung">Fehlerbehebung</h2>
 <p>Melden Sie Programmfehler und stellen Sie Supportanfragen entweder auf <a href="https://github.com/cmb69/maps_xh/issues">Github</a> oder im <a href="https://cmsimpleforum.com/">CMSimple_XH Forum</a>.</p>
 <h2 id="lizenz">Lizenz</h2>

@@ -30,12 +30,17 @@
 </head>
 <body>
 <h1 id="maps_xh">Maps_XH</h1>
+<p>The plugin facilitates displaying <a href="https://www.openstreetmap.org/">OpenStreetMap</a> maps on a CMSimple_XH website without needing to fiddle around with JavaScript. Such maps are useful to show others where they can find you, but can be used for other purposes as well. The plugin provides data privacy by default; i.e. no data are transferred to third-party servers prior to explicit agreement. The maps can have an arbitrary amount of markers (optionally with info texts), and there is basic support for importing GeoJSON features.</p>
 <ul>
 <li><a href="#requirements">Requirements</a></li>
 <li><a href="#download">Download</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#settings">Settings</a></li>
-<li><a href="#usage">Usage</a></li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#define-maps">Define Maps</a></li>
+<li><a href="#importing-geojson">Importing GeoJSON</a></li>
+</ul></li>
 <li><a href="#troubleshooting">Troubleshooting</a></li>
 <li><a href="#license">License</a></li>
 <li><a href="#credits">Credits</a></li>
@@ -63,7 +68,20 @@
 <pre><code>{{{maps(&#39;name&#39;)}}}</code></pre>
 <p>To display a map in the template:</p>
 <pre><code>&lt;?=maps(&#39;name&#39;)?&gt;</code></pre>
-<p>Where <code>name</code> is the basename of a suitable XML file you have stored in the subfolder <code>maps</code> of the <code>content</code> folder of CMSimple_XH.</p>
+<p>Where <code>name</code> is the name of the map. See <a href="#define-maps">Define Maps</a> for details.</p>
+<p>If you switch to view mode, and you have tile privacy enabled (<code>Plugins</code> → <code>Maps</code> → <code>Config</code> → <code>Tile</code> → <code>Privacy</code>) what is recommended, you will not see the actual map, but rather a grey area with the markers (if any are defined). Below you find a form where you have to agree to the data transmission first, before the map will be fully shown. This also happens to visitors of your website.</p>
+<p><strong>Please heed the terms of use of the tile providers.</strong> The plugin does its best to comply, but finally it is up to you. For the default tile provider, see <a href="https://operations.osmfoundation.org/policies/tiles/" class="uri">https://operations.osmfoundation.org/policies/tiles/</a>.</p>
+<h3 id="define-maps">Define Maps</h3>
+<p>In the plugin back-end (<code>Plugins</code> → <code>Map</code> → <code>Administration</code>) you can define your map(s). The user interface is supposed to be self explaining, but some notes are in order:</p>
+<ul>
+<li><p>Every map has a unique name under which it is stored in the <code>content/</code> folder. If you want to change the name, you need to rename the respective file via FTP.</p></li>
+<li><p>The coordinates (latitude/longitude) determine the center of the map, and are given as decimal numbers (not degrees and minutes). Search the Web to find the coordinates for the desired location.</p></li>
+<li><p>Zoom level 0 means the whole world, level 20 is roughly a building. <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">Definition of the zoom levels</a>.</p></li>
+<li><p>The aspect ratio determines the height of the map when displayed; its width is always 100%.</p></li>
+<li><p>You can define an arbitrary amount of markers which are placed at the given coordinates. These markers can have info text which is shown when the marker is clicked, or, if you check the checkbox, is shown when the map is displayed.</p></li>
+</ul>
+<h3 id="importing-geojson">Importing GeoJSON</h3>
+<p>There is support for importing so-called <a href="https://geojson.org/">GeoJSON</a> features; only points are recognized, and these are imported as markers. The import form has a field for the the <code>GeoJSON</code> (use copy&amp;paste to fill it), and a <code>Template</code> field which can be used to fill the marker info with data from the GeoJSON features. The template expects HTML with placeholders which will be replaced with so called properties of the GeoJSON feature. If the property does not exists, no replacement is done. A placeholders is the name of a property enclosed in curly braces, e.g. <code>{name}</code>. Note that you can choose to replace the existing markers, what is useful when reimporting updated GeoJSON.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>Report bugs and ask for support either on <a href="https://github.com/cmb69/maps_xh/issues">Github</a> or in the <a href="https://cmsimpleforum.com/">CMSimple_XH Forum</a>.</p>
 <h2 id="license">License</h2>

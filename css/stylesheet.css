@@ -4,6 +4,10 @@ figure.maps_map {}
 figure.maps_map figcaption {
     font-size: larger;
 }
+figure.maps_map .maps_controls {
+    display: flex;
+    justify-content: right;
+}
 
 /* maps administration */
 

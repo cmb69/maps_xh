@@ -1,10 +1,21 @@
 # Maps_XH
 
+The plugin facilitates displaying [OpenStreetMap](https://www.openstreetmap.org/)
+maps on a CMSimple_XH website without needing to fiddle around with JavaScript.
+Such maps are useful to show others where they can find you, but can be used
+for other purposes as well.
+The plugin provides data privacy by default; i.e. no data are transferred to
+third-party servers prior to explicit agreement.
+The maps can have an arbitrary amount of markers (optionally with info texts),
+and there is basic support for importing GeoJSON features.
+
 - [Requirements](#requirements)
 - [Download](#download)
 - [Installation](#installation)
 - [Settings](#settings)
 - [Usage](#usage)
+  - [Define Maps](#define-maps)
+  - [Importing GeoJSON](#importing-geojson)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
 - [Credits](#credits)
@@ -63,8 +74,54 @@ To display a map in the template:
 
     <?=maps('name')?>
 
-Where `name` is the basename of a suitable XML file you have stored in the subfolder
-`maps` of the `content` folder of CMSimple_XH.
+Where `name` is the name of the map.  See [Define Maps](#define-maps) for details.
+
+If you switch to view mode, and you have tile privacy enabled
+(`Plugins` → `Maps` → `Config` → `Tile` → `Privacy`) what is recommended, you
+will not see the actual map, but rather a grey area with the markers (if any
+are defined).  Below you find a form where you have to agree to the data
+transmission first, before the map will be fully shown.  This also happens
+to visitors of your website.
+
+**Please heed the terms of use of the tile providers.**
+The plugin does its best to comply, but finally it is up to you.
+For the default tile provider, see <https://operations.osmfoundation.org/policies/tiles/>.
+
+### Define Maps
+
+In the plugin back-end (`Plugins` → `Map` → `Administration`) you can define
+your map(s).  The user interface is supposed to be self explaining, but some
+notes are in order:
+
+* Every map has a unique name under which it is stored in the `content/` folder.
+  If you want to change the name, you need to rename the respective file via FTP.
+
+* The coordinates (latitude/longitude) determine the center of the map, and
+  are given as decimal numbers (not degrees and minutes).  Search the Web to
+  find the coordinates for the desired location.
+
+* Zoom level 0 means the whole world, level 20 is roughly a building.
+  [Definition of the zoom levels](https://wiki.openstreetmap.org/wiki/Zoom_levels).
+
+* The aspect ratio determines the height of the map when displayed; its width
+  is always 100%.
+
+* You can define an arbitrary amount of markers which are placed at the given
+  coordinates.  These markers can have info text which is shown when the marker
+  is clicked, or, if you check the checkbox, is shown when the map is displayed.
+
+### Importing GeoJSON
+
+There is support for importing so-called [GeoJSON](https://geojson.org/) features;
+only points are recognized, and these are imported as markers.  The import form
+has a field for the the `GeoJSON` (use copy&paste to fill it), and a `Template` field
+which can be used to fill the marker info with data from the GeoJSON features.
+The template expects HTML with placeholders which will be replaced with so called
+properties of the GeoJSON feature.  If the property does not exists, no
+replacement is done.  A placeholders is the name of a property enclosed
+in curly braces, e.g. `{name}`.
+Note that you can choose to replace the existing markers, what is useful when
+reimporting updated GeoJSON.
 
 ## Troubleshooting
 

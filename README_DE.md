@@ -1,10 +1,21 @@
 # Maps_XH
 
+Das Plugin ermöglicht die Anzeige von [OpenStreetMap](https://www.openstreetmap.org/)
+Landkarten auf einer CMSimple_XH Website, ohne dass man etwas mit JavaScript basteln muss.
+Solche Landkarten sind nützlich für eine "So können sie uns finden" Seite,
+aber können auch für andere Zwecke genutzt werden.
+Das Plugin ist per Voreinstellung auf Datenschutz ausgelegt, d.h. keine Daten
+werden an fremde Server übermittelt, bevor nicht explizit zugestimmt wurde.
+Die Landkarten können eine beliebige Anzahl von Markierungen (optional mit
+Info-Text) enthalten, und grundlegender Import von GeoJSON Features ist möglich.
+
 - [Voraussetzungen](#voraussetzungen)
 - [Download](#download)
 - [Installation](#installation)
 - [Einstellungen](#einstellungen)
 - [Verwendung](#verwendung)
+  - [Definition von Landkarten](#definition-von-landkarten)
+  - [Import von GeoJSON](#import-von-geojson)
 - [Fehlerbehebung](#fehlerbehebung)
 - [Lizenz](#lizenz)
 - [Danksagung](#danksagung)
@@ -63,8 +74,61 @@ Um eine Landkarte im Template anzuzeigen:
 
     <?=maps('name')?>
 
-Wobei `name` der Basisname einer passenden XML-Datei ist, die im Unterorder
-`maps` des `content` Ordner von CMSimple_XH abgelegt wurde.
+Wobei `name` der Name der Landkarte ist. Details sind unter
+[Definition von Landkarten](#definition-von-landkarten) zu finden.
+
+Bei Wechsel in den Ansichtsmodus, wird, wenn der Kachel-Datenschutz aktiviert
+ist (`Plugins` → `Maps` → `Konfiguration` → `Tile` → `Privacy`), was empfohlen
+wird, nicht gleich die Karte, sondern nur ein grauer Bereich mit den Markierungen
+(falls welche definiert wurden) angezeigt. Darunter befindet sich ein Formular
+wo der Datenübertragung zunächst zugestimmt werden muss, um die Landkarte
+vollständig anzuzeigen. Dies verhält sich ebenso für Besucher der Website.
+
+**Bitte beachten Sie die Nutzungsbedingungen der Kachel-Anbieter.**
+Das Plugin tut sein Möglichstest diese einzuhalten, aber schließlich liegt es an
+Ihnen dies sicherzustellen. Für den voreingestellten Kachel-Anbieter siehe
+<https://operations.osmfoundation.org/policies/tiles/>.
+
+### Definition von Landkarten
+
+Im Plugin-Backend (`Plugins` → `Map` → `Administration`) können die Landkarten
+definiert werden. Die Benutzung sollte selbst erklärend sein, aber ein paar
+Hinweise scheinen angebracht:
+
+* Jede Landkarte hat einen eindeutigen Namen, under dem sie im `content/` Ordner
+  gespeichert wird. Der Name kann nur durch Umbennung der entsprechenden Datei
+  per FTP geändert werden.
+
+* Die Koordinaten (Breiten-/Längengrad) bestimmen den Mittelpunkt der Landkarte,
+  und werden als Dezimalzahlen (nicht Grad und Bogenminuten) angegeben.
+  Eine Websuche kann nützlich sein, um die Koordinaten für den gewünschten Ort
+  zu finden.
+
+* Zoom-Stufe 0 bedeutet die ganze Welt; Stufe 20 ist ungefähr ein Gebäude.
+  [Definition der Zoom-Stufen](https://wiki.openstreetmap.org/wiki/Zoom_levels).
+
+* Das Seitenverhältnis bestimmt die Höhe der Landkarte, wenn sie angezeigt wird.
+  Ihre Breite ist immer 100%.
+
+* Es kann eine beliebige Anzahl von Markierungen definiert werden, die an den
+  angegebenen Koordinaten angezeigt werden.  Diese Markierung können Info-Text
+  enthalten, der angezeigt wird, wenn der Marker angeklickt wird, oder, wenn die
+  entsprechende Checkbox angehakt ist, angezeigt wird, wenn die Karte angezeigt
+  wird.
+
+### Import von GeoJSON
+
+Der Import von sogenannten [GeoJSON](https://geojson.org/) Features wird
+unterstützt; nur Punkte (points) werden berücksichtigt, und diese werden als
+Markierungen importiert. Das Import-Formular hat ein Feld für das `GeoJSON`
+(kopieren und einfügen kann nützlich sein), und ein `Template` Feld, das
+verwendet kann, um die Markierungsinfo mit Daten des GeoJSON Features zu befüllen.
+Das Template erwartet HTML mit Platzhaltern, die durch die sogenannten Eigenschaften
+(properties) des GeoJSON Features ersetzt werden. Existiert die Eigenschaft nicht,
+dann findet keine Ersetzung statt. Ein Platzhalter ist der Name einer Eigenschaft,
+der in geschweifte Klammern eingeschlossen ist, z.B. `{name}`.
+Es ist zu beachten, dass gewählt werden kann, dass bestehende Markierung ersetzt
+werden, was nützlich ist wenn ein aktualisiertes GeoJSON erneut import wird.
 
 ## Fehlerbehebung
 
