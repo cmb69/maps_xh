@@ -56,6 +56,7 @@ class Dic
         global $pth;
         return new InfoCommand(
             $pth["folder"]["plugins"] . "maps/",
+            new DocumentStore(self::contentFolder()),
             new SystemChecker(),
             self::view()
         );
