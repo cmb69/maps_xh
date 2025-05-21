@@ -89,7 +89,7 @@ class MapAdminCommand
             return $this->doCreate($request);
         }
         $dto = new MapDto("", "", 0, 0, 0, 0, "1/1", "");
-        return $this->respondWithEditor(true, $dto, []);
+        return $this->respondWithEditor($request, true, $dto, []);
     }
 
     private function doCreate(Request $request): Response
@@ -99,12 +99,12 @@ class MapAdminCommand
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
             $errors = [$this->view->message("fail", "error_not_authorized")];
-            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), $errors);
+            return $this->respondWithEditor($request, true, $dto, $this->markerDtos($map), $errors);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
             $errors = [$this->view->message("fail", "error_save", $dto->name)];
-            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), $errors);
+            return $this->respondWithEditor($request, true, $dto, $this->markerDtos($map), $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -124,7 +124,7 @@ class MapAdminCommand
             ]);
         }
         $dto = $this->mapToDto($map);
-        return $this->respondWithEditor(false, $dto, $this->markerDtos($map));
+        return $this->respondWithEditor($request, false, $dto, $this->markerDtos($map));
     }
 
     private function doUpdate(Request $request): Response
@@ -142,12 +142,12 @@ class MapAdminCommand
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
             $errors = [$this->view->message("fail", "error_not_authorized")];
-            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), $errors);
+            return $this->respondWithEditor($request, true, $dto, $this->markerDtos($map), $errors);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
             $errors = [$this->view->message("fail", "error_save", $dto->name)];
-            return $this->respondWithEditor(false, $dto, $this->markerDtos($map), $errors);
+            return $this->respondWithEditor($request, false, $dto, $this->markerDtos($map), $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -285,15 +285,20 @@ class MapAdminCommand
      * @param iterable<object{latitude:float,longitude:float,info:string,show:string}> $markers
      * @param list<string> $errors
      */
-    private function respondWithEditor(bool $new, MapDto $dto, iterable $markers, array $errors = []): Response
-    {
+    private function respondWithEditor(
+        Request $request,
+        bool $new,
+        MapDto $dto,
+        iterable $markers,
+        array $errors = []
+    ): Response {
         return Response::create($this->view->render("edit", [
             "errors" => $errors,
             "name_disabled" => $new ? "" : "disabled",
             "map" => $dto,
             "markers" => $markers,
             "token" => $this->csrfProtector->token(),
-            "script" => $this->script(),
+            "script" => $request->url()->path($this->script())->with("v", Dic::VERSION)->relative(),
         ]))->withTitle("Maps – " . $this->view->text("label_edit"));
     }
 

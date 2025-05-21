@@ -61,7 +61,7 @@ class MapCommand
             return Response::create($this->view->message("fail", "error_load", $name));
         }
         return Response::create($this->view->render("map", [
-            "script" => $this->script(),
+            "script" => $request->url()->path($this->script())->with("v", Dic::VERSION)->relative(),
             "conf" => $this->jsConf($request, $map),
             "title" => $map->title(),
             "aspectRatio" => $map->aspectRatio(),
