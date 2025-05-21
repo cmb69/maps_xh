@@ -98,11 +98,13 @@ class MapAdminCommand
         $dto = $this->dtoFromRequest($request);
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
-            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_not_authorized")]);
+            $errors = [$this->view->message("fail", "error_not_authorized")];
+            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), $errors);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
-            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_save", $dto->name)]);
+            $errors = [$this->view->message("fail", "error_save", $dto->name)];
+            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -139,11 +141,13 @@ class MapAdminCommand
         $dto = $this->dtoFromRequest($request);
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
-            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_not_authorized")]);
+            $errors = [$this->view->message("fail", "error_not_authorized")];
+            return $this->respondWithEditor(true, $dto, $this->markerDtos($map), $errors);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
-            return $this->respondWithEditor(false, $dto, $this->markerDtos($map), [$this->view->message("fail", "error_save", $dto->name)]);
+            $errors = [$this->view->message("fail", "error_save", $dto->name)];
+            return $this->respondWithEditor(false, $dto, $this->markerDtos($map), $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
