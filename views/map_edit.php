@@ -17,7 +17,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
 ?>
 
 <script type="module" src="<?=$this->esc($script)?>"></script>
-<article class="map_edit">
+<article class="maps_edit">
   <h1>Maps – <?=$this->text("label_edit")?></h1>
 <?foreach ($errors as $error):?>
   <?=$this->raw($error)?>

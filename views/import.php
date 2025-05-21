@@ -12,7 +12,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
  */
 ?>
 
-<article class="map_import">
+<article class="maps_import">
   <h1>Maps – <?=$this->text("label_import")?></h1>
 <?foreach ($errors as $error):?>
   <?=$this->raw($error)?>
