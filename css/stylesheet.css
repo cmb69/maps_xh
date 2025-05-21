@@ -21,6 +21,9 @@ article.maps_edit form {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+article.maps_edit textarea {
+    width: 100%;
+}
 article.maps_edit input,
 article.maps_edit textarea,
 article.maps_import input,

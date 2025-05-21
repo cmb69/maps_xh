@@ -31,6 +31,7 @@ $plugin_tx['maps']['help_latitude']="(between -90 and 90)";
 $plugin_tx['maps']['help_longitude']="(between -180 and 180)";
 $plugin_tx['maps']['help_name']="(only a-z, 0-9, and hyhpens)";
 $plugin_tx['maps']['help_template']="(HTML with {property} placeholders)";
+$plugin_tx['maps']['help_title']="(HTML)";
 $plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="To display the map, tile images need to be fetched from a third-party server. Do you agree?";

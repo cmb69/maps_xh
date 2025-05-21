@@ -31,6 +31,7 @@ $plugin_tx['maps']['help_latitude']="(zwischen -90 und 90)";
 $plugin_tx['maps']['help_longitude']="(zwischen -180 und 180)";
 $plugin_tx['maps']['help_name']="(nur a-z, 0-9 und Bindestriche)";
 $plugin_tx['maps']['help_template']="(HTML mit {property} Platzhaltern)";
+$plugin_tx['maps']['help_title']="(HTML)";
 $plugin_tx['maps']['help_zoom']="(zwischen 0 und 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="Um die Landkarte anzuzeigen, müssen Kachelbilder von einem Server einer Drittpartei geladen werden. Stimmen Sie dem zu?";
