@@ -271,7 +271,7 @@ class MapAdminCommand
     private function respondWithOverview(Request $request, array $errors = []): Response
     {
         $maps = $this->store->find('/[a-z0-9\-]+\.xml$/');
-        return Response::create($this->view->render("maps_admin", [
+        return Response::create($this->view->render("admin", [
             "errors" => $errors,
             "maps" => $this->mapDtos($request, $maps),
         ]))->withTitle("Maps – " . $this->view->text("menu_main"));
@@ -283,7 +283,7 @@ class MapAdminCommand
      */
     private function respondWithEditor(bool $new, MapDto $dto, iterable $markers, array $errors = []): Response
     {
-        return Response::create($this->view->render("map_edit", [
+        return Response::create($this->view->render("edit", [
             "errors" => $errors,
             "name_disabled" => $new ? "" : "disabled",
             "map" => $dto,
