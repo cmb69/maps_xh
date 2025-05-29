@@ -8,6 +8,10 @@ figure.maps_map .maps_controls {
     display: flex;
     justify-content: right;
 }
+figure.maps_map .leaflet-top,
+figure.maps_map  .leaflet-bottom {
+    z-index: 500;
+}
 
 /* maps administration */
 
