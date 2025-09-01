@@ -23,18 +23,19 @@ const form = textarea.form;
 let script = form.querySelector("script.maps_table_template");
 script.insertAdjacentHTML("beforebegin", script.text);
 const table = form.querySelector("table");
+let tbody = table.querySelector("tbody");
 const deleteButton = form.querySelector(".maps_delete_row");
-for (var i = 1; i < table.rows.length; i++) {
-    table.rows[i].cells[4].appendChild(deleteButton.cloneNode(true));
-}
+tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
+    td.append(deleteButton.cloneNode(true));
+});
 deleteButton.remove();
 const button = form.querySelector(".maps_add_row");
 button.onclick = () => {
     let script = form.querySelector("script.maps_row_template");
-    table.tBodies[0].insertAdjacentHTML("beforeend", script.text);
-    table.rows[table.rows.length - 1].cells[4].appendChild(deleteButton.cloneNode(true));
+    tbody.insertAdjacentHTML("beforeend", script.text);
+    tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
 }
-table.tBodies[0].onclick = function (ev) {
+tbody.onclick = function (ev) {
     let button = ev.target.closest(".maps_delete_row");
     if (button) {
         var tr = button.parentElement.parentElement;
