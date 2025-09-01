@@ -20,30 +20,30 @@
 const textarea = document.querySelector("textarea[name=markers]");
 textarea.parentElement.style.display = "none";
 const form = textarea.form;
+let script = form.querySelector("script.maps_table_template");
+script.insertAdjacentHTML("beforebegin", script.text);
 const table = form.querySelector("table");
-table.style.display = "table";
-const deleteButton = table.rows[table.rows.length - 1].cells[4].firstChild;
-for (var i = 1; i < table.rows.length - 1; i++) {
+const deleteButton = form.querySelector(".maps_delete_row");
+for (var i = 1; i < table.rows.length; i++) {
     table.rows[i].cells[4].appendChild(deleteButton.cloneNode(true));
 }
+deleteButton.remove();
 const button = form.querySelector(".maps_add_row");
 button.onclick = () => {
-    var clone = table.rows[table.rows.length - 1].cloneNode(true);
-    table.tBodies[0].appendChild(clone);
-    clone.querySelector(".maps_delete_row").onclick = event => {
-        var tr = event.currentTarget.parentElement.parentElement;
-        tr.parentElement.removeChild(tr);
-    }
+    let script = form.querySelector("script.maps_row_template");
+    table.tBodies[0].insertAdjacentHTML("beforeend", script.text);
+    table.rows[table.rows.length - 1].cells[4].appendChild(deleteButton.cloneNode(true));
 }
-form.querySelectorAll(".maps_delete_row").forEach(button => {
-    button.onclick = () => {
+table.tBodies[0].onclick = function (ev) {
+    let button = ev.target.closest(".maps_delete_row");
+    if (button) {
         var tr = button.parentElement.parentElement;
-        tr.parentElement.removeChild(tr);
+        tr.remove();
     }
-})
+};
 form.onsubmit = () => {
     var markers = [];
-    for (var i = 1; i < table.rows.length - 1; i++) {
+    for (var i = 1; i < table.rows.length; i++) {
         var row = table.rows[i];
         var marker = {
             "latitude": row.cells[0].querySelector("input").value,
