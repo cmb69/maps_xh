@@ -19,6 +19,7 @@
 
 /* jshint browser:true,esversion:6,module:true,varstmt:true */
 /* globals L */
+// @ts-check
 
 function init(figure) {
     let conf = JSON.parse(figure.dataset.mapsConf);

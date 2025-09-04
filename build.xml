@@ -40,6 +40,7 @@
     <exec executable="jshint" passthru="true" checkreturn="true">
       <arg line="js"/>
     </exec>
+    <exec executable="tsc" passthru="true" checkreturn="true"/>
   </target>
 
   <target name="check" description="runs all checks" depends="sniff,stan,test,js"/>
@@ -92,6 +93,7 @@
         <exclude name=".github/**"/>
         <exclude name=".phive/**"/>
         <exclude name="help/template.htm"/>
+        <exclude name="js/*.d.ts"/>
         <exclude name="tests/**"/>
         <exclude name="README*.md"/>
         <exclude name="build.xml"/>
@@ -99,6 +101,7 @@
         <exclude name="phpstan.*"/>
         <exclude name="phpunit.xml"/>
         <exclude name="teplad.xml"/>
+        <exclude name="tsconfig.json"/>
       </fileset>
     </move>
     <delete dir="export"/>

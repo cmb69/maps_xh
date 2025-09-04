@@ -18,12 +18,15 @@
  */
 
 /* jshint browser:true,esversion:6,module:true,varstmt:true */
+// @ts-check
 
 let article = document.querySelector("article.maps_edit");
-const textarea = document.querySelector("textarea[name=markers]");
+const textarea = /** @type {HTMLTextAreaElement} */ (
+    document.querySelector("textarea[name=markers]")
+);
 textarea.parentElement.style.display = "none";
 const form = textarea.form;
-let script = article.querySelector("script.maps_table_template");
+let script = /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template"));
 form.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
 const table = article.querySelector("table");
 let tbody = table.querySelector("tbody");
@@ -32,9 +35,11 @@ tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
     td.append(deleteButton.cloneNode(true));
 });
 deleteButton.remove();
-const button = table.querySelector(".maps_add_row");
+const button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
 button.onclick = () => {
-    let script = article.querySelector("script.maps_row_template");
+    let script = /** @type {HTMLScriptElement} */ (
+        article.querySelector("script.maps_row_template")
+    );
     tbody.insertAdjacentHTML("beforeend", script.text);
     tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
 };
@@ -58,5 +63,7 @@ form.onsubmit = () => {
         return acc;
     }, []);
     textarea.value = JSON.stringify(markers);
-    table.querySelectorAll("input, textarea").forEach((el) => (el.name = ""));
+    /** @type {NodeListOf<HTMLInputElement | HTMLTextAreaElement>} */ (
+        table.querySelectorAll("input, textarea")
+    ).forEach((el) => (el.name = ""));
 };

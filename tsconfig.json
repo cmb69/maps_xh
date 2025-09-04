@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom", "dom.iterable"],
+    "checkJs": true,
+    "noEmit": true,
+  },
+  "files": [
+    "js/admin.js",
+    "js/maps.js",
+    "js/leaflet.d.ts"
+  ]
+}
