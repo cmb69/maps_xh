@@ -20,50 +20,53 @@
 /* jshint browser:true,esversion:6,module:true,varstmt:true */
 // @ts-check
 
-let article = document.querySelector("article.maps_edit");
-let textarea = /** @type {HTMLTextAreaElement} */ (
-    document.querySelector("textarea[name=markers]")
-);
-textarea.parentElement.style.display = "none";
-let form = textarea.form;
-let script = /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template"));
-form.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
-let table = article.querySelector("table");
-let tbody = table.querySelector("tbody");
-let deleteButton = table.querySelector(".maps_delete_row");
-tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
-    td.append(deleteButton.cloneNode(true));
-});
-deleteButton.remove();
-let button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
-button.onclick = function () {
-    let script = /** @type {HTMLScriptElement} */ (
-        article.querySelector("script.maps_row_template")
+document.querySelectorAll("article.maps_edit").forEach(function (article) {
+    let textarea = /** @type {HTMLTextAreaElement} */ (
+        document.querySelector("textarea[name=markers]")
     );
-    tbody.insertAdjacentHTML("beforeend", script.text);
-    tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
-};
-tbody.onclick = function (ev) {
-    let button = ev.target.closest(".maps_delete_row");
-    if (button) {
-        let tr = button.parentElement.parentElement;
-        tr.remove();
-    }
-};
-form.onsubmit = function () {
-    let form = document.createElement("form");
-    form.append(table.cloneNode(true));
-    let markers = Array.from(new FormData(form)).reduce(function (acc, pair) {
-        let [key, val] = pair;
-        if (key === "latitude") {
-            acc.push({});
+    textarea.parentElement.style.display = "none";
+    let form = textarea.form;
+    let script = /** @type {HTMLScriptElement} */ (
+        article.querySelector("script.maps_table_template")
+    );
+    form.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
+    let table = article.querySelector("table");
+    let tbody = table.querySelector("tbody");
+    let deleteButton = table.querySelector(".maps_delete_row");
+    tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
+        td.append(deleteButton.cloneNode(true));
+    });
+    deleteButton.remove();
+    let button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
+    button.onclick = function () {
+        let script = /** @type {HTMLScriptElement} */ (
+            article.querySelector("script.maps_row_template")
+        );
+        tbody.insertAdjacentHTML("beforeend", script.text);
+        tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
+    };
+    tbody.onclick = function (ev) {
+        let button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
+        if (button) {
+            let tr = button.parentElement.parentElement;
+            tr.remove();
         }
-        let marker = acc[acc.length - 1];
-        marker[key] = val.toString();
-        return acc;
-    }, []);
-    textarea.value = JSON.stringify(markers);
-    /** @type {NodeListOf<HTMLInputElement | HTMLTextAreaElement>} */ (
-        table.querySelectorAll("input, textarea")
-    ).forEach((el) => (el.name = ""));
-};
+    };
+    form.onsubmit = function () {
+        let form = document.createElement("form");
+        form.append(table.cloneNode(true));
+        let markers = Array.from(new FormData(form)).reduce(function (acc, pair) {
+            let [key, val] = pair;
+            if (key === "latitude") {
+                acc.push({});
+            }
+            let marker = acc[acc.length - 1];
+            marker[key] = val.toString();
+            return acc;
+        }, []);
+        textarea.value = JSON.stringify(markers);
+        /** @type {NodeListOf<HTMLInputElement | HTMLTextAreaElement>} */ (
+            table.querySelectorAll("input, textarea")
+        ).forEach((el) => (el.name = ""));
+    };
+});
