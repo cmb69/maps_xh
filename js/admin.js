@@ -17,6 +17,8 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* jshint browser:true,esversion:6,module:true,varstmt:true */
+
 let article = document.querySelector("article.maps_edit");
 const textarea = document.querySelector("textarea[name=markers]");
 textarea.parentElement.style.display = "none";
@@ -39,7 +41,7 @@ button.onclick = () => {
 tbody.onclick = function (ev) {
     let button = ev.target.closest(".maps_delete_row");
     if (button) {
-        var tr = button.parentElement.parentElement;
+        let tr = button.parentElement.parentElement;
         tr.remove();
     }
 };

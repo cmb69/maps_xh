@@ -17,10 +17,13 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function init(figure) {
-    var conf = JSON.parse(figure.dataset.mapsConf);
+/* jshint browser:true,esversion:6,module:true,varstmt:true */
+/* globals L */
 
-    var map = L.map(figure.querySelector("div.maps_map")).setView(
+function init(figure) {
+    let conf = JSON.parse(figure.dataset.mapsConf);
+
+    let map = L.map(figure.querySelector("div.maps_map")).setView(
         [conf.latitude, conf.longitude],
         conf.zoom
     );
@@ -30,8 +33,8 @@ function init(figure) {
             attribution: conf.tileAttribution,
         }).addTo(map);
     }
-    for (var marker of conf.markers) {
-        var m = L.marker([marker[0], marker[1]]).addTo(map);
+    for (let marker of conf.markers) {
+        let m = L.marker([marker[0], marker[1]]).addTo(map);
         m.bindPopup(marker[2]);
         if (marker[3]) {
             m.openPopup();
