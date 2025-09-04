@@ -71,10 +71,10 @@ class MapCommand
 
     private function script(): string
     {
-        if (is_file($this->pluginFolder . "maps.min.js")) {
-            return $this->pluginFolder . "maps.min.js";
+        if (is_file($this->pluginFolder . "js/maps.min.js")) {
+            return $this->pluginFolder . "js/maps.min.js";
         }
-        return $this->pluginFolder . "maps.js";
+        return $this->pluginFolder . "js/maps.js";
     }
 
     /** @return array<string,mixed> */

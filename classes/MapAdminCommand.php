@@ -304,10 +304,10 @@ class MapAdminCommand
 
     private function script(): string
     {
-        if (is_file($this->pluginFolder . "admin.min.js")) {
-            return $this->pluginFolder . "admin.min.js";
+        if (is_file($this->pluginFolder . "js/admin.min.js")) {
+            return $this->pluginFolder . "js/admin.min.js";
         }
-        return $this->pluginFolder . "admin.js";
+        return $this->pluginFolder . "js/admin.js";
     }
 
     /** @param list<string> $errors */
