@@ -17,21 +17,22 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+let article = document.querySelector("article.maps_edit");
 const textarea = document.querySelector("textarea[name=markers]");
 textarea.parentElement.style.display = "none";
 const form = textarea.form;
-let script = form.querySelector("script.maps_table_template");
-script.insertAdjacentHTML("beforebegin", script.text);
-const table = form.querySelector("table");
+let script = article.querySelector("script.maps_table_template");
+form.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
+const table = article.querySelector("table");
 let tbody = table.querySelector("tbody");
-const deleteButton = form.querySelector(".maps_delete_row");
+const deleteButton = table.querySelector(".maps_delete_row");
 tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
     td.append(deleteButton.cloneNode(true));
 });
 deleteButton.remove();
-const button = form.querySelector(".maps_add_row");
+const button = table.querySelector(".maps_add_row");
 button.onclick = () => {
-    let script = form.querySelector("script.maps_row_template");
+    let script = article.querySelector("script.maps_row_template");
     tbody.insertAdjacentHTML("beforeend", script.text);
     tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
 }
@@ -43,16 +44,18 @@ tbody.onclick = function (ev) {
     }
 };
 form.onsubmit = () => {
-    var markers = [];
-    for (var i = 1; i < table.rows.length; i++) {
-        var row = table.rows[i];
-        var marker = {
-            "latitude": row.cells[0].querySelector("input").value,
-            "longitude": row.cells[1].querySelector("input").value,
-            "info": row.cells[2].querySelector("textarea").value,
-            "show": row.cells[3].querySelector("input").checked
-        };
-        markers.push(marker);
-    }
+    let form = document.createElement("form");
+    form.append(table.cloneNode(true));
+    let markers = Array.from(new FormData(form))
+        .reduce(function (acc, pair) {
+            let [key, val] = pair;
+            if (key === "latitude") {
+                acc.push({});
+            }
+            let marker = acc[acc.length - 1];
+            marker[key] = val.toString();
+            return acc;
+        }, []);
     textarea.value = JSON.stringify(markers);
+    table.querySelectorAll("input, textarea").forEach((el) => (el.name = ""));
 };
