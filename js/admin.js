@@ -26,10 +26,10 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     );
     textarea.parentElement.style.display = "none";
     let form = textarea.form;
-    let script = /** @type {HTMLScriptElement} */ (
-        article.querySelector("script.maps_table_template")
+    form.querySelector(".maps_controls").insertAdjacentHTML(
+        "beforebegin",
+        /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template")).text
     );
-    form.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
     let table = article.querySelector("table");
     let tbody = table.querySelector("tbody");
     let deleteButton = table.querySelector(".maps_delete_row");
@@ -39,17 +39,17 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     deleteButton.remove();
     let button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
     button.onclick = function () {
-        let script = /** @type {HTMLScriptElement} */ (
-            article.querySelector("script.maps_row_template")
+        tbody.insertAdjacentHTML(
+            "beforeend",
+            /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_row_template"))
+                .text
         );
-        tbody.insertAdjacentHTML("beforeend", script.text);
         tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
     };
     tbody.onclick = function (ev) {
         let button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
         if (button) {
-            let tr = button.parentElement.parentElement;
-            tr.remove();
+            button.parentElement.parentElement.remove();
         }
     };
     form.onsubmit = function () {
