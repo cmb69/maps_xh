@@ -21,21 +21,21 @@
 // @ts-check
 
 let article = document.querySelector("article.maps_edit");
-const textarea = /** @type {HTMLTextAreaElement} */ (
+let textarea = /** @type {HTMLTextAreaElement} */ (
     document.querySelector("textarea[name=markers]")
 );
 textarea.parentElement.style.display = "none";
-const form = textarea.form;
+let form = textarea.form;
 let script = /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template"));
 form.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
-const table = article.querySelector("table");
+let table = article.querySelector("table");
 let tbody = table.querySelector("tbody");
-const deleteButton = table.querySelector(".maps_delete_row");
+let deleteButton = table.querySelector(".maps_delete_row");
 tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
     td.append(deleteButton.cloneNode(true));
 });
 deleteButton.remove();
-const button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
+let button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
 button.onclick = () => {
     let script = /** @type {HTMLScriptElement} */ (
         article.querySelector("script.maps_row_template")
