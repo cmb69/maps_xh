@@ -36,7 +36,7 @@ tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
 });
 deleteButton.remove();
 let button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
-button.onclick = () => {
+button.onclick = function () {
     let script = /** @type {HTMLScriptElement} */ (
         article.querySelector("script.maps_row_template")
     );
@@ -50,7 +50,7 @@ tbody.onclick = function (ev) {
         tr.remove();
     }
 };
-form.onsubmit = () => {
+form.onsubmit = function () {
     let form = document.createElement("form");
     form.append(table.cloneNode(true));
     let markers = Array.from(new FormData(form)).reduce(function (acc, pair) {
