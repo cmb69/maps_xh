@@ -20,7 +20,10 @@
 function init(figure) {
     var conf = JSON.parse(figure.dataset.mapsConf);
 
-    var map = L.map(figure.querySelector("div.maps_map")).setView([conf.latitude, conf.longitude], conf.zoom);
+    var map = L.map(figure.querySelector("div.maps_map")).setView(
+        [conf.latitude, conf.longitude],
+        conf.zoom
+    );
     if (conf.loadTiles) {
         L.tileLayer(conf.tileUrl, {
             maxZoom: conf.maxZoom,

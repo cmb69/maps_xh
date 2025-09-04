@@ -35,7 +35,7 @@ button.onclick = () => {
     let script = article.querySelector("script.maps_row_template");
     tbody.insertAdjacentHTML("beforeend", script.text);
     tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
-}
+};
 tbody.onclick = function (ev) {
     let button = ev.target.closest(".maps_delete_row");
     if (button) {
@@ -46,16 +46,15 @@ tbody.onclick = function (ev) {
 form.onsubmit = () => {
     let form = document.createElement("form");
     form.append(table.cloneNode(true));
-    let markers = Array.from(new FormData(form))
-        .reduce(function (acc, pair) {
-            let [key, val] = pair;
-            if (key === "latitude") {
-                acc.push({});
-            }
-            let marker = acc[acc.length - 1];
-            marker[key] = val.toString();
-            return acc;
-        }, []);
+    let markers = Array.from(new FormData(form)).reduce(function (acc, pair) {
+        let [key, val] = pair;
+        if (key === "latitude") {
+            acc.push({});
+        }
+        let marker = acc[acc.length - 1];
+        marker[key] = val.toString();
+        return acc;
+    }, []);
     textarea.value = JSON.stringify(markers);
     table.querySelectorAll("input, textarea").forEach((el) => (el.name = ""));
 };
