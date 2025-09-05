@@ -17,7 +17,6 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* jshint browser:true,esversion:6,module:true,varstmt:true */
 // @ts-check
 
 document.querySelectorAll("article.maps_edit").forEach(function (article) {
