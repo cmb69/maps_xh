@@ -32,19 +32,21 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     );
     let table = article.querySelector("table");
     let tbody = table.querySelector("tbody");
-    let deleteButton = table.querySelector(".maps_delete_row");
+    let deleteRowButton = table.querySelector(".maps_delete_row");
     tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
-        td.append(deleteButton.cloneNode(true));
+        td.append(deleteRowButton.cloneNode(true));
     });
-    deleteButton.remove();
-    let button = /** @type {HTMLButtonElement} */ (table.querySelector("button.maps_add_row"));
-    button.onclick = function () {
+    deleteRowButton.remove();
+    let addRowButton = /** @type {HTMLButtonElement} */ (
+        table.querySelector("button.maps_add_row")
+    );
+    addRowButton.onclick = function () {
         tbody.insertAdjacentHTML(
             "beforeend",
             /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_row_template"))
                 .text
         );
-        tbody.querySelector("tr:last-child td:last-child").append(deleteButton.cloneNode(true));
+        tbody.querySelector("tr:last-child td:last-child").append(deleteRowButton.cloneNode(true));
     };
     tbody.onclick = function (ev) {
         let button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
