@@ -21,8 +21,20 @@
 /* globals L */
 // @ts-check
 
+/**
+ * @typedef {Object} Config
+ * @prop {string} tileUrl
+ * @prop {string} tileAttribution
+ * @prop {boolean} loadTiles
+ * @prop {number} latitude
+ * @prop {number} longitude
+ * @prop {number} zoom
+ * @prop {number} maxZoom
+ * @prop {[number,number,string,boolean][]} markers
+ */
+
 function init(figure) {
-    let conf = JSON.parse(figure.dataset.mapsConf);
+    let conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
 
     let map = L.map(figure.querySelector("div.maps_map")).setView(
         [conf.latitude, conf.longitude],
