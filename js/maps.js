@@ -46,13 +46,14 @@ function init(figure) {
             attribution: conf.tileAttribution,
         }).addTo(map);
     }
-    for (let marker of conf.markers) {
-        let m = L.marker([marker[0], marker[1]]).addTo(map);
-        m.bindPopup(marker[2]);
-        if (marker[3]) {
+    conf.markers.forEach(function (marker) {
+        let [latitude, longitude, info, show] = marker;
+        let m = L.marker([latitude, longitude]).addTo(map);
+        m.bindPopup(info);
+        if (show) {
             m.openPopup();
         }
-    }
+    });
 }
 
 document.querySelectorAll("figure.maps_map").forEach(init);
