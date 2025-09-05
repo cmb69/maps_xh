@@ -32,27 +32,27 @@
  * @prop {[number,number,string,boolean][]} markers
  */
 
-function init(figure) {
-    let conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+/** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll("figure.maps_map")).forEach(
+    function (figure) {
+        let conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
 
-    let map = L.map(figure.querySelector("div.maps_map")).setView(
-        [conf.latitude, conf.longitude],
-        conf.zoom
-    );
-    if (conf.loadTiles) {
-        L.tileLayer(conf.tileUrl, {
-            maxZoom: conf.maxZoom,
-            attribution: conf.tileAttribution,
-        }).addTo(map);
-    }
-    conf.markers.forEach(function (marker) {
-        let [latitude, longitude, info, show] = marker;
-        let m = L.marker([latitude, longitude]).addTo(map);
-        m.bindPopup(info);
-        if (show) {
-            m.openPopup();
+        let map = L.map(figure.querySelector("div.maps_map")).setView(
+            [conf.latitude, conf.longitude],
+            conf.zoom
+        );
+        if (conf.loadTiles) {
+            L.tileLayer(conf.tileUrl, {
+                maxZoom: conf.maxZoom,
+                attribution: conf.tileAttribution,
+            }).addTo(map);
         }
-    });
-}
-
-document.querySelectorAll("figure.maps_map").forEach(init);
+        conf.markers.forEach(function (marker) {
+            let [latitude, longitude, info, show] = marker;
+            let m = L.marker([latitude, longitude]).addTo(map);
+            m.bindPopup(info);
+            if (show) {
+                m.openPopup();
+            }
+        });
+    }
+);
