@@ -19,6 +19,14 @@
 
 // @ts-check
 
+/**
+ * @typedef {object} Marker
+ * @property {number} latitude
+ * @property {number} longitude
+ * @property {string} info
+ * @property {boolean} show
+ */
+
 document.querySelectorAll("article.maps_edit").forEach(function (article) {
     let textarea = /** @type {HTMLTextAreaElement} */ (
         document.querySelector("textarea[name=markers]")
@@ -37,7 +45,7 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     let rowTemplate = /** @type {HTMLTemplateElement} */ (
         table.querySelector("template.maps_row_template")
     );
-    let markers = JSON.parse(textarea.value);
+    let markers = /** @type {Marker[]} */ (JSON.parse(textarea.value));
     markers.forEach(function (marker) {
         tbody.append(rowTemplate.content.cloneNode(true));
         let row = /** @type {HTMLElement} */ (tbody.lastElementChild);
@@ -63,9 +71,9 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         }
     };
     form.onsubmit = function () {
-        let markers = [];
+        let markers = /** @type {Marker[]} */ ([]);
         tbody.querySelectorAll("tr").forEach(function (row) {
-            let marker = {};
+            let marker = /** @type {Marker} */ ({});
             /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
                 row.querySelectorAll("[name]")
             ).forEach(function (control) {
