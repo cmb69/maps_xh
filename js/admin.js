@@ -32,13 +32,12 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         article.querySelector("textarea[name=markers]")
     );
     textarea.closest("p").style.display = "none";
-    article
-        .querySelector(".maps_controls")
-        .insertAdjacentHTML(
-            "beforebegin",
-            /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template"))
-                .text
+    (function () {
+        var script = /** @type {HTMLScriptElement} */ (
+            article.querySelector("script.maps_table_template")
         );
+        article.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
+    })();
     var tbody = article.querySelector("tbody");
     var rowTemplate = /** @type {HTMLTemplateElement} */ (
         article.querySelector("template.maps_row_template")
