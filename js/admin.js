@@ -83,15 +83,24 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         textarea.value = JSON.stringify(markers);
     }
 
+    function addMarkerRow() {
+        tbody.append(rowTemplate.content.cloneNode(true));
+    }
+
+    /** @type {(tr: HTMLTableRowElement) => void} */
+    function deleteMarkerRow(tr) {
+        tr.remove();
+    }
+
     hydrateMarkerRows();
     /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
         function () {
-            tbody.append(rowTemplate.content.cloneNode(true));
+            addMarkerRow();
         };
     tbody.onclick = function (ev) {
         var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
         if (button) {
-            button.closest("tr").remove();
+            deleteMarkerRow(button.closest("tr"));
         }
     };
     textarea.form.onsubmit = function () {
