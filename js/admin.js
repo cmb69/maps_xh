@@ -94,16 +94,12 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
 
     hydrateMarkerRows();
     /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
-        function () {
-            addMarkerRow();
-        };
+        addMarkerRow;
     tbody.onclick = function (ev) {
         var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
         if (button) {
             deleteMarkerRow(button.closest("tr"));
         }
     };
-    textarea.form.onsubmit = function () {
-        dehydrateMarkerRows();
-    };
+    textarea.form.onsubmit = dehydrateMarkerRows;
 });
