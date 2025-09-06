@@ -29,21 +29,23 @@
 
 document.querySelectorAll("article.maps_edit").forEach(function (article) {
     var textarea = /** @type {HTMLTextAreaElement} */ (
-        document.querySelector("textarea[name=markers]")
+        article.querySelector("textarea[name=markers]")
     );
     textarea.parentElement.style.display = "none";
     var form = textarea.form;
-    form.querySelector(".maps_controls").insertAdjacentHTML(
-        "beforebegin",
-        /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template")).text
-    );
-    var table = article.querySelector("table");
-    var tbody = table.querySelector("tbody");
+    article
+        .querySelector(".maps_controls")
+        .insertAdjacentHTML(
+            "beforebegin",
+            /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template"))
+                .text
+        );
+    var tbody = article.querySelector("tbody");
     var addRowButton = /** @type {HTMLButtonElement} */ (
-        table.querySelector("button.maps_add_row")
+        article.querySelector("button.maps_add_row")
     );
     var rowTemplate = /** @type {HTMLTemplateElement} */ (
-        table.querySelector("template.maps_row_template")
+        article.querySelector("template.maps_row_template")
     );
     var markers = /** @type {Marker[]} */ (JSON.parse(textarea.value));
     markers.forEach(function (marker) {
@@ -87,7 +89,7 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         });
         textarea.value = JSON.stringify(markers);
         /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
-            table.querySelectorAll("input, textarea")
+            tbody.querySelectorAll("input, textarea")
         ).forEach(function (el) {
             el.name = "";
         });
