@@ -43,32 +43,26 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     var rowTemplate = /** @type {HTMLTemplateElement} */ (
         article.querySelector("template.maps_row_template")
     );
-    /** @type {Marker[]} */ (JSON.parse(textarea.value)).forEach(function (marker) {
-        tbody.append(rowTemplate.content.cloneNode(true));
-        var row = /** @type {HTMLTableRowElement} */ (tbody.querySelector("tr:last-child"));
-        Object.keys(marker).forEach(function (key) {
-            var value = marker[key];
-            var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
-                row.querySelector("[name=" + key + "]")
-            );
-            if (control.type !== "checkbox") {
-                control.value = value;
-            } else {
-                /** @type {HTMLInputElement} */ (control).checked = value;
-            }
-        });
-    });
-    /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
-        function () {
+
+    function hydrateMarkerRows() {
+        /** @type {Marker[]} */ (JSON.parse(textarea.value)).forEach(function (marker) {
             tbody.append(rowTemplate.content.cloneNode(true));
-        };
-    tbody.onclick = function (ev) {
-        var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
-        if (button) {
-            button.closest("tr").remove();
-        }
-    };
-    textarea.form.onsubmit = function () {
+            var row = /** @type {HTMLTableRowElement} */ (tbody.querySelector("tr:last-child"));
+            Object.keys(marker).forEach(function (key) {
+                var value = marker[key];
+                var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
+                    row.querySelector("[name=" + key + "]")
+                );
+                if (control.type !== "checkbox") {
+                    control.value = value;
+                } else {
+                    /** @type {HTMLInputElement} */ (control).checked = value;
+                }
+            });
+        });
+    }
+
+    function dehydrateMarkerRows() {
         var markers = /** @type {Marker[]} */ ([]);
         tbody.querySelectorAll("tr").forEach(function (row) {
             var marker = /** @type {Marker} */ ({});
@@ -80,14 +74,25 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
                 } else {
                     marker[control.name] = /** @type {HTMLInputElement} */ (control).checked;
                 }
+                control.name = "";
             });
             markers.push(marker);
         });
         textarea.value = JSON.stringify(markers);
-        /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
-            tbody.querySelectorAll("input, textarea")
-        ).forEach(function (el) {
-            el.name = "";
-        });
+    }
+
+    hydrateMarkerRows();
+    /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
+        function () {
+            tbody.append(rowTemplate.content.cloneNode(true));
+        };
+    tbody.onclick = function (ev) {
+        var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
+        if (button) {
+            button.closest("tr").remove();
+        }
+    };
+    textarea.form.onsubmit = function () {
+        dehydrateMarkerRows();
     };
 });
