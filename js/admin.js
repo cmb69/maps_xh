@@ -32,7 +32,6 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         article.querySelector("textarea[name=markers]")
     );
     textarea.parentElement.style.display = "none";
-    var form = textarea.form;
     article
         .querySelector(".maps_controls")
         .insertAdjacentHTML(
@@ -41,14 +40,10 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
                 .text
         );
     var tbody = article.querySelector("tbody");
-    var addRowButton = /** @type {HTMLButtonElement} */ (
-        article.querySelector("button.maps_add_row")
-    );
     var rowTemplate = /** @type {HTMLTemplateElement} */ (
         article.querySelector("template.maps_row_template")
     );
-    var markers = /** @type {Marker[]} */ (JSON.parse(textarea.value));
-    markers.forEach(function (marker) {
+    /** @type {Marker[]} */ (JSON.parse(textarea.value)).forEach(function (marker) {
         tbody.append(rowTemplate.content.cloneNode(true));
         var row = /** @type {HTMLElement} */ (tbody.lastElementChild);
         Object.keys(marker).forEach(function (key) {
@@ -63,16 +58,17 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
             }
         });
     });
-    addRowButton.onclick = function () {
-        tbody.append(rowTemplate.content.cloneNode(true));
-    };
+    /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
+        function () {
+            tbody.append(rowTemplate.content.cloneNode(true));
+        };
     tbody.onclick = function (ev) {
         var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
         if (button) {
             button.parentElement.parentElement.remove();
         }
     };
-    form.onsubmit = function () {
+    textarea.form.onsubmit = function () {
         var markers = /** @type {Marker[]} */ ([]);
         tbody.querySelectorAll("tr").forEach(function (row) {
             var marker = /** @type {Marker} */ ({});
