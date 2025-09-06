@@ -34,9 +34,9 @@
 
 /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll("figure.maps_map")).forEach(
     function (figure) {
-        let conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+        var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
 
-        let map = L.map(figure.querySelector("div.maps_map")).setView(
+        var map = L.map(figure.querySelector("div.maps_map")).setView(
             [conf.latitude, conf.longitude],
             conf.zoom
         );
@@ -47,10 +47,9 @@
             }).addTo(map);
         }
         conf.markers.forEach(function (marker) {
-            let [latitude, longitude, info, show] = marker;
-            let m = L.marker([latitude, longitude]).addTo(map);
-            m.bindPopup(info);
-            if (show) {
+            var m = L.marker([marker[0], marker[1]]).addTo(map);
+            m.bindPopup(marker[2]);
+            if (marker[3]) {
                 m.openPopup();
             }
         });

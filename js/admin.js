@@ -28,31 +28,31 @@
  */
 
 document.querySelectorAll("article.maps_edit").forEach(function (article) {
-    let textarea = /** @type {HTMLTextAreaElement} */ (
+    var textarea = /** @type {HTMLTextAreaElement} */ (
         document.querySelector("textarea[name=markers]")
     );
     textarea.parentElement.style.display = "none";
-    let form = textarea.form;
+    var form = textarea.form;
     form.querySelector(".maps_controls").insertAdjacentHTML(
         "beforebegin",
         /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_table_template")).text
     );
-    let table = article.querySelector("table");
-    let tbody = table.querySelector("tbody");
-    let addRowButton = /** @type {HTMLButtonElement} */ (
+    var table = article.querySelector("table");
+    var tbody = table.querySelector("tbody");
+    var addRowButton = /** @type {HTMLButtonElement} */ (
         table.querySelector("button.maps_add_row")
     );
-    let rowTemplate = /** @type {HTMLTemplateElement} */ (
+    var rowTemplate = /** @type {HTMLTemplateElement} */ (
         table.querySelector("template.maps_row_template")
     );
-    let markers = /** @type {Marker[]} */ (JSON.parse(textarea.value));
+    var markers = /** @type {Marker[]} */ (JSON.parse(textarea.value));
     markers.forEach(function (marker) {
         tbody.append(rowTemplate.content.cloneNode(true));
-        let row = /** @type {HTMLElement} */ (tbody.lastElementChild);
+        var row = /** @type {HTMLElement} */ (tbody.lastElementChild);
         Object.keys(marker).forEach(function (key) {
-            let value = marker[key];
-            let control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
-                row.querySelector(`[name=${key}]`)
+            var value = marker[key];
+            var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
+                row.querySelector("[name=" + key + "]")
             );
             if (control.type !== "checkbox") {
                 control.value = value;
@@ -65,15 +65,15 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         tbody.append(rowTemplate.content.cloneNode(true));
     };
     tbody.onclick = function (ev) {
-        let button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
+        var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
         if (button) {
             button.parentElement.parentElement.remove();
         }
     };
     form.onsubmit = function () {
-        let markers = /** @type {Marker[]} */ ([]);
+        var markers = /** @type {Marker[]} */ ([]);
         tbody.querySelectorAll("tr").forEach(function (row) {
-            let marker = /** @type {Marker} */ ({});
+            var marker = /** @type {Marker} */ ({});
             /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
                 row.querySelectorAll("[name]")
             ).forEach(function (control) {
@@ -88,6 +88,8 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         textarea.value = JSON.stringify(markers);
         /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
             table.querySelectorAll("input, textarea")
-        ).forEach((el) => (el.name = ""));
+        ).forEach(function (el) {
+            el.name = "";
+        });
     };
 });
