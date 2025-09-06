@@ -31,7 +31,7 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     var textarea = /** @type {HTMLTextAreaElement} */ (
         article.querySelector("textarea[name=markers]")
     );
-    textarea.parentElement.style.display = "none";
+    textarea.closest("p").style.display = "none";
     article
         .querySelector(".maps_controls")
         .insertAdjacentHTML(
@@ -45,7 +45,7 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     );
     /** @type {Marker[]} */ (JSON.parse(textarea.value)).forEach(function (marker) {
         tbody.append(rowTemplate.content.cloneNode(true));
-        var row = /** @type {HTMLElement} */ (tbody.lastElementChild);
+        var row = /** @type {HTMLTableRowElement} */ (tbody.querySelector("tr:last-child"));
         Object.keys(marker).forEach(function (key) {
             var value = marker[key];
             var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
@@ -65,7 +65,7 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     tbody.onclick = function (ev) {
         var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
         if (button) {
-            button.parentElement.parentElement.remove();
+            button.closest("tr").remove();
         }
     };
     textarea.form.onsubmit = function () {
