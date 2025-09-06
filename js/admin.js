@@ -45,9 +45,10 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     );
 
     function hydrateMarkerRows() {
+        var fragment = document.createDocumentFragment();
         /** @type {Marker[]} */ (JSON.parse(textarea.value)).forEach(function (marker) {
-            tbody.append(rowTemplate.content.cloneNode(true));
-            var row = /** @type {HTMLTableRowElement} */ (tbody.querySelector("tr:last-child"));
+            fragment.append(rowTemplate.content.cloneNode(true));
+            var row = /** @type {HTMLTableRowElement} */ (fragment.querySelector("tr:last-child"));
             Object.keys(marker).forEach(function (key) {
                 var value = marker[key];
                 var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
@@ -60,6 +61,7 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
                 }
             });
         });
+        tbody.append(fragment);
     }
 
     function dehydrateMarkerRows() {
