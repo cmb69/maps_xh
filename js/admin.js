@@ -31,21 +31,30 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
     );
     let table = article.querySelector("table");
     let tbody = table.querySelector("tbody");
-    let deleteRowButton = table.querySelector(".maps_delete_row");
-    tbody.querySelectorAll("tr td:last-child").forEach(function (td) {
-        td.append(deleteRowButton.cloneNode(true));
-    });
-    deleteRowButton.remove();
     let addRowButton = /** @type {HTMLButtonElement} */ (
         table.querySelector("button.maps_add_row")
     );
+    let rowTemplate = /** @type {HTMLTemplateElement} */ (
+        table.querySelector("template.maps_row_template")
+    );
+    let markers = JSON.parse(textarea.value);
+    markers.forEach(function (marker) {
+        tbody.append(rowTemplate.content.cloneNode(true));
+        let row = /** @type {HTMLElement} */ (tbody.lastElementChild);
+        Object.keys(marker).forEach(function (key) {
+            let value = marker[key];
+            let control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
+                row.querySelector(`[name=${key}]`)
+            );
+            if (control.type !== "checkbox") {
+                control.value = value;
+            } else {
+                /** @type {HTMLInputElement} */ (control).checked = value;
+            }
+        });
+    });
     addRowButton.onclick = function () {
-        tbody.insertAdjacentHTML(
-            "beforeend",
-            /** @type {HTMLScriptElement} */ (article.querySelector("script.maps_row_template"))
-                .text
-        );
-        tbody.querySelector("tr:last-child td:last-child").append(deleteRowButton.cloneNode(true));
+        tbody.append(rowTemplate.content.cloneNode(true));
     };
     tbody.onclick = function (ev) {
         let button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
@@ -54,19 +63,22 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
         }
     };
     form.onsubmit = function () {
-        let form = document.createElement("form");
-        form.append(table.cloneNode(true));
-        let markers = Array.from(new FormData(form)).reduce(function (acc, pair) {
-            let [key, val] = pair;
-            if (key === "latitude") {
-                acc.push({});
-            }
-            let marker = acc[acc.length - 1];
-            marker[key] = val.toString();
-            return acc;
-        }, []);
+        let markers = [];
+        tbody.querySelectorAll("tr").forEach(function (row) {
+            let marker = {};
+            /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
+                row.querySelectorAll("[name]")
+            ).forEach(function (control) {
+                if (control.type !== "checkbox") {
+                    marker[control.name] = control.value;
+                } else {
+                    marker[control.name] = /** @type {HTMLInputElement} */ (control).checked;
+                }
+            });
+            markers.push(marker);
+        });
         textarea.value = JSON.stringify(markers);
-        /** @type {NodeListOf<HTMLInputElement | HTMLTextAreaElement>} */ (
+        /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
             table.querySelectorAll("input, textarea")
         ).forEach((el) => (el.name = ""));
     };
