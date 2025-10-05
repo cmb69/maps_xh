@@ -18,7 +18,6 @@
  */
 
 /* globals L */
-// @ts-check
 
 /**
  * @typedef {Object} Config

@@ -17,8 +17,6 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @ts-check
-
 /**
  * @typedef {object} Marker
  * @property {number} latitude
