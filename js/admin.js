@@ -130,7 +130,7 @@ var editor = {
     },
     /** @type {(tr: HTMLTableRowElement) => void} */
     deleteMarkerRow: function (tr) {
-        tr.remove();
+        tr.parentNode.removeChild(tr);
     },
 };
 
