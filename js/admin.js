@@ -30,6 +30,15 @@ function array(arrayLike) {
     return Array.prototype.slice.call(arrayLike);
 }
 
+/** @type {(element: Element, tagName: string) => Element} */
+function closest(element, tagName) {
+    var parent = element;
+    while (parent.tagName !== tagName.toUpperCase()) {
+        parent = parent.parentElement;
+    }
+    return parent;
+}
+
 var editor = {
     /** @type {HTMLElement} */
     element: undefined,
@@ -53,7 +62,7 @@ var editor = {
     init: function (article) {
         this.element = article;
         var textarea = this.textarea;
-        textarea.closest("p").style.display = "none";
+        /** @type {HTMLParagraphElement} */ (closest(textarea, "p")).style.display = "none";
         /** @type {HTMLScriptElement[]} */ (
             array(article.querySelectorAll("script[type='text/x-template']"))
         ).forEach(function (script) {
@@ -66,9 +75,9 @@ var editor = {
     },
     /** @type {(ev: Event) => void} */
     onTBodyClick: function (ev) {
-        var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
+        var button = closest(/** @type {Element} */ (ev.target), "button");
         if (button) {
-            this.deleteMarkerRow(button.closest("tr"));
+            this.deleteMarkerRow(/** @type {HTMLTableRowElement} */ (closest(button, "tr")));
         }
     },
     /** @type {() => void} */
