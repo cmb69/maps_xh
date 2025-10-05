@@ -25,6 +25,11 @@
  * @property {boolean} show
  */
 
+/** @type {<T>(arrayLike: ArrayLike<T>) => T[]} */
+function array(arrayLike) {
+    return Array.prototype.slice.call(arrayLike);
+}
+
 var editor = {
     /** @type {HTMLElement} */
     element: undefined,
@@ -49,8 +54,8 @@ var editor = {
         this.element = article;
         var textarea = this.textarea;
         textarea.closest("p").style.display = "none";
-        /** @type {NodeListOf<HTMLScriptElement>} */ (
-            article.querySelectorAll("script[type='text/x-template']")
+        /** @type {HTMLScriptElement[]} */ (
+            array(article.querySelectorAll("script[type='text/x-template']"))
         ).forEach(function (script) {
             script.outerHTML = script.text;
         });
@@ -93,10 +98,10 @@ var editor = {
     /** @type {() => void} */
     dehydrateMarkerRows: function () {
         var markers = /** @type {Marker[]} */ ([]);
-        this.tbody.querySelectorAll("tr").forEach(function (row) {
+        array(this.tbody.querySelectorAll("tr")).forEach(function (row) {
             var marker = /** @type {Marker} */ ({});
-            /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
-                row.querySelectorAll("[name]")
+            /** @type {(HTMLInputElement|HTMLTextAreaElement)[]} */ (
+                array(row.querySelectorAll("[name]"))
             ).forEach(function (control) {
                 if (control.type !== "checkbox") {
                     // @ts-ignore
@@ -121,6 +126,6 @@ var editor = {
     },
 };
 
-document.querySelectorAll("article.maps_edit").forEach(function (article) {
+array(document.querySelectorAll("article.maps_edit")).forEach(function (article) {
     Object.create(editor).init(article);
 });
