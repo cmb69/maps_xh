@@ -27,45 +27,74 @@
  * @property {boolean} show
  */
 
-document.querySelectorAll("article.maps_edit").forEach(function (article) {
-    var textarea = /** @type {HTMLTextAreaElement} */ (
-        article.querySelector("textarea[name=markers]")
-    );
-    textarea.closest("p").style.display = "none";
-    (function () {
-        var script = /** @type {HTMLScriptElement} */ (
-            article.querySelector("script.maps_table_template")
-        );
-        article.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
-    })();
-    var tbody = article.querySelector("tbody");
-    var rowTemplate = /** @type {HTMLTemplateElement} */ (
-        article.querySelector("template.maps_row_template")
-    );
+var editor = {
+    /** @type {HTMLElement} */
+    element: undefined,
+    /** @type {HTMLTextAreaElement} */
+    get textarea() {
+        return this.element.querySelector("textarea[name=markers]");
+    },
+    /** @type {HTMLTableSectionElement} */
+    get tbody() {
+        return this.element.querySelector("tbody");
+    },
+    /** @type {HTMLTemplateElement} */
+    get rowTemplate() {
+        return this.element.querySelector("template.maps_row_template");
+    },
+    /** @type {(article: HTMLElement) => void} */
+    init: function (article) {
+        this.element = article;
+        var textarea = this.textarea;
+        textarea.closest("p").style.display = "none";
+        (function () {
+            var script = /** @type {HTMLScriptElement} */ (
+                article.querySelector("script.maps_table_template")
+            );
+            article.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
+        })();
 
-    function hydrateMarkerRows() {
+        this.hydrateMarkerRows();
+        /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
+            this.addMarkerRow.bind(this);
+        this.tbody.onclick = this.onTBodyClick.bind(this);
+        textarea.form.onsubmit = this.dehydrateMarkerRows.bind(this);
+    },
+    /** @type {(ev: Event) => void} */
+    onTBodyClick: function (ev) {
+        var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
+        if (button) {
+            this.deleteMarkerRow(button.closest("tr"));
+        }
+    },
+    /** @type {() => void} */
+    hydrateMarkerRows: function () {
         var fragment = document.createDocumentFragment();
-        /** @type {Marker[]} */ (JSON.parse(textarea.value)).forEach(function (marker) {
-            fragment.append(rowTemplate.content.cloneNode(true));
-            var row = /** @type {HTMLTableRowElement} */ (fragment.querySelector("tr:last-child"));
-            Object.keys(marker).forEach(function (key) {
-                var value = marker[key];
-                var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
-                    row.querySelector("[name=" + key + "]")
-                );
-                if (control.type !== "checkbox") {
-                    control.value = value;
-                } else {
-                    /** @type {HTMLInputElement} */ (control).checked = value;
-                }
-            });
+        /** @type {Marker[]} */ (JSON.parse(this.textarea.value)).forEach(
+            this.hydrateMarkerRow.bind(this, fragment)
+        );
+        this.tbody.append(fragment);
+    },
+    /** @type {(fragment: DocumentFragment, marker: Marker) => void} */
+    hydrateMarkerRow: function (fragment, marker) {
+        fragment.append(this.rowTemplate.content.cloneNode(true));
+        var row = /** @type {HTMLTableRowElement} */ (fragment.querySelector("tr:last-child"));
+        Object.keys(marker).forEach(function (key) {
+            var value = marker[key];
+            var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
+                row.querySelector("[name=" + key + "]")
+            );
+            if (control.type !== "checkbox") {
+                control.value = value;
+            } else {
+                /** @type {HTMLInputElement} */ (control).checked = value;
+            }
         });
-        tbody.append(fragment);
-    }
-
-    function dehydrateMarkerRows() {
+    },
+    /** @type {() => void} */
+    dehydrateMarkerRows: function () {
         var markers = /** @type {Marker[]} */ ([]);
-        tbody.querySelectorAll("tr").forEach(function (row) {
+        this.tbody.querySelectorAll("tr").forEach(function (row) {
             var marker = /** @type {Marker} */ ({});
             /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
                 row.querySelectorAll("[name]")
@@ -79,26 +108,18 @@ document.querySelectorAll("article.maps_edit").forEach(function (article) {
             });
             markers.push(marker);
         });
-        textarea.value = JSON.stringify(markers);
-    }
-
-    function addMarkerRow() {
-        tbody.append(rowTemplate.content.cloneNode(true));
-    }
-
+        this.textarea.value = JSON.stringify(markers);
+    },
+    /** @type {() => void} */
+    addMarkerRow: function () {
+        this.tbody.append(this.rowTemplate.content.cloneNode(true));
+    },
     /** @type {(tr: HTMLTableRowElement) => void} */
-    function deleteMarkerRow(tr) {
+    deleteMarkerRow: function (tr) {
         tr.remove();
-    }
+    },
+};
 
-    hydrateMarkerRows();
-    /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
-        addMarkerRow;
-    tbody.onclick = function (ev) {
-        var button = /** @type {Element} */ (ev.target).closest(".maps_delete_row");
-        if (button) {
-            deleteMarkerRow(button.closest("tr"));
-        }
-    };
-    textarea.form.onsubmit = dehydrateMarkerRows;
+document.querySelectorAll("article.maps_edit").forEach(function (article) {
+    Object.create(editor).init(article);
 });
