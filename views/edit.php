@@ -98,7 +98,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
           </tr>
         </thead>
         <tbody>
-          <template class="maps_row_template">
+          <script type="text/x-template" class="maps_row_template">
             <tr>
               <td><input type="number" name="latitude" value="0" min="-90" max="90" step="any"></td>
               <td><input type="number" name="longitude" value="0" min="-180" max="180" step="any"></td>

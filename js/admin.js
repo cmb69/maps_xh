@@ -54,9 +54,9 @@ var editor = {
     get addMarkerButton() {
         return this.element.querySelector("button.maps_add_row");
     },
-    /** @type {HTMLTemplateElement} */
+    /** @type {HTMLScriptElement} */
     get rowTemplate() {
-        return this.element.querySelector("template.maps_row_template");
+        return this.element.querySelector("script.maps_row_template");
     },
     /** @type {(article: HTMLElement) => void} */
     init: function (article) {
@@ -82,16 +82,15 @@ var editor = {
     },
     /** @type {() => void} */
     hydrateMarkerRows: function () {
-        var fragment = document.createDocumentFragment();
+        var tbody = this.tbody;
         /** @type {Marker[]} */ (JSON.parse(this.textarea.value)).forEach(
-            this.hydrateMarkerRow.bind(this, fragment)
+            this.hydrateMarkerRow.bind(this, tbody)
         );
-        this.tbody.append(fragment);
     },
-    /** @type {(fragment: DocumentFragment, marker: Marker) => void} */
-    hydrateMarkerRow: function (fragment, marker) {
-        fragment.append(this.rowTemplate.content.cloneNode(true));
-        var row = /** @type {HTMLTableRowElement} */ (fragment.querySelector("tr:last-child"));
+    /** @type {(tbody: HTMLTableSectionElement, marker: Marker) => void} */
+    hydrateMarkerRow: function (tbody, marker) {
+        tbody.insertAdjacentHTML("beforeend", this.rowTemplate.text);
+        var row = /** @type {HTMLTableRowElement} */ (tbody.querySelector("tr:last-child"));
         Object.keys(marker).forEach(function (key) {
             var value = marker[/** @type {keyof Marker} */ (key)];
             var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
@@ -127,7 +126,7 @@ var editor = {
     },
     /** @type {() => void} */
     addMarkerRow: function () {
-        this.tbody.append(this.rowTemplate.content.cloneNode(true));
+        this.tbody.insertAdjacentHTML("beforeend", this.rowTemplate.text);
     },
     /** @type {(tr: HTMLTableRowElement) => void} */
     deleteMarkerRow: function (tr) {
