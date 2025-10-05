@@ -49,13 +49,11 @@ var editor = {
         this.element = article;
         var textarea = this.textarea;
         textarea.closest("p").style.display = "none";
-        (function () {
-            var script = /** @type {HTMLScriptElement} */ (
-                article.querySelector("script.maps_table_template")
-            );
-            article.querySelector(".maps_controls").insertAdjacentHTML("beforebegin", script.text);
-        })();
-
+        /** @type {NodeListOf<HTMLScriptElement>} */ (
+            article.querySelectorAll("script[type='text/x-template']")
+        ).forEach(function (script) {
+            script.outerHTML = script.text;
+        });
         this.hydrateMarkerRows();
         this.addMarkerButton.onclick = this.addMarkerRow.bind(this);
         this.tbody.onclick = this.onTBodyClick.bind(this);
