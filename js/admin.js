@@ -81,14 +81,14 @@ var editor = {
         fragment.append(this.rowTemplate.content.cloneNode(true));
         var row = /** @type {HTMLTableRowElement} */ (fragment.querySelector("tr:last-child"));
         Object.keys(marker).forEach(function (key) {
-            var value = marker[key];
+            var value = marker[/** @type {keyof Marker} */ (key)];
             var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
                 row.querySelector("[name=" + key + "]")
             );
             if (control.type !== "checkbox") {
-                control.value = value;
+                control.value = /** @type {string} */ (value);
             } else {
-                /** @type {HTMLInputElement} */ (control).checked = value;
+                /** @type {HTMLInputElement} */ (control).checked = /** @type {boolean} */ (value);
             }
         });
     },
@@ -101,8 +101,10 @@ var editor = {
                 row.querySelectorAll("[name]")
             ).forEach(function (control) {
                 if (control.type !== "checkbox") {
+                    // @ts-ignore
                     marker[control.name] = control.value;
                 } else {
+                    // @ts-ignore
                     marker[control.name] = /** @type {HTMLInputElement} */ (control).checked;
                 }
                 control.name = "";
