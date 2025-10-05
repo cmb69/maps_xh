@@ -38,6 +38,10 @@ var editor = {
     get tbody() {
         return this.element.querySelector("tbody");
     },
+    /** @type {HTMLButtonElement} */
+    get addMarkerButton() {
+        return this.element.querySelector("button.maps_add_row");
+    },
     /** @type {HTMLTemplateElement} */
     get rowTemplate() {
         return this.element.querySelector("template.maps_row_template");
@@ -55,8 +59,7 @@ var editor = {
         })();
 
         this.hydrateMarkerRows();
-        /** @type {HTMLButtonElement} */ (article.querySelector("button.maps_add_row")).onclick =
-            this.addMarkerRow.bind(this);
+        this.addMarkerButton.onclick = this.addMarkerRow.bind(this);
         this.tbody.onclick = this.onTBodyClick.bind(this);
         textarea.form.onsubmit = this.dehydrateMarkerRows.bind(this);
     },
