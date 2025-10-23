@@ -113,6 +113,12 @@
             var rows = array(this.tbody.querySelectorAll("tr"));
             var markers = rows.map(this.dehydrateMarkerRow.bind(this));
             this.textarea.value = JSON.stringify(markers);
+            var controls = /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
+                this.tbody.querySelectorAll("[name]")
+            );
+            controls.forEach(function (el) {
+                el.name = "";
+            });
         },
 
         /** @type {(row: HTMLTableRowElement) => Marker} */
