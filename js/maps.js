@@ -19,38 +19,42 @@
 
 /* globals L */
 
-/**
- * @typedef {Object} Config
- * @prop {string} tileUrl
- * @prop {string} tileAttribution
- * @prop {boolean} loadTiles
- * @prop {number} latitude
- * @prop {number} longitude
- * @prop {number} zoom
- * @prop {number} maxZoom
- * @prop {[number,number,string,boolean][]} markers
- */
+(function () {
+    "use strict";
 
-/** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll("figure.maps_map")).forEach(
-    function (figure) {
-        var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+    /**
+     * @typedef {Object} Config
+     * @prop {string} tileUrl
+     * @prop {string} tileAttribution
+     * @prop {boolean} loadTiles
+     * @prop {number} latitude
+     * @prop {number} longitude
+     * @prop {number} zoom
+     * @prop {number} maxZoom
+     * @prop {[number,number,string,boolean][]} markers
+     */
 
-        var map = L.map(figure.querySelector("div.maps_map")).setView(
-            [conf.latitude, conf.longitude],
-            conf.zoom
-        );
-        if (conf.loadTiles) {
-            L.tileLayer(conf.tileUrl, {
-                maxZoom: conf.maxZoom,
-                attribution: conf.tileAttribution,
-            }).addTo(map);
-        }
-        conf.markers.forEach(function (marker) {
-            var m = L.marker([marker[0], marker[1]]).addTo(map);
-            m.bindPopup(marker[2]);
-            if (marker[3]) {
-                m.openPopup();
+    /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll("figure.maps_map")).forEach(
+        function (figure) {
+            var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+
+            var map = L.map(figure.querySelector("div.maps_map")).setView(
+                [conf.latitude, conf.longitude],
+                conf.zoom
+            );
+            if (conf.loadTiles) {
+                L.tileLayer(conf.tileUrl, {
+                    maxZoom: conf.maxZoom,
+                    attribution: conf.tileAttribution,
+                }).addTo(map);
             }
-        });
-    }
-);
+            conf.markers.forEach(function (marker) {
+                var m = L.marker([marker[0], marker[1]]).addTo(map);
+                m.bindPopup(marker[2]);
+                if (marker[3]) {
+                    m.openPopup();
+                }
+            });
+        }
+    );
+})();

@@ -65,6 +65,7 @@ class MapCommand
         if ($map === null) {
             return Response::create($this->view->message("fail", "error_load", $name));
         }
+        $this->javaScript->includePolyfills();
         $this->javaScript->include($this->pluginFolder . "js/maps");
         return Response::create($this->view->render("map", [
             "conf" => $this->jsConf($request, $map),

@@ -51,6 +51,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testRendersEditorForNewMap(): void
     {
+        $this->javaScript->expects($this->once())->method("includePolyfills");
         $this->javaScript->expects($this->once())->method("include")->with("./js/admin");
         $request = new FakeRequest(["url" => "http://example.com/?&maps&admin=plugin_main&action=create"]);
         $response = $this->sut()($request);
@@ -104,6 +105,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testRendersEditorForUpdate(): void
     {
+        $this->javaScript->expects($this->once())->method("includePolyfills");
         $this->javaScript->expects($this->once())->method("include")->with("./js/admin");
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",

@@ -275,6 +275,7 @@ class MapAdminCommand
     /** @param list<string> $errors */
     private function respondWithEditor(bool $new, MapDto $dto, array $errors = []): Response
     {
+        $this->javaScript->includePolyfills();
         $this->javaScript->include($this->pluginFolder . "js/admin");
         return Response::create($this->view->render("edit", [
             "errors" => $errors,

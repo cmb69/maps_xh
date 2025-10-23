@@ -42,6 +42,7 @@ class MapCommandTest extends TestCase
 
     public function testShowsMap(): void
     {
+        $this->javaScript->expects($this->once())->method("includePolyfills");
         $this->javaScript->expects($this->once())->method("include")->with("./js/maps");
         $request = new FakeRequest();
         $response = $this->sut()("london", $request);
