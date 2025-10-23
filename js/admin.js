@@ -28,8 +28,8 @@
      * @property {boolean} show
      */
 
-    var editor = {
-        /** @type {HTMLElement} */
+    var editor = Object.seal({
+        /** @readonly @type {HTMLElement} */
         element: undefined,
         /** @type {HTMLTextAreaElement} */
         get textarea() {
@@ -48,12 +48,11 @@
             return this.element.querySelector("script.maps_row_template");
         },
         /** @type {(article: HTMLElement) => void} */
-        init: function (article) {
-            this.element = article;
+        init: function () {
             var textarea = this.textarea;
             textarea.closest("p").style.display = "none";
             /** @type {NodeListOf<HTMLScriptElement>} */ (
-                article.querySelectorAll("script[type='text/x-template']")
+                this.element.querySelectorAll("script[type='text/x-template']")
             ).forEach(function (script) {
                 script.outerHTML = script.text;
             });
@@ -123,9 +122,9 @@
         deleteMarkerRow: function (tr) {
             tr.parentNode.removeChild(tr);
         },
-    };
+    });
 
     document.querySelectorAll("article.maps_edit").forEach(function (article) {
-        Object.create(editor).init(article);
+        Object.create(editor, { element: { value: article } }).init();
     });
 })();
