@@ -6,7 +6,7 @@ figure.maps_map {
     }
     .maps_controls {
         display: flex;
-        justify-content: right;
+        justify-content: flex-end;
     }
     .leaflet-top,
     .leaflet-bottom {
@@ -23,7 +23,7 @@ article.maps_admin {
     p.maps_controls {
         margin: 1em 0;
         display: flex;
-        justify-content: right;
+        justify-content: flex-end;
     }
 }
 
@@ -76,7 +76,7 @@ article.maps_edit {
         grid-column: 1/3;
         margin: 1em 0;
         display: flex;
-        justify-content: right;
+        justify-content: flex-end;
     }
 }
 
@@ -97,7 +97,7 @@ article.maps_import {
     .maps_controls {
         margin: 1em 0;
         display: flex;
-        justify-content: right;
+        justify-content: flex-end;
     }
 }
 
