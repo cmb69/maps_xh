@@ -116,9 +116,10 @@
             var markers = /** @type {Marker[]} */ ([]);
             this.tbody.querySelectorAll("tr").forEach(function (row) {
                 var marker = /** @type {Marker} */ ({});
-                /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
+                var controls = /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
                     row.querySelectorAll("[name]")
-                ).forEach(function (control) {
+                );
+                controls.forEach(function (control) {
                     if (control.type !== "checkbox") {
                         // @ts-ignore
                         marker[control.name] = control.value;
