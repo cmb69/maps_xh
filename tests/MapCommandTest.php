@@ -5,15 +5,19 @@ namespace Maps;
 use ApprovalTests\Approvals;
 use Maps\Model\Map;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\FakeRequest;
+use Plib\JavaScript;
 use Plib\View;
 
 class MapCommandTest extends TestCase
 {
     private array $conf;
     private DocumentStore $store;
+    /** @var JavaScript&MockObject */
+    private $javaScript;
     private View $view;
 
     public function setUp(): void
@@ -21,6 +25,7 @@ class MapCommandTest extends TestCase
         vfsStream::setup("root");
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["maps"];
         $this->store = new DocumentStore(vfsStream::url("root/"));
+        $this->javaScript = $this->createMock(JavaScript::class);
         $map = Map::create("london", $this->store);
         $map->setTitle("Map of London");
         $map->setCoordinates(-0.09, 51.505);
@@ -32,11 +37,12 @@ class MapCommandTest extends TestCase
 
     private function sut(): MapCommand
     {
-        return new MapCommand("./", $this->conf, $this->store, $this->view);
+        return new MapCommand("./", $this->conf, $this->store, $this->javaScript, $this->view);
     }
 
     public function testShowsMap(): void
     {
+        $this->javaScript->expects($this->once())->method("include")->with("./js/maps");
         $request = new FakeRequest();
         $response = $this->sut()("london", $request);
         Approvals::verifyHtml($response->output());

@@ -6,7 +6,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
 
 /**
  * @var View $this
- * @var string $script
  * @var array<string,mixed> $conf
  * @var string $title
  * @var string $aspectRatio
@@ -14,7 +13,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
  */
 ?>
 
-<script type="module" src="<?=$this->esc($script)?>"></script>
 <figure class="maps_map" data-maps-conf='<?=$this->json($conf)?>'>
   <figcaption><?=$this->raw($title)?></figcaption>
   <div class="maps_map" style="width: 100%; aspect-ratio: <?=$this->esc($aspectRatio)?>"></div>

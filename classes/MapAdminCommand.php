@@ -24,6 +24,7 @@ namespace Maps;
 use Maps\Model\Map;
 use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
+use Plib\JavaScript;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
@@ -33,17 +34,20 @@ class MapAdminCommand
     private string $pluginFolder;
     private DocumentStore $store;
     private CsrfProtector $csrfProtector;
+    private JavaScript $javaScript;
     private View $view;
 
     public function __construct(
         string $pluginFolder,
         DocumentStore $store,
         CsrfProtector $csrfProtector,
+        JavaScript $javaScript,
         View $view
     ) {
         $this->pluginFolder = $pluginFolder;
         $this->store = $store;
         $this->csrfProtector = $csrfProtector;
+        $this->javaScript = $javaScript;
         $this->view = $view;
     }
 
@@ -89,7 +93,7 @@ class MapAdminCommand
             return $this->doCreate($request);
         }
         $dto = new MapDto("", "", 0, 0, 0, 0, "1/1", "");
-        return $this->respondWithEditor($request, true, $dto);
+        return $this->respondWithEditor(true, $dto);
     }
 
     private function doCreate(Request $request): Response
@@ -99,12 +103,12 @@ class MapAdminCommand
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
             $errors = [$this->view->message("fail", "error_not_authorized")];
-            return $this->respondWithEditor($request, true, $dto, $errors);
+            return $this->respondWithEditor(true, $dto, $errors);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
             $errors = [$this->view->message("fail", "error_save", $dto->name)];
-            return $this->respondWithEditor($request, true, $dto, $errors);
+            return $this->respondWithEditor(true, $dto, $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -124,7 +128,7 @@ class MapAdminCommand
             ]);
         }
         $dto = $this->mapToDto($map);
-        return $this->respondWithEditor($request, false, $dto);
+        return $this->respondWithEditor(false, $dto);
     }
 
     private function doUpdate(Request $request): Response
@@ -142,12 +146,12 @@ class MapAdminCommand
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
             $errors = [$this->view->message("fail", "error_not_authorized")];
-            return $this->respondWithEditor($request, true, $dto, $errors);
+            return $this->respondWithEditor(true, $dto, $errors);
         }
         $this->updateMapFromDto($map, $dto);
         if (!$this->store->commit()) {
             $errors = [$this->view->message("fail", "error_save", $dto->name)];
-            return $this->respondWithEditor($request, false, $dto, $errors);
+            return $this->respondWithEditor(false, $dto, $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
     }
@@ -269,27 +273,15 @@ class MapAdminCommand
     }
 
     /** @param list<string> $errors */
-    private function respondWithEditor(
-        Request $request,
-        bool $new,
-        MapDto $dto,
-        array $errors = []
-    ): Response {
+    private function respondWithEditor(bool $new, MapDto $dto, array $errors = []): Response
+    {
+        $this->javaScript->include($this->pluginFolder . "js/admin");
         return Response::create($this->view->render("edit", [
             "errors" => $errors,
             "name_disabled" => $new ? "" : "disabled",
             "map" => $dto,
             "token" => $this->csrfProtector->token(),
-            "script" => $request->url()->path($this->script())->with("v", Dic::VERSION)->relative(),
         ]))->withTitle("Maps – " . $this->view->text("label_edit"));
-    }
-
-    private function script(): string
-    {
-        if (is_file($this->pluginFolder . "js/admin.min.js")) {
-            return $this->pluginFolder . "js/admin.min.js";
-        }
-        return $this->pluginFolder . "js/admin.js";
     }
 
     /** @param list<string> $errors */

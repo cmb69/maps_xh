@@ -23,6 +23,7 @@ namespace Maps;
 
 use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
+use Plib\JavaScript;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -47,6 +48,7 @@ class Dic
             $pth["folder"]["plugins"] . "maps/",
             $plugin_cf["maps"],
             new DocumentStore(self::contentFolder()),
+            new JavaScript(),
             self::view()
         );
     }
@@ -69,6 +71,7 @@ class Dic
             $pth["folder"]["plugins"] . "maps/",
             new DocumentStore(self::contentFolder()),
             new CsrfProtector(),
+            new JavaScript(),
             self::view()
         );
     }

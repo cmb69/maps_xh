@@ -5,11 +5,13 @@ namespace Maps;
 use ApprovalTests\Approvals;
 use Maps\Model\Map;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\FakeRequest;
+use Plib\JavaScript;
 use Plib\View;
 
 class MapAdminCommandTest extends TestCase
@@ -17,6 +19,8 @@ class MapAdminCommandTest extends TestCase
     private DocumentStore $store;
     /** @var CsrfProtector&Stub */
     private $csrfProtector;
+    /** @var JavaScript&MockObject */
+    private $javaScript;
     private View $view;
 
     public function setUp(): void
@@ -28,12 +32,13 @@ class MapAdminCommandTest extends TestCase
         $this->store->commit();
         $this->csrfProtector = $this->createStub(CsrfProtector::class);
         $this->csrfProtector->method("token")->willReturn("0123456789ABCDEF");
+        $this->javaScript = $this->createMock(JavaScript::class);
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);
     }
 
     private function sut(): MapAdminCommand
     {
-        return new MapAdminCommand("./", $this->store, $this->csrfProtector, $this->view);
+        return new MapAdminCommand("./", $this->store, $this->csrfProtector, $this->javaScript, $this->view);
     }
 
     public function testRendersOverview(): void
@@ -46,6 +51,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testRendersEditorForNewMap(): void
     {
+        $this->javaScript->expects($this->once())->method("include")->with("./js/admin");
         $request = new FakeRequest(["url" => "http://example.com/?&maps&admin=plugin_main&action=create"]);
         $response = $this->sut()($request);
         $this->assertSame("Maps – Edit", $response->title());
@@ -98,6 +104,7 @@ class MapAdminCommandTest extends TestCase
 
     public function testRendersEditorForUpdate(): void
     {
+        $this->javaScript->expects($this->once())->method("include")->with("./js/admin");
         $request = new FakeRequest([
             "url" => "http://example.com/?&maps&admin=plugin_main&action=update&maps_map=london",
         ]);
