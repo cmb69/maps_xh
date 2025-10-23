@@ -23,6 +23,7 @@ namespace Maps;
 
 use Maps\Model\Map;
 use Plib\DocumentStore2 as DocumentStore;
+use Plib\JavaScript;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
@@ -36,6 +37,8 @@ class MapCommand
 
     private DocumentStore $store;
 
+    private JavaScript $javaScript;
+
     private View $view;
 
     /** @param array<string,string> $conf */
@@ -43,11 +46,13 @@ class MapCommand
         string $pluginFolder,
         array $conf,
         DocumentStore $store,
+        JavaScript $javaScript,
         View $view
     ) {
         $this->pluginFolder = $pluginFolder;
         $this->conf = $conf;
         $this->store = $store;
+        $this->javaScript = $javaScript;
         $this->view = $view;
     }
 
@@ -60,21 +65,14 @@ class MapCommand
         if ($map === null) {
             return Response::create($this->view->message("fail", "error_load", $name));
         }
+        $this->javaScript->includePolyfills();
+        $this->javaScript->include($this->pluginFolder . "js/maps");
         return Response::create($this->view->render("map", [
-            "script" => $request->url()->path($this->script())->with("v", Dic::VERSION)->relative(),
             "conf" => $this->jsConf($request, $map),
             "title" => $map->title(),
             "aspectRatio" => $map->aspectRatio(),
             "privacy" => $this->tilePrivacy($request),
         ]));
-    }
-
-    private function script(): string
-    {
-        if (is_file($this->pluginFolder . "js/maps.min.js")) {
-            return $this->pluginFolder . "js/maps.min.js";
-        }
-        return $this->pluginFolder . "js/maps.js";
     }
 
     /** @return array<string,mixed> */

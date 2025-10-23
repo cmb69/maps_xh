@@ -17,30 +17,53 @@
  * along with Maps_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* jshint browser:true,esversion:6,module:true,varstmt:true */
 /* globals L */
-// @ts-check
 
-function init(figure) {
-    let conf = JSON.parse(figure.dataset.mapsConf);
+(function () {
+    "use strict";
 
-    let map = L.map(figure.querySelector("div.maps_map")).setView(
-        [conf.latitude, conf.longitude],
-        conf.zoom
+    /**
+     * @typedef {Object} Config
+     * @prop {string} tileUrl
+     * @prop {string} tileAttribution
+     * @prop {boolean} loadTiles
+     * @prop {number} latitude
+     * @prop {number} longitude
+     * @prop {number} zoom
+     * @prop {number} maxZoom
+     * @prop {[number,number,string,boolean][]} markers
+     */
+
+    var maps = /** @type {NodeListOf<HTMLElement>} */ (
+        document.querySelectorAll("figure.maps_map")
     );
-    if (conf.loadTiles) {
-        L.tileLayer(conf.tileUrl, {
-            maxZoom: conf.maxZoom,
-            attribution: conf.tileAttribution,
-        }).addTo(map);
-    }
-    for (let marker of conf.markers) {
-        let m = L.marker([marker[0], marker[1]]).addTo(map);
-        m.bindPopup(marker[2]);
-        if (marker[3]) {
-            m.openPopup();
+    maps.forEach(function (figure) {
+        /** @type {() => void} */
+        function resize() {
+            var map = /** @type {HTMLElement} */ (figure.querySelector("div.maps_map"));
+            var matches = map.dataset.aspectRatio.match(/(\d+)\/(\d+)/);
+            map.style.height = (map.clientWidth / +matches[1]) * +matches[2] + "px";
         }
-    }
-}
 
-document.querySelectorAll("figure.maps_map").forEach(init);
+        var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+        var map = /** @type {HTMLElement} */ (figure.querySelector("div.maps_map"));
+        if (map.style.aspectRatio === undefined) {
+            resize();
+            addEventListener("resize", resize);
+        }
+        var leafletMap = L.map(map).setView([conf.latitude, conf.longitude], conf.zoom);
+        if (conf.loadTiles) {
+            L.tileLayer(conf.tileUrl, {
+                maxZoom: conf.maxZoom,
+                attribution: conf.tileAttribution,
+            }).addTo(leafletMap);
+        }
+        conf.markers.forEach(function (marker) {
+            var m = L.marker([marker[0], marker[1]]).addTo(leafletMap);
+            m.bindPopup(marker[2]);
+            if (marker[3]) {
+                m.openPopup();
+            }
+        });
+    });
+})();
