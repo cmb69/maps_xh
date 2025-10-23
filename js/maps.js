@@ -34,27 +34,28 @@
      * @prop {[number,number,string,boolean][]} markers
      */
 
-    /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll("figure.maps_map")).forEach(
-        function (figure) {
-            var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
-
-            var map = L.map(figure.querySelector("div.maps_map")).setView(
-                [conf.latitude, conf.longitude],
-                conf.zoom
-            );
-            if (conf.loadTiles) {
-                L.tileLayer(conf.tileUrl, {
-                    maxZoom: conf.maxZoom,
-                    attribution: conf.tileAttribution,
-                }).addTo(map);
-            }
-            conf.markers.forEach(function (marker) {
-                var m = L.marker([marker[0], marker[1]]).addTo(map);
-                m.bindPopup(marker[2]);
-                if (marker[3]) {
-                    m.openPopup();
-                }
-            });
-        }
+    var maps = /** @type {NodeListOf<HTMLElement>} */ (
+        document.querySelectorAll("figure.maps_map")
     );
+    maps.forEach(function (figure) {
+        var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+
+        var map = L.map(figure.querySelector("div.maps_map")).setView(
+            [conf.latitude, conf.longitude],
+            conf.zoom
+        );
+        if (conf.loadTiles) {
+            L.tileLayer(conf.tileUrl, {
+                maxZoom: conf.maxZoom,
+                attribution: conf.tileAttribution,
+            }).addTo(map);
+        }
+        conf.markers.forEach(function (marker) {
+            var m = L.marker([marker[0], marker[1]]).addTo(map);
+            m.bindPopup(marker[2]);
+            if (marker[3]) {
+                m.openPopup();
+            }
+        });
+    });
 })();

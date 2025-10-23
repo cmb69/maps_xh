@@ -28,7 +28,8 @@
      * @property {boolean} show
      */
 
-    var editor = Object.seal({
+    /** @readonly */
+    var editorProto = Object.seal({
         /** @readonly @type {HTMLElement} */
         element: undefined,
 
@@ -52,13 +53,14 @@
             return this.element.querySelector("script.maps_row_template");
         },
 
-        /** @type {(article: HTMLElement) => void} */
+        /** @type {() => void} */
         init: function () {
             var textarea = this.textarea;
             textarea.closest("p").style.display = "none";
-            /** @type {NodeListOf<HTMLScriptElement>} */ (
+            var scripts = /** @type {NodeListOf<HTMLScriptElement>} */ (
                 this.element.querySelectorAll("script[type='text/x-template']")
-            ).forEach(function (script) {
+            );
+            scripts.forEach(function (script) {
                 script.outerHTML = script.text;
             });
             this.hydrateMarkerRows();
@@ -69,7 +71,8 @@
 
         /** @type {(ev: Event) => void} */
         onTBodyClick: function (ev) {
-            var button = /** @type {Element} */ (ev.target).closest("button");
+            var target = /** @type {Element} */ (ev.target);
+            var button = target.closest("button");
             if (button) {
                 this.deleteMarkerRow(button.closest("tr"));
             }
@@ -78,9 +81,8 @@
         /** @type {() => void} */
         hydrateMarkerRows: function () {
             var tbody = this.tbody;
-            /** @type {Marker[]} */ (JSON.parse(this.textarea.value)).forEach(
-                this.hydrateMarkerRow.bind(this, tbody)
-            );
+            var markers = /** @type {Marker[]} */ (JSON.parse(this.textarea.value));
+            markers.forEach(this.hydrateMarkerRow.bind(this, tbody));
         },
 
         /** @type {(tbody: HTMLTableSectionElement, marker: Marker) => void} */
@@ -95,9 +97,8 @@
                 if (control.type !== "checkbox") {
                     control.value = /** @type {string} */ (value);
                 } else {
-                    /** @type {HTMLInputElement} */ (control).checked = /** @type {boolean} */ (
-                        value
-                    );
+                    var input = /** @type {HTMLInputElement} */ (control);
+                    input.checked = /** @type {boolean} */ (value);
                 }
             });
         },
@@ -114,8 +115,9 @@
                         // @ts-ignore
                         marker[control.name] = control.value;
                     } else {
+                        var input = /** @type {HTMLInputElement} */ (control);
                         // @ts-ignore
-                        marker[control.name] = /** @type {HTMLInputElement} */ (control).checked;
+                        marker[control.name] = input.checked;
                     }
                     control.name = "";
                 });
@@ -135,7 +137,13 @@
         },
     });
 
-    document.querySelectorAll("article.maps_edit").forEach(function (article) {
-        Object.create(editor, { element: { value: article } }).init();
+    var editors = /** @type {NodeListOf<HTMLElement>} */ (
+        document.querySelectorAll("article.maps_edit")
+    );
+    editors.forEach(function (article) {
+        var editor = /** @type {typeof editorProto} */ (
+            Object.create(editorProto, { element: { value: article } })
+        );
+        editor.init();
     });
 })();
