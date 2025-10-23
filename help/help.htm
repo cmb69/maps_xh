@@ -30,7 +30,15 @@
 </head>
 <body>
 <h1 id="maps_xh">Maps_XH</h1>
-<p>The plugin facilitates displaying <a href="https://www.openstreetmap.org/">OpenStreetMap</a> maps on a CMSimple_XH website without needing to fiddle around with JavaScript. Such maps are useful to show others where they can find you, but can be used for other purposes as well. The plugin provides data privacy by default; i.e. no data are transferred to third-party servers prior to explicit agreement. The maps can have an arbitrary amount of markers (optionally with info texts), and there is basic support for importing GeoJSON features.</p>
+<p>The plugin facilitates displaying <a
+href="https://www.openstreetmap.org/">OpenStreetMap</a> maps on a
+CMSimple_XH website without needing to fiddle around with JavaScript.
+Such maps are useful to show others where they can find you, but can be
+used for other purposes as well. The plugin provides data privacy by
+default; i.e. no data are transferred to third-party servers prior to
+explicit agreement. The maps can have an arbitrary amount of markers
+(optionally with info texts), and there is basic support for importing
+GeoJSON features.</p>
 <ul>
 <li><a href="#requirements">Requirements</a></li>
 <li><a href="#download">Download</a></li>
@@ -46,54 +54,128 @@
 <li><a href="#credits">Credits</a></li>
 </ul>
 <h2 id="requirements">Requirements</h2>
-<p>Maps_XH is a plugin for <a href="https://cmsimple-xh.org/">CMSimple_XH</a>. It requires CMSimple_XH ≥ 1.7.0, and PHP ≥ 8.0.0. Maps_XH also requires <a href="https://github.com/cmb69/plib_xh">Plib_XH</a> ≥ 1.9; if that is not already installed (see <em>Settings</em>→<em>Info</em>), get the <a href="https://github.com/cmb69/plib_xh/releases/latest">lastest release</a>, and install it.</p>
+<p>Maps_XH is a plugin for <a
+href="https://cmsimple-xh.org/">CMSimple_XH</a>. It requires CMSimple_XH
+≥ 1.7.0, and PHP ≥ 8.0.0. Maps_XH also requires <a
+href="https://github.com/cmb69/plib_xh">Plib_XH</a> ≥ 1.9; if that is
+not already installed (see <em>Settings</em>→<em>Info</em>), get the <a
+href="https://github.com/cmb69/plib_xh/releases/latest">lastest
+release</a>, and install it.</p>
 <h2 id="download">Download</h2>
-<p>The <a href="https://github.com/cmb69/maps_xh/releases/latest">lastest release</a> is available for download on Github.</p>
+<p>The <a
+href="https://github.com/cmb69/maps_xh/releases/latest">lastest
+release</a> is available for download on Github.</p>
 <h2 id="installation">Installation</h2>
 <p>The installation is done as with many other CMSimple_XH plugins.</p>
 <ol type="1">
 <li>Backup the data on your server.</li>
 <li>Unzip the distribution on your computer.</li>
-<li>Upload the whole folder <code>maps/</code> to your server into the <code>plugins/</code> folder of CMSimple_XH.</li>
-<li>Set write permissions to the subfolders <code>config/</code>, <code>css/</code>, and <code>languages/</code>.</li>
-<li>Check under <code>Plugins</code> → <code>Maps</code> in the back-end of the website, if all requirements are fulfilled.</li>
+<li>Upload the whole folder <code>maps/</code> to your server into the
+<code>plugins/</code> folder of CMSimple_XH.</li>
+<li>Set write permissions to the subfolders <code>config/</code>,
+<code>css/</code>, and <code>languages/</code>.</li>
+<li>Check under <code>Plugins</code> → <code>Maps</code> in the back-end
+of the website, if all requirements are fulfilled.</li>
 </ol>
 <h2 id="settings">Settings</h2>
-<p>The configuration of the plugin is done as with many other CMSimple_XH plugins in the back-end of the Website. Select <code>Plugins</code> → <code>Maps</code>.</p>
-<p>You can change the default settings of Maps_XH under <code>Config</code>. Hints for the options will be displayed when hovering over the help icons with your mouse.</p>
-<p>Localization is done under <code>Language</code>. You can translate the character strings to your own language if there is no appropriate language file available, or customize them according to your needs.</p>
-<p>The look of Maps_XH can be customized under <code>Stylesheet</code>.</p>
+<p>The configuration of the plugin is done as with many other
+CMSimple_XH plugins in the back-end of the Website. Select
+<code>Plugins</code> → <code>Maps</code>.</p>
+<p>You can change the default settings of Maps_XH under
+<code>Config</code>. Hints for the options will be displayed when
+hovering over the help icons with your mouse.</p>
+<p>Localization is done under <code>Language</code>. You can translate
+the character strings to your own language if there is no appropriate
+language file available, or customize them according to your needs.</p>
+<p>The look of Maps_XH can be customized under
+<code>Stylesheet</code>.</p>
 <h2 id="usage">Usage</h2>
 <p>To display a map on a page:</p>
 <pre><code>{{{maps(&#39;name&#39;)}}}</code></pre>
 <p>To display a map in the template:</p>
 <pre><code>&lt;?=maps(&#39;name&#39;)?&gt;</code></pre>
-<p>Where <code>name</code> is the name of the map. See <a href="#define-maps">Define Maps</a> for details.</p>
-<p>If you switch to view mode, and you have tile privacy enabled (<code>Plugins</code> → <code>Maps</code> → <code>Config</code> → <code>Tile</code> → <code>Privacy</code>) what is recommended, you will not see the actual map, but rather a grey area with the markers (if any are defined). Below you find a form where you have to agree to the data transmission first, before the map will be fully shown. This also happens to visitors of your website.</p>
-<p><strong>Please heed the terms of use of the tile providers.</strong> The plugin does its best to comply, but finally it is up to you. For the default tile provider, see <a href="https://operations.osmfoundation.org/policies/tiles/" class="uri">https://operations.osmfoundation.org/policies/tiles/</a>.</p>
+<p>Where <code>name</code> is the name of the map. See <a
+href="#define-maps">Define Maps</a> for details.</p>
+<p>If you switch to view mode, and you have tile privacy enabled
+(<code>Plugins</code> → <code>Maps</code> → <code>Config</code> →
+<code>Tile</code> → <code>Privacy</code>) what is recommended, you will
+not see the actual map, but rather a grey area with the markers (if any
+are defined). Below you find a form where you have to agree to the data
+transmission first, before the map will be fully shown. This also
+happens to visitors of your website.</p>
+<p><strong>Please heed the terms of use of the tile providers.</strong>
+The plugin does its best to comply, but finally it is up to you. For the
+default tile provider, see <a
+href="https://operations.osmfoundation.org/policies/tiles/"
+class="uri">https://operations.osmfoundation.org/policies/tiles/</a>.</p>
 <h3 id="define-maps">Define Maps</h3>
-<p>In the plugin back-end (<code>Plugins</code> → <code>Map</code> → <code>Administration</code>) you can define your map(s). The user interface is supposed to be self explaining, but some notes are in order:</p>
+<p>In the plugin back-end (<code>Plugins</code> → <code>Map</code> →
+<code>Administration</code>) you can define your map(s). The user
+interface is supposed to be self explaining, but some notes are in
+order:</p>
 <ul>
-<li><p>Every map has a unique name under which it is stored in the <code>content/</code> folder. If you want to change the name, you need to rename the respective file via FTP.</p></li>
-<li><p>The coordinates (latitude/longitude) determine the center of the map, and are given as decimal numbers (not degrees and minutes). Search the Web to find the coordinates for the desired location.</p></li>
-<li><p>Zoom level 0 means the whole world, level 20 is roughly a building. <a href="https://wiki.openstreetmap.org/wiki/Zoom_levels">Definition of the zoom levels</a>.</p></li>
-<li><p>The aspect ratio determines the height of the map when displayed; its width is always 100%.</p></li>
-<li><p>You can define an arbitrary amount of markers which are placed at the given coordinates. These markers can have info text which is shown when the marker is clicked, or, if you check the checkbox, is shown when the map is displayed.</p></li>
+<li><p>Every map has a unique name under which it is stored in the
+<code>content/</code> folder. If you want to change the name, you need
+to rename the respective file via FTP.</p></li>
+<li><p>The coordinates (latitude/longitude) determine the center of the
+map, and are given as decimal numbers (not degrees and minutes). Search
+the Web to find the coordinates for the desired location.</p></li>
+<li><p>Zoom level 0 means the whole world, level 20 is roughly a
+building. <a
+href="https://wiki.openstreetmap.org/wiki/Zoom_levels">Definition of the
+zoom levels</a>.</p></li>
+<li><p>The aspect ratio determines the height of the map when displayed;
+its width is always 100%.</p></li>
+<li><p>You can define an arbitrary amount of markers which are placed at
+the given coordinates. These markers can have info text which is shown
+when the marker is clicked, or, if you check the checkbox, is shown when
+the map is displayed.</p></li>
 </ul>
 <h3 id="importing-geojson">Importing GeoJSON</h3>
-<p>There is support for importing so-called <a href="https://geojson.org/">GeoJSON</a> features; only points are recognized, and these are imported as markers. The import form has a field for the the <code>GeoJSON</code> (use copy&amp;paste to fill it), and a <code>Template</code> field which can be used to fill the marker info with data from the GeoJSON features. The template expects HTML with placeholders which will be replaced with so called properties of the GeoJSON feature. If the property does not exists, no replacement is done. A placeholders is the name of a property enclosed in curly braces, e.g. <code>{name}</code>. Note that you can choose to replace the existing markers, what is useful when reimporting updated GeoJSON.</p>
+<p>There is support for importing so-called <a
+href="https://geojson.org/">GeoJSON</a> features; only points are
+recognized, and these are imported as markers. The import form has a
+field for the the <code>GeoJSON</code> (use copy&amp;paste to fill it),
+and a <code>Template</code> field which can be used to fill the marker
+info with data from the GeoJSON features. The template expects HTML with
+placeholders which will be replaced with so called properties of the
+GeoJSON feature. If the property does not exists, no replacement is
+done. A placeholders is the name of a property enclosed in curly braces,
+e.g. <code>{name}</code>. Note that you can choose to replace the
+existing markers, what is useful when reimporting updated GeoJSON.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
-<p>Report bugs and ask for support either on <a href="https://github.com/cmb69/maps_xh/issues">Github</a> or in the <a href="https://cmsimpleforum.com/">CMSimple_XH Forum</a>.</p>
+<p>Report bugs and ask for support either on <a
+href="https://github.com/cmb69/maps_xh/issues">Github</a> or in the <a
+href="https://cmsimpleforum.com/">CMSimple_XH Forum</a>.</p>
 <h2 id="license">License</h2>
-<p>Maps_XH is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
-<p>Maps_XH is distributed in the hope that it will be useful, but <em>without any warranty</em>; without even the implied warranty of <em>merchantibility</em> or <em>fitness for a particular purpose</em>. See the GNU General Public License for more details.</p>
-<p>You should have received a copy of the GNU General Public License along with Maps_XH. If not, see <a href="https://www.gnu.org/licenses/" class="uri">https://www.gnu.org/licenses/</a>.</p>
+<p>Maps_XH is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.</p>
+<p>Maps_XH is distributed in the hope that it will be useful, but
+<em>without any warranty</em>; without even the implied warranty of
+<em>merchantibility</em> or <em>fitness for a particular purpose</em>.
+See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with Maps_XH. If not, see <a href="https://www.gnu.org/licenses/"
+class="uri">https://www.gnu.org/licenses/</a>.</p>
 <p>Copyright © Christoph M. Becker</p>
 <h2 id="credits">Credits</h2>
 <p>Maps_XH was inspired by <em>hufnala</em>.</p>
-<p>The plugin is powered by <a href="https://www.openstreetmap.org/">OpenStreetMap</a> and <a href="https://leafletjs.com/">Leaflet</a>. Many thanks for providing these awesome tools and services to the community!</p>
-<p>The plugin icon is designed by <a href="https://www.flaticon.com/free-icons/street-map">Freepik - Flaticon</a>. Many thanks for making this icon available for free.</p>
-<p>Many thanks to the community at the <a href="https://www.cmsimpleforum.com/">CMSimple_XH Forum</a> for tips, suggestions and testing.</p>
-<p>And last but not least many thanks to <a href="httsp://www.harteg.dk">Peter Harteg</a>, the “father” of CMSimple, and all developers of <a href="https://www.cmsimple-xh.org">CMSimple_XH</a> without whom this amazing CMS would not exist.</p>
+<p>The plugin is powered by <a
+href="https://www.openstreetmap.org/">OpenStreetMap</a> and <a
+href="https://leafletjs.com/">Leaflet</a>. Many thanks for providing
+these awesome tools and services to the community!</p>
+<p>The plugin icon is designed by <a
+href="https://www.flaticon.com/free-icons/street-map">Freepik -
+Flaticon</a>. Many thanks for making this icon available for free.</p>
+<p>Many thanks to the community at the <a
+href="https://www.cmsimpleforum.com/">CMSimple_XH Forum</a> for tips,
+suggestions and testing.</p>
+<p>And last but not least many thanks to <a
+href="httsp://www.harteg.dk">Peter Harteg</a>, the “father” of CMSimple,
+and all developers of <a
+href="https://www.cmsimple-xh.org">CMSimple_XH</a> without whom this
+amazing CMS would not exist.</p>
 </body>
 </html>
