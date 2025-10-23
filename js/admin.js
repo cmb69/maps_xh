@@ -31,22 +31,27 @@
     var editor = Object.seal({
         /** @readonly @type {HTMLElement} */
         element: undefined,
+
         /** @type {HTMLTextAreaElement} */
         get textarea() {
             return this.element.querySelector("textarea[name=markers]");
         },
+
         /** @type {HTMLTableSectionElement} */
         get tbody() {
             return this.element.querySelector("tbody");
         },
+
         /** @type {HTMLButtonElement} */
         get addMarkerButton() {
             return this.element.querySelector("button.maps_add_row");
         },
+
         /** @type {HTMLScriptElement} */
         get rowTemplate() {
             return this.element.querySelector("script.maps_row_template");
         },
+
         /** @type {(article: HTMLElement) => void} */
         init: function () {
             var textarea = this.textarea;
@@ -61,6 +66,7 @@
             this.tbody.onclick = this.onTBodyClick.bind(this);
             textarea.form.onsubmit = this.dehydrateMarkerRows.bind(this);
         },
+
         /** @type {(ev: Event) => void} */
         onTBodyClick: function (ev) {
             var button = /** @type {Element} */ (ev.target).closest("button");
@@ -68,6 +74,7 @@
                 this.deleteMarkerRow(button.closest("tr"));
             }
         },
+
         /** @type {() => void} */
         hydrateMarkerRows: function () {
             var tbody = this.tbody;
@@ -75,6 +82,7 @@
                 this.hydrateMarkerRow.bind(this, tbody)
             );
         },
+
         /** @type {(tbody: HTMLTableSectionElement, marker: Marker) => void} */
         hydrateMarkerRow: function (tbody, marker) {
             tbody.insertAdjacentHTML("beforeend", this.rowTemplate.text);
@@ -93,6 +101,7 @@
                 }
             });
         },
+
         /** @type {() => void} */
         dehydrateMarkerRows: function () {
             var markers = /** @type {Marker[]} */ ([]);
@@ -114,10 +123,12 @@
             });
             this.textarea.value = JSON.stringify(markers);
         },
+
         /** @type {() => void} */
         addMarkerRow: function () {
             this.tbody.insertAdjacentHTML("beforeend", this.rowTemplate.text);
         },
+
         /** @type {(tr: HTMLTableRowElement) => void} */
         deleteMarkerRow: function (tr) {
             tr.parentNode.removeChild(tr);
