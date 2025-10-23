@@ -34,7 +34,7 @@
     }
 
     /** @readonly */
-    var editorProto = Object.seal({
+    var Editor = Object.seal({
         /** @readonly @type {HTMLElement} */
         element: undefined,
 
@@ -160,8 +160,8 @@
         document.querySelectorAll("article.maps_edit")
     );
     editors.forEach(function (article) {
-        var editor = /** @type {typeof editorProto} */ (
-            Object.create(editorProto, { element: { value: article } })
+        var editor = /** @type {typeof Editor} */ (
+            Object.create(Editor, { element: { value: article } })
         );
         editor.init();
     });
