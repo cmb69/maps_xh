@@ -28,6 +28,11 @@
      * @property {boolean} show
      */
 
+    /** @type {<T>(arrayLike: ArrayLike<T>) => T[]} */
+    function array(arrayLike) {
+        return Array.prototype.slice.call(arrayLike);
+    }
+
     /** @readonly */
     var editorProto = Object.seal({
         /** @readonly @type {HTMLElement} */
@@ -97,42 +102,27 @@
         hydrateMarkerRow: function (tbody, marker) {
             tbody.insertAdjacentHTML("beforeend", this.rowTemplate.text);
             var row = /** @type {HTMLTableRowElement} */ (tbody.querySelector("tr:last-child"));
-            Object.keys(marker).forEach(function (key) {
-                var value = marker[/** @type {keyof Marker} */ (key)];
-                var control = /** @type {HTMLInputElement|HTMLTextAreaElement} */ (
-                    row.querySelector("[name=" + key + "]")
-                );
-                if (control.type !== "checkbox") {
-                    control.value = /** @type {string} */ (value);
-                } else {
-                    var input = /** @type {HTMLInputElement} */ (control);
-                    input.checked = /** @type {boolean} */ (value);
-                }
-            });
+            this.markerLatitude(row).value = marker.latitude.toString();
+            this.markerLongitude(row).value = marker.longitude.toString();
+            this.markerInfo(row).value = marker.info;
+            this.markerShow(row).checked = marker.show;
         },
 
         /** @type {() => void} */
         dehydrateMarkerRows: function () {
-            var markers = /** @type {Marker[]} */ ([]);
-            this.tbody.querySelectorAll("tr").forEach(function (row) {
-                var marker = /** @type {Marker} */ ({});
-                var controls = /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
-                    row.querySelectorAll("[name]")
-                );
-                controls.forEach(function (control) {
-                    if (control.type !== "checkbox") {
-                        // @ts-ignore
-                        marker[control.name] = control.value;
-                    } else {
-                        var input = /** @type {HTMLInputElement} */ (control);
-                        // @ts-ignore
-                        marker[control.name] = input.checked;
-                    }
-                    control.name = "";
-                });
-                markers.push(marker);
-            });
+            var rows = array(this.tbody.querySelectorAll("tr"));
+            var markers = rows.map(this.dehydrateMarkerRow.bind(this));
             this.textarea.value = JSON.stringify(markers);
+        },
+
+        /** @type {(row: HTMLTableRowElement) => Marker} */
+        dehydrateMarkerRow: function (row) {
+            return {
+                latitude: +this.markerLatitude(row).value,
+                longitude: +this.markerLongitude(row).value,
+                info: this.markerInfo(row).value,
+                show: this.markerShow(row).checked,
+            };
         },
 
         /** @type {() => void} */
@@ -143,6 +133,26 @@
         /** @type {(tr: HTMLTableRowElement) => void} */
         deleteMarkerRow: function (tr) {
             tr.parentNode.removeChild(tr);
+        },
+
+        /** @type {(row: HTMLTableRowElement) => HTMLInputElement} */
+        markerLatitude: function (row) {
+            return row.querySelector("input[name=latitude]");
+        },
+
+        /** @type {(row: HTMLTableRowElement) => HTMLInputElement} */
+        markerLongitude: function (row) {
+            return row.querySelector("input[name=longitude]");
+        },
+
+        /** @type {(row: HTMLTableRowElement) => HTMLTextAreaElement} */
+        markerInfo: function (row) {
+            return row.querySelector("textarea[name=info]");
+        },
+
+        /** @type {(row: HTMLTableRowElement) => HTMLInputElement} */
+        markerShow: function (row) {
+            return row.querySelector("input[name=show]");
         },
     });
 
