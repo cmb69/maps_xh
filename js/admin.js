@@ -43,11 +43,6 @@
             return this.element.querySelector("tbody");
         },
 
-        /** @type {HTMLButtonElement} */
-        get addMarkerButton() {
-            return this.element.querySelector("button.maps_add_row");
-        },
-
         /** @type {HTMLScriptElement} */
         get rowTemplate() {
             return this.element.querySelector("script.maps_row_template");
@@ -64,17 +59,30 @@
                 script.outerHTML = script.text;
             });
             this.hydrateMarkerRows();
-            this.addMarkerButton.onclick = this.addMarkerRow.bind(this);
-            this.tbody.onclick = this.onTBodyClick.bind(this);
-            textarea.form.onsubmit = this.dehydrateMarkerRows.bind(this);
+            this.element.addEventListener("click", this);
+            this.element.addEventListener("submit", this);
         },
 
-        /** @type {(ev: Event) => void} */
-        onTBodyClick: function (ev) {
-            var target = /** @type {Element} */ (ev.target);
+        /** @type {(event: Event) => void} */
+        handleEvent: function (event) {
+            switch (event.type) {
+                case "click":
+                    return this.handleClickEvent(event);
+                case "submit":
+                    return this.dehydrateMarkerRows();
+            }
+        },
+
+        /** @type {(event: Event) => void} */
+        handleClickEvent: function (event) {
+            var target = /** @type {Element} */ (event.target);
             var button = target.closest("button");
-            if (button) {
-                this.deleteMarkerRow(button.closest("tr"));
+            if (!button) return;
+            switch (button.classList[0]) {
+                case "maps_add_row":
+                    return this.addMarkerRow();
+                case "maps_delete_row":
+                    return this.deleteMarkerRow(button.closest("tr"));
             }
         },
 
