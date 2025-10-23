@@ -15,7 +15,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
 
 <figure class="maps_map" data-maps-conf='<?=$this->json($conf)?>'>
   <figcaption><?=$this->raw($title)?></figcaption>
-  <div class="maps_map" style="width: 100%; aspect-ratio: <?=$this->esc($aspectRatio)?>"></div>
+  <div class="maps_map" style="width: 100%; aspect-ratio: <?=$this->esc($aspectRatio)?>" data-aspect-ratio="<?=$this->esc($aspectRatio)?>"></div>
 <?if ($privacy):?>
   <form method="post">
     <p><?=$this->text("message_tile_privacy")?></p>

@@ -38,20 +38,28 @@
         document.querySelectorAll("figure.maps_map")
     );
     maps.forEach(function (figure) {
-        var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+        /** @type {() => void} */
+        function resize() {
+            var map = /** @type {HTMLElement} */ (figure.querySelector("div.maps_map"));
+            var matches = map.dataset.aspectRatio.match(/(\d+)\/(\d+)/);
+            map.style.height = (map.clientWidth / +matches[1]) * +matches[2] + "px";
+        }
 
-        var map = L.map(figure.querySelector("div.maps_map")).setView(
-            [conf.latitude, conf.longitude],
-            conf.zoom
-        );
+        var conf = /** @type {Config} */ (JSON.parse(figure.dataset.mapsConf));
+        var map = /** @type {HTMLElement} */ (figure.querySelector("div.maps_map"));
+        if (map.style.aspectRatio === undefined) {
+            resize();
+            addEventListener("resize", resize);
+        }
+        var leafletMap = L.map(map).setView([conf.latitude, conf.longitude], conf.zoom);
         if (conf.loadTiles) {
             L.tileLayer(conf.tileUrl, {
                 maxZoom: conf.maxZoom,
                 attribution: conf.tileAttribution,
-            }).addTo(map);
+            }).addTo(leafletMap);
         }
         conf.markers.forEach(function (marker) {
-            var m = L.marker([marker[0], marker[1]]).addTo(map);
+            var m = L.marker([marker[0], marker[1]]).addTo(leafletMap);
             m.bindPopup(marker[2]);
             if (marker[3]) {
                 m.openPopup();
