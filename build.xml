@@ -53,10 +53,10 @@
 
   <target name="minify" description="minifies JS">
     <exec executable="uglifyjs" checkreturn="true" dir="${dir}">
-      <arg line="js/admin.js --module --compress --mangle --output js/admin.min.js"/>
+      <arg line="js/admin.js --no-module --compress --mangle --output js/admin.min.js"/>
     </exec>
     <exec executable="uglifyjs" checkreturn="true" dir="${dir}">
-      <arg line="js/maps.js --module --compress --mangle --output js/maps.min.js"/>
+      <arg line="js/maps.js --no-module --compress --mangle --output js/maps.min.js"/>
     </exec>
   </target>
 
