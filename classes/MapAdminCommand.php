@@ -21,7 +21,10 @@
 
 namespace Maps;
 
+use GdImage;
+use Maps\Infra\Fetcher;
 use Maps\Model\Map;
+use Maps\Model\TileCalculator;
 use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\JavaScript;
@@ -29,24 +32,38 @@ use Plib\Request;
 use Plib\Response;
 use Plib\View;
 
+/**
+ * @phpstan-import-type Tile from TileCalculator
+ */
 class MapAdminCommand
 {
     private string $pluginFolder;
+    /** @var array<string,string> */
+    private array $config;
     private DocumentStore $store;
     private CsrfProtector $csrfProtector;
+    private TileCalculator $tileCalculator;
+    private Fetcher $fetcher;
     private JavaScript $javaScript;
     private View $view;
 
+    /** @param array<string,string> $config */
     public function __construct(
         string $pluginFolder,
+        array $config,
         DocumentStore $store,
         CsrfProtector $csrfProtector,
+        TileCalculator $tileCalculator,
+        Fetcher $fetcher,
         JavaScript $javaScript,
         View $view
     ) {
         $this->pluginFolder = $pluginFolder;
+        $this->config = $config;
         $this->store = $store;
         $this->csrfProtector = $csrfProtector;
+        $this->tileCalculator = $tileCalculator;
+        $this->fetcher = $fetcher;
         $this->javaScript = $javaScript;
         $this->view = $view;
     }
@@ -60,6 +77,8 @@ class MapAdminCommand
                 return $this->create($request);
             case "update":
                 return $this->update($request);
+            case "create_image":
+                return $this->createImage($request);
             case "import":
                 return $this->import($request);
         }
@@ -154,6 +173,80 @@ class MapAdminCommand
             return $this->respondWithEditor(false, $dto, $errors);
         }
         return Response::redirect($request->url()->without("action")->absolute());
+    }
+
+    private function createImage(Request $request): Response
+    {
+        if ($request->post("maps_do") !== null) {
+            return $this->doCreateImage($request);
+        }
+        if ($request->get("maps_map") === null) {
+            return $this->respondWithOverview($request, [$this->view->message("fail", "error_no_map")]);
+        }
+        $map = Map::read($request->get("maps_map"), $this->store);
+        if ($map === null) {
+            return $this->respondWithOverview($request, [
+                $this->view->message("fail", "error_load", $request->get("maps_map"))
+            ]);
+        }
+        return $this->respondWithCreateImageForm($map, 500);
+    }
+
+    private function doCreateImage(Request $request): Response
+    {
+        if ($request->get("maps_map") === null) {
+            return $this->respondWithOverview($request, [$this->view->message("fail", "error_no_map")]);
+        }
+        $map = Map::read($request->get("maps_map"), $this->store);
+        if ($map === null) {
+            return $this->respondWithOverview($request, [
+                $this->view->message("fail", "error_load", $request->get("maps_map"))
+            ]);
+        }
+        $width = (int) ($request->post("width") ?? "500");
+        if ($width < 100 || $width > 1000) {
+            $errors = [$this->view->message("fail", "error_invalid_width")];
+            return $this->respondWithCreateImageForm($map, $width, $errors);
+        }
+        if (!$this->csrfProtector->check($request->post("maps_token"))) {
+            $errors = [$this->view->message("fail", "error_not_authorized")];
+            return $this->respondWithCreateImageForm($map, $width, $errors);
+        }
+        $height = (int) round($width * $map->aspectDenominator() / $map->aspectNumerator());
+        $tiles = $this->tileCalculator->calculate($map->latitude(), $map->longitude(), $map->zoom(), $width, $height);
+        if (($im = $this->createMapImage($width, $height, $tiles)) === null) {
+            $errors = [$this->view->message("fail", "error_create_image")];
+            return $this->respondWithCreateImageForm($map, $width, $errors);
+        }
+        if (!imagejpeg($im, $this->pluginFolder . "static/{$map->name()}.jpg")) {
+            $errors = [$this->view->message("fail", "error_save_image")];
+            return $this->respondWithCreateImageForm($map, $width, $errors);
+        }
+        return Response::redirect($request->url()->without("action")->absolute());
+    }
+
+    /**
+     * @param list<Tile> $tiles
+     * @return ?GdImage
+     */
+    private function createMapImage(int $width, int $height, $tiles)
+    {
+        $dst = imagecreatetruecolor($width, $height);
+        foreach ($tiles as $tile) {
+            $url = str_replace(
+                ["{x}", "{y}", "{z}"],
+                [$tile->tileX, $tile->tileY, $tile->zoom],
+                $this->config["tile_url"]
+            );
+            if (($data = $this->fetcher->fetch($url)) === null) {
+                return null;
+            }
+            if (($src = @imagecreatefromstring($data)) === false) {
+                return null;
+            }
+            imagecopy($dst, $src, $tile->x, $tile->y, 0, 0, imagesx($src), imagesy($src));
+        }
+        return $dst;
     }
 
     private function import(Request $request): Response
@@ -283,6 +376,17 @@ class MapAdminCommand
             "map" => $dto,
             "token" => $this->csrfProtector->token(),
         ]))->withTitle("Maps – " . $this->view->text("label_edit"));
+    }
+
+    /** @param list<string> $errors */
+    private function respondWithCreateImageForm(Map $map, int $width, array $errors = []): Response
+    {
+        return Response::create($this->view->render("create_image", [
+            "errors" => $errors,
+            "name" => $map->name(),
+            "width" => $width,
+            "token" => $this->csrfProtector->token(),
+        ]))->withTitle("Maps – " . $this->view->text("label_create_image"));
     }
 
     /** @param list<string> $errors */

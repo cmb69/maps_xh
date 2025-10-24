@@ -46,7 +46,8 @@ GeoJSON features.</p>
 <li><a href="#settings">Settings</a></li>
 <li><a href="#usage">Usage</a>
 <ul>
-<li><a href="#define-maps">Define Maps</a></li>
+<li><a href="#defining-maps">Defining Maps</a></li>
+<li><a href="#creating-images">Creating Images</a></li>
 <li><a href="#importing-geojson">Importing GeoJSON</a></li>
 </ul></li>
 <li><a href="#troubleshooting">Troubleshooting</a></li>
@@ -56,7 +57,7 @@ GeoJSON features.</p>
 <h2 id="requirements">Requirements</h2>
 <p>Maps_XH is a plugin for <a
 href="https://cmsimple-xh.org/">CMSimple_XH</a>. It requires CMSimple_XH
-≥ 1.7.0, and PHP ≥ 8.0.0. Maps_XH also requires <a
+≥ 1.7.0, and PHP ≥ 8.0.0 with the GD extension. Maps_XH also requires <a
 href="https://github.com/cmb69/plib_xh">Plib_XH</a> ≥ 1.12; if that is
 not already installed (see <em>Settings</em>→<em>Info</em>), get the <a
 href="https://github.com/cmb69/plib_xh/releases/latest">lastest
@@ -99,16 +100,16 @@ href="#define-maps">Define Maps</a> for details.</p>
 <p>If you switch to view mode, and you have tile privacy enabled
 (<code>Plugins</code> → <code>Maps</code> → <code>Config</code> →
 <code>Tile</code> → <code>Privacy</code>) what is recommended, you will
-not see the actual map, but rather a grey area with the markers (if any
-are defined). Below you find a form where you have to agree to the data
-transmission first, before the map will be fully shown. This also
-happens to visitors of your website.</p>
+not see the actual map, but rather a static map image (see <a
+href="#creating-images">Creating Images</a>). Below you find a form
+where you have to agree to the data transmission first, before the map
+will be fully shown. This also happens to visitors of your website.</p>
 <p><strong>Please heed the terms of use of the tile providers.</strong>
 The plugin does its best to comply, but finally it is up to you. For the
 default tile provider, see <a
 href="https://operations.osmfoundation.org/policies/tiles/"
 class="uri">https://operations.osmfoundation.org/policies/tiles/</a>.</p>
-<h3 id="define-maps">Define Maps</h3>
+<h3 id="defining-maps">Defining Maps</h3>
 <p>In the plugin back-end (<code>Plugins</code> → <code>Map</code> →
 <code>Administration</code>) you can define your map(s). The user
 interface is supposed to be self explaining, but some notes are in
@@ -131,6 +132,21 @@ the given coordinates. These markers can have info text which is shown
 when the marker is clicked, or, if you check the checkbox, is shown when
 the map is displayed.</p></li>
 </ul>
+<h3 id="creating-images">Creating Images</h3>
+<p>If JavaScript is not available, or the tile privacy option is
+enabled, and users have not yet agreed to the data transmission, a
+static map image is shown. This image has to be created in the plugin
+administration manually to avoid fetching tiles from the servers
+whenever a map is edited. So when you are finished with editing the map
+definition, click <code>Create image</code>, enter the desired width of
+the static map image, and submit the form. Unless there is an error, the
+static map image will be stored in the subfolder <code>static/</code> of
+the plugin folder.</p>
+<p>Note that in order to comply to the <a
+href="https://operations.osmfoundation.org/policies/tiles/%3E">Tile
+Usage Policy</a>, the tiles are cached in the subfolder
+<code>static/cache/</code> of the plugin folder. Clearing this cache is
+only possible via FTP.</p>
 <h3 id="importing-geojson">Importing GeoJSON</h3>
 <p>There is support for importing so-called <a
 href="https://geojson.org/">GeoJSON</a> features; only points are

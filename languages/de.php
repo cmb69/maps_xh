@@ -7,6 +7,7 @@ $plugin_tx['maps']['menu_main']="Verwaltung";
 $plugin_tx['maps']['label_create_marker']="Markierung erzeugen";
 $plugin_tx['maps']['label_agree']="Ich stimme zu!";
 $plugin_tx['maps']['label_aspect_ratio']="Seitenverhältnis";
+$plugin_tx['maps']['label_create_image']="Kartenbild erzeugen";
 $plugin_tx['maps']['label_delete_marker']="Diese Markierung löschen";
 $plugin_tx['maps']['label_edit']="Bearbeiten";
 $plugin_tx['maps']['label_geojson']="GeoJSON";
@@ -23,6 +24,7 @@ $plugin_tx['maps']['label_save']="Speichern";
 $plugin_tx['maps']['label_show']="Zeigen";
 $plugin_tx['maps']['label_template']="Template";
 $plugin_tx['maps']['label_title']="Überschrift";
+$plugin_tx['maps']['label_width']="Breite";
 $plugin_tx['maps']['label_zoom']="Zoom";
 
 $plugin_tx['maps']['help_aspect_ratio']="(Breite/Höhe)";
@@ -32,16 +34,21 @@ $plugin_tx['maps']['help_longitude']="(zwischen -180 und 180)";
 $plugin_tx['maps']['help_name']="(nur a-z, 0-9 und Bindestriche)";
 $plugin_tx['maps']['help_template']="(HTML mit {property} Platzhaltern)";
 $plugin_tx['maps']['help_title']="(HTML)";
+$plugin_tx['maps']['help_width']="(zwischen 100 und 1000)";
 $plugin_tx['maps']['help_zoom']="(zwischen 0 und 20)";
 
-$plugin_tx['maps']['message_tile_privacy']="Um die Landkarte anzuzeigen, müssen Kachelbilder von einem Server einer Drittpartei geladen werden. Stimmen Sie dem zu?";
+$plugin_tx['maps']['message_tile_privacy']="Um eine interaktive Landkarte anzuzeigen, müssen Kachelbilder von einem Server einer Drittpartei geladen werden. Stimmen Sie dem zu?";
 
+$plugin_tx['maps']['error_create_image']="Das Kartenbild kann nicht erzeugt werden!";
+$plugin_tx['maps']['error_invalid_width']="Ungültige Kartenbild-Breite!";
 $plugin_tx['maps']['error_not_authorized']="Sie sind nicht befugt diese Aktion durchzuführen!";
 $plugin_tx['maps']['error_no_map']="Sie haben keine Landkarte ausgewählt!";
 $plugin_tx['maps']['error_geojson']="Dieses GeoJSON wird nicht unterstützt!";
 $plugin_tx['maps']['error_load']="Die Landkarte „%s“ kann nicht geladen werden!";
 $plugin_tx['maps']['error_save']="Die Landkarte kann nicht gespeichert werden!";
+$plugin_tx['maps']['error_save_image']="Das Kartenbild kann nicht gespeichert werden!";
 
+$plugin_tx['maps']['syscheck_extension']="PHP Erweiterung %s verfügbar: %s";
 $plugin_tx['maps']['syscheck_title']="System-Prüfung";
 $plugin_tx['maps']['syscheck_phpversion']="PHP Version ≥ %s: %s";
 $plugin_tx['maps']['syscheck_plibversion']="Plib_XH Version ≥ %s: %s";

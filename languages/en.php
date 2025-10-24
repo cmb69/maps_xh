@@ -7,6 +7,7 @@ $plugin_tx['maps']['menu_main']="Administration";
 $plugin_tx['maps']['label_create_marker']="Create marker";
 $plugin_tx['maps']['label_agree']="I agree!";
 $plugin_tx['maps']['label_aspect_ratio']="Aspect Ratio";
+$plugin_tx['maps']['label_create_image']="Create image";
 $plugin_tx['maps']['label_delete_marker']="Delete this marker";
 $plugin_tx['maps']['label_edit']="Edit";
 $plugin_tx['maps']['label_geojson']="GeoJSON";
@@ -23,6 +24,7 @@ $plugin_tx['maps']['label_save']="Save";
 $plugin_tx['maps']['label_show']="Show";
 $plugin_tx['maps']['label_template']="Template";
 $plugin_tx['maps']['label_title']="Title";
+$plugin_tx['maps']['label_width']="Width";
 $plugin_tx['maps']['label_zoom']="Zoom";
 
 $plugin_tx['maps']['help_aspect_ratio']="(with/height)";
@@ -32,16 +34,21 @@ $plugin_tx['maps']['help_longitude']="(between -180 and 180)";
 $plugin_tx['maps']['help_name']="(only a-z, 0-9, and hyhpens)";
 $plugin_tx['maps']['help_template']="(HTML with {property} placeholders)";
 $plugin_tx['maps']['help_title']="(HTML)";
+$plugin_tx['maps']['help_width']="(between 100 and 1000)";
 $plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 
-$plugin_tx['maps']['message_tile_privacy']="To display the map, tile images need to be fetched from a third-party server. Do you agree?";
+$plugin_tx['maps']['message_tile_privacy']="To display an interactive map, tile images need to be fetched from a third-party server. Do you agree?";
 
+$plugin_tx['maps']['error_create_image']="Cannot create the map image!";
+$plugin_tx['maps']['error_invalid_width']="Invalid image width!";
 $plugin_tx['maps']['error_not_authorized']="You are not authorized to conduct this action!";
 $plugin_tx['maps']['error_no_map']="You have not selected a map!";
 $plugin_tx['maps']['error_geojson']="This GeoJSON is not supported!";
 $plugin_tx['maps']['error_load']="Cannot load the map “%s”!";
 $plugin_tx['maps']['error_save']="Cannot save the map!";
+$plugin_tx['maps']['error_save_image']="Cannot save the map image!";
 
+$plugin_tx['maps']['syscheck_extension']="PHP extension %s available: %s";
 $plugin_tx['maps']['syscheck_title']="System Check";
 $plugin_tx['maps']['syscheck_phpversion']="PHP version ≥ %s: %s";
 $plugin_tx['maps']['syscheck_plibversion']="Plib_XH version ≥ %s: %s";

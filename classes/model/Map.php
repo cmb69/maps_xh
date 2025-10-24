@@ -147,6 +147,22 @@ final class Map implements Document
         return $this->aspectRatio;
     }
 
+    public function aspectNumerator(): int
+    {
+        if (!preg_match('/(\d+)\/\d+/', $this->aspectRatio, $matches)) {
+            return 1;
+        }
+        return (int) $matches[1];
+    }
+
+    public function aspectDenominator(): int
+    {
+        if (!preg_match('/\d+\/(\d+)/', $this->aspectRatio, $matches)) {
+            return 1;
+        }
+        return (int) $matches[1];
+    }
+
     /** @return list<Marker> */
     public function markers(): array
     {

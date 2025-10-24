@@ -21,6 +21,8 @@
 
 namespace Maps;
 
+use Maps\Infra\Fetcher;
+use Maps\Model\TileCalculator;
 use Plib\CsrfProtector;
 use Plib\DocumentStore2 as DocumentStore;
 use Plib\JavaScript;
@@ -66,11 +68,14 @@ class Dic
 
     public static function mapAdminCommand(): MapAdminCommand
     {
-        global $pth;
+        global $pth, $plugin_cf;
         return new MapAdminCommand(
             $pth["folder"]["plugins"] . "maps/",
+            $plugin_cf["maps"],
             new DocumentStore(self::contentFolder()),
             new CsrfProtector(),
+            new TileCalculator(),
+            new Fetcher(self::VERSION, $pth["folder"]["plugins"] . "maps/static/cache/"),
             new JavaScript(),
             self::view()
         );

@@ -3,7 +3,9 @@
 namespace Maps;
 
 use ApprovalTests\Approvals;
+use Maps\Infra\Fetcher;
 use Maps\Model\Map;
+use Maps\Model\TileCalculator;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -16,9 +18,16 @@ use Plib\View;
 
 class MapAdminCommandTest extends TestCase
 {
+    private string $pluginFolder;
+
+    /** @var array<string,string> */
+    private $config;
     private DocumentStore $store;
     /** @var CsrfProtector&Stub */
     private $csrfProtector;
+    private TileCalculator $tileCalculator;
+    /** @var Fetcher&Stub */
+    private $fetcher;
     /** @var JavaScript&MockObject */
     private $javaScript;
     private View $view;
@@ -26,19 +35,33 @@ class MapAdminCommandTest extends TestCase
     public function setUp(): void
     {
         vfsStream::setup("root");
+        mkdir(vfsStream::url("root/static/"), 0777, true);
+        $this->pluginFolder = "./";
+        $this->config = XH_includeVar("./config/config.php", "plugin_cf")["maps"];
         $this->store = new DocumentStore(vfsStream::url("root/"));
         $map = Map::create("london", $this->store);
         $map->addMarker(0, 0, "basic info", true);
         $this->store->commit();
         $this->csrfProtector = $this->createStub(CsrfProtector::class);
         $this->csrfProtector->method("token")->willReturn("0123456789ABCDEF");
+        $this->tileCalculator = new TileCalculator();
+        $this->fetcher = $this->createStub(Fetcher::class);
         $this->javaScript = $this->createMock(JavaScript::class);
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["maps"]);
     }
 
     private function sut(): MapAdminCommand
     {
-        return new MapAdminCommand("./", $this->store, $this->csrfProtector, $this->javaScript, $this->view);
+        return new MapAdminCommand(
+            $this->pluginFolder,
+            $this->config,
+            $this->store,
+            $this->csrfProtector,
+            $this->tileCalculator,
+            $this->fetcher,
+            $this->javaScript,
+            $this->view
+        );
     }
 
     public function testRendersOverview(): void
@@ -202,6 +225,127 @@ class MapAdminCommandTest extends TestCase
         ]);
         $response = $this->sut()($request);
         $this->assertStringContainsString("Cannot save the map!", $response->output());
+    }
+
+    public function testRendersCreateImageForm(): void
+    {
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=london",
+        ]);
+        $response = $this->sut()($request);
+        $this->assertSame("Maps – Create image", $response->title());
+        Approvals::verifyHtml($response->output());
+    }
+
+    public function testsReportsThatNoMapIsSelectedForCreateImage(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(true);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image",
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You have not selected a map!", $response->output());
+    }
+
+    public function testsReportsMissingMapForCreateImage(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(true);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=does-not-exist",
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("Cannot load the map “does-not-exist”!", $response->output());
+    }
+
+    public function testsReportsThatNoMapIsSelectedWhenCreatingImage(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(true);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image",
+            "post" => [
+                "maps_do" => "",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You have not selected a map!", $response->output());
+    }
+
+    public function testsReportsMissingMapWhenCreatingImage(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(true);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=does-not-exist",
+            "post" => [
+                "maps_do" => "",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("Cannot load the map “does-not-exist”!", $response->output());
+    }
+
+    public function testsReportsInvalidWidthWhenCreatingImage(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(true);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=london",
+            "post" => [
+                "maps_do" => "",
+                "width" => "10",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("Invalid image width!", $response->output());
+    }
+
+    public function testCreateImageIsCsrfProtected(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(false);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=london",
+            "post" => [
+                "maps_do" => "",
+                "width" => "500",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("You are not authorized to conduct this action!", $response->output());
+    }
+
+    public function testReportsFailureToCreateImage(): void
+    {
+        $this->pluginFolder = vfsStream::url("root/");
+        $this->csrfProtector->method("check")->willReturn(true);
+        $this->fetcher->method("fetch")->willReturn("");
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=london",
+            "post" => [
+                "maps_do" => "",
+                "width" => "500",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString("Cannot create the map image!", $response->output());
+    }
+
+    public function testCreatesImage(): void
+    {
+        $imageData = base64_decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAA7E"
+            . "AAAOxAGVKw4bAAAADElEQVQImWNgYGAAAAAEAAGjChXjAAAAAElFTkSuQmCC"
+        );
+        $this->pluginFolder = vfsStream::url("root/");
+        $this->csrfProtector->method("check")->willReturn(true);
+        $this->fetcher->method("fetch")->willReturn($imageData);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create_image&maps_map=london",
+            "post" => [
+                "maps_do" => "",
+                "width" => "500",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertSame("http://example.com/?&maps&admin=plugin_main&maps_map=london", $response->location());
+        $this->assertFileExists($this->pluginFolder . "static/london.jpg");
     }
 
     public function testRendersImportForm(): void

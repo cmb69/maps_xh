@@ -14,7 +14,8 @@ and there is basic support for importing GeoJSON features.
 - [Installation](#installation)
 - [Settings](#settings)
 - [Usage](#usage)
-  - [Define Maps](#define-maps)
+  - [Defining Maps](#defining-maps)
+  - [Creating Images](#creating-images)
   - [Importing GeoJSON](#importing-geojson)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
@@ -23,7 +24,7 @@ and there is basic support for importing GeoJSON features.
 ## Requirements
 
 Maps_XH is a plugin for [CMSimple_XH](https://cmsimple-xh.org/).
-It requires CMSimple_XH ≥ 1.7.0, and PHP ≥ 8.0.0.
+It requires CMSimple_XH ≥ 1.7.0, and PHP ≥ 8.0.0 with the GD extension.
 Maps_XH also requires [Plib_XH](https://github.com/cmb69/plib_xh) ≥ 1.12;
 if that is not already installed (see *Settings*→*Info*),
 get the [lastest release](https://github.com/cmb69/plib_xh/releases/latest),
@@ -78,8 +79,8 @@ Where `name` is the name of the map.  See [Define Maps](#define-maps) for detail
 
 If you switch to view mode, and you have tile privacy enabled
 (`Plugins` → `Maps` → `Config` → `Tile` → `Privacy`) what is recommended, you
-will not see the actual map, but rather a grey area with the markers (if any
-are defined).  Below you find a form where you have to agree to the data
+will not see the actual map, but rather a static map image (see [Creating Images](#creating-images)).
+Below you find a form where you have to agree to the data
 transmission first, before the map will be fully shown.  This also happens
 to visitors of your website.
 
@@ -87,7 +88,7 @@ to visitors of your website.
 The plugin does its best to comply, but finally it is up to you.
 For the default tile provider, see <https://operations.osmfoundation.org/policies/tiles/>.
 
-### Define Maps
+### Defining Maps
 
 In the plugin back-end (`Plugins` → `Map` → `Administration`) you can define
 your map(s).  The user interface is supposed to be self explaining, but some
@@ -109,6 +110,21 @@ notes are in order:
 * You can define an arbitrary amount of markers which are placed at the given
   coordinates.  These markers can have info text which is shown when the marker
   is clicked, or, if you check the checkbox, is shown when the map is displayed.
+
+### Creating Images
+
+If JavaScript is not available, or the tile privacy option is enabled, and users
+have not yet agreed to the data transmission, a static map image is shown.
+This image has to be created in the plugin administration manually to avoid
+fetching tiles from the servers whenever a map is edited.  So when you are
+finished with editing the map definition, click `Create image`, enter the
+desired width of the static map image, and submit the form.  Unless there is an error,
+the static map image will be stored in the subfolder `static/` of the plugin
+folder.
+
+Note that in order to comply to the [Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/>),
+the tiles are cached in the subfolder `static/cache/` of the plugin folder.
+Clearing this cache is only possible via FTP.
 
 ### Importing GeoJSON
 

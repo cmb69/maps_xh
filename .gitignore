@@ -4,3 +4,5 @@
 /vendor
 /coverage
 /js/*.min.js
+/static/*.jpg
+/static/cache/*

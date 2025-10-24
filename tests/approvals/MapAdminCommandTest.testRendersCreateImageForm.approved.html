@@ -1,0 +1,23 @@
+
+<article class="maps_create_image">
+  <h1>Maps – Create image</h1>
+  <form method="post">
+    <p>
+      <label>
+        <span>Name</span>
+        <input name="name" value="london" disabled>
+      </label>
+    </p>
+    <p>
+      <label>
+        <span>Width</span>
+        <span class="maps_help">(between 100 and 1000)</span>
+        <input type="number" name="width" value="500" min="100" max="1000" step="50" requrired></input>
+      </label>
+    </p>
+    <p class="maps_controls">
+      <button name="maps_do">Create image</button>
+    </p>
+    <input type="hidden" name="maps_token" value="0123456789ABCDEF">
+  </form>
+</article>

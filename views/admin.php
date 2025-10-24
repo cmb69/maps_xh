@@ -31,6 +31,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
     </ul>
     <p class="maps_controls">
       <button name="action" value="update"><?=$this->text("label_edit")?></button>
+      <button name="action" value="create_image"><?=$this->text("label_create_image")?></button>
       <button name="action" value="import"><?=$this->text("label_import")?></button>
       <button name="action" value="create"><?=$this->text("label_new")?></button>
     </p>

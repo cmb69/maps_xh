@@ -15,6 +15,7 @@ Info-Text) enthalten, und grundlegender Import von GeoJSON Features ist möglich
 - [Einstellungen](#einstellungen)
 - [Verwendung](#verwendung)
   - [Definition von Landkarten](#definition-von-landkarten)
+  - [Erzeugen von Kartenbilder](#erzeugen-von-kartenbildern)
   - [Import von GeoJSON](#import-von-geojson)
 - [Fehlerbehebung](#fehlerbehebung)
 - [Lizenz](#lizenz)
@@ -23,7 +24,7 @@ Info-Text) enthalten, und grundlegender Import von GeoJSON Features ist möglich
 ## Voraussetzungen
 
 Maps_XH ist ein Plugin für [CMSimple_XH](https://cmsimple-xh.org/de/).
-Es benötigt CMSimple_XH ≥ 1.7.0 und PHP ≥ 8.0.0.
+Es benötigt CMSimple_XH ≥ 1.7.0 und PHP ≥ 8.0.0 mit der GD Extension.
 Maps_XH benötigt weiterhin [Plib_XH](https://github.com/cmb69/plib_xh) ≥ 1.12;
 ist dieses noch nicht installiert (see *Einstellungen*→*Info*),
 laden Sie das [aktuelle Release](https://github.com/cmb69/plib_xh/releases/latest)
@@ -79,8 +80,9 @@ Wobei `name` der Name der Landkarte ist. Details sind unter
 
 Bei Wechsel in den Ansichtsmodus, wird, wenn der Kachel-Datenschutz aktiviert
 ist (`Plugins` → `Maps` → `Konfiguration` → `Tile` → `Privacy`), was empfohlen
-wird, nicht gleich die Karte, sondern nur ein grauer Bereich mit den Markierungen
-(falls welche definiert wurden) angezeigt. Darunter befindet sich ein Formular
+wird, nicht gleich die Karte, sondern nur ein statisches Kartenbild
+(siehe [Erzeugen von Kartenbildern](#erzeugen-von-kartenbildern)).
+Darunter befindet sich ein Formular
 wo der Datenübertragung zunächst zugestimmt werden muss, um die Landkarte
 vollständig anzuzeigen. Dies verhält sich ebenso für Besucher der Website.
 
@@ -115,6 +117,23 @@ Hinweise scheinen angebracht:
   enthalten, der angezeigt wird, wenn der Marker angeklickt wird, oder, wenn die
   entsprechende Checkbox angehakt ist, angezeigt wird, wenn die Karte angezeigt
   wird.
+
+### Erzeugen von Kartenbildern
+
+Ist JavaScript nicht verfügbar, oder der Kachel-Datenschutz aktiviert ist, aber
+Benutzer noch nicht der Datenübertragung zugestimmt haben, wird ein statisches
+Kartenbild angezeigt. Dieses Bild muss in der Pluginadministration manuell
+erzeugt werden, um zu verhindern, dass jedesmal, wenn eine Karte bearbeitet wird,
+Kacheln von den Servern geladen werden. Ist die Karte also fertig erstellt,
+dann sollte `Kartenbild erzeugen` gedrückt, die gewünschte Breite des statischen
+Kartenbildes eingegeben, und das Formular abgeschickt werden. Tritt kein Fehler
+auf, wird das statische Kartenbild im Unterordner `static/` des Pluginordners
+gespeichert.
+
+Es ist zu beachten, dass zwecks Erfüllung der
+[Kachel-Nutzungsbedingungen](https://operations.osmfoundation.org/policies/tiles/>)
+die Kacheln im Unterordner `static/cache/` des Pluginordners gecacht werden.
+Das Löschen dieses Caches ist nur per FTP möglich.
 
 ### Import von GeoJSON
 

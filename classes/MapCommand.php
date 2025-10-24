@@ -71,6 +71,7 @@ class MapCommand
             "conf" => $this->jsConf($request, $map),
             "title" => $map->title(),
             "aspectRatio" => $map->aspectRatio(),
+            "map_image" => $this->pluginFolder . "static/$name.jpg",
             "privacy" => $this->tilePrivacy($request),
         ]));
     }
