@@ -39,6 +39,7 @@ $plugin_tx['maps']['help_zoom']="(between 0 and 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="To display an interactive map, tile images need to be fetched from a third-party server. Do you agree?";
 
+$plugin_tx['maps']['error_create']="Cannot create the map “%s”! Does it already exist?";
 $plugin_tx['maps']['error_create_image']="Cannot create the map image!";
 $plugin_tx['maps']['error_invalid_width']="Invalid image width!";
 $plugin_tx['maps']['error_not_authorized']="You are not authorized to conduct this action!";

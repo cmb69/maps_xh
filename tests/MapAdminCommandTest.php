@@ -97,6 +97,23 @@ class MapAdminCommandTest extends TestCase
         $this->assertSame("http://example.com/?&maps&admin=plugin_main", $response->location());
     }
 
+    public function testReportsFailureToCreateMap(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(true);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&maps&admin=plugin_main&action=create",
+            "post" => [
+                "maps_do" => "",
+                "name" => "london",
+            ],
+        ]);
+        $response = $this->sut()($request);
+        $this->assertStringContainsString(
+            "Cannot create the map “london”! Does it already exist?",
+            $response->output()
+        );
+    }
+
     public function testCreatingIsCsrfProtected(): void
     {
         $this->csrfProtector->method("check")->willReturn(false);

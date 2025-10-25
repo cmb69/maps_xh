@@ -39,6 +39,7 @@ $plugin_tx['maps']['help_zoom']="(zwischen 0 und 20)";
 
 $plugin_tx['maps']['message_tile_privacy']="Um eine interaktive Landkarte anzuzeigen, müssen Kachelbilder von einem Server einer Drittpartei geladen werden. Stimmen Sie dem zu?";
 
+$plugin_tx['maps']['error_create']="Die Landkarte „%s“ kann nicht erzeugt werden! Gibt es sie bereits?";
 $plugin_tx['maps']['error_create_image']="Das Kartenbild kann nicht erzeugt werden!";
 $plugin_tx['maps']['error_invalid_width']="Ungültige Kartenbild-Breite!";
 $plugin_tx['maps']['error_not_authorized']="Sie sind nicht befugt diese Aktion durchzuführen!";

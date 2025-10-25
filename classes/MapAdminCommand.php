@@ -117,8 +117,11 @@ class MapAdminCommand
 
     private function doCreate(Request $request): Response
     {
-        $map = Map::create($request->post("name") ?? "", $this->store);
         $dto = $this->dtoFromRequest($request);
+        if (($map = Map::create($request->post("name") ?? "", $this->store)) === null) {
+            $errors = [$this->view->message("fail", "error_create", $dto->name)];
+            return $this->respondWithEditor(true, $dto, $errors);
+        }
         if (!$this->csrfProtector->check($request->post("maps_token"))) {
             $this->store->rollback();
             $errors = [$this->view->message("fail", "error_not_authorized")];
