@@ -111,7 +111,7 @@ class MapAdminCommand
         if ($request->post("maps_do") !== null) {
             return $this->doCreate($request);
         }
-        $dto = new MapDto("", "", 0, 0, 0, 0, "1/1", "");
+        $dto = new MapDto("", "", 0, 0, 0, 0, "1/1", "[]");
         return $this->respondWithEditor(true, $dto);
     }
 
