@@ -50,6 +50,7 @@ GeoJSON features.</p>
 <li><a href="#creating-images">Creating Images</a></li>
 <li><a href="#importing-geojson">Importing GeoJSON</a></li>
 </ul></li>
+<li><a href="#limitations">Limitations</a></li>
 <li><a href="#troubleshooting">Troubleshooting</a></li>
 <li><a href="#license">License</a></li>
 <li><a href="#credits">Credits</a></li>
@@ -164,6 +165,18 @@ GeoJSON feature. If the property does not exists, no replacement is
 done. A placeholders is the name of a property enclosed in curly braces,
 e.g. <code>{name}</code>. Note that you can choose to replace the
 existing markers, what is useful when reimporting updated GeoJSON.</p>
+<h2 id="limitations">Limitations</h2>
+<p>If a <a
+href="https://en.wikipedia.org/wiki/Content_Security_Policy">content
+security policy</a> is in place which prevents loading images from the
+chosen tile provider, the maps will be empty, and a content security
+policy violation will be reported in the browser console. For instance,
+<a
+href="https://olaf.penschke.net/?CMSimple_XH/Plugins/Sec-Header_XH">Sec-Header_XH</a>
+1.1 prevents loading of images from other domains by default. To allow
+images to be loaded from the default tile server, you have to change its
+configuration option <code>Img-src</code> to something like:</p>
+<pre><code>&#39;self&#39; https://tile.openstreetmap.org/ data: blob:</code></pre>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>Report bugs and ask for support either on <a
 href="https://github.com/cmb69/maps_xh/issues">Github</a> or in the <a

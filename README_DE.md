@@ -17,6 +17,7 @@ Info-Text) enthalten, und grundlegender Import von GeoJSON Features ist möglich
   - [Definition von Landkarten](#definition-von-landkarten)
   - [Erzeugen von Kartenbilder](#erzeugen-von-kartenbildern)
   - [Import von GeoJSON](#import-von-geojson)
+- [Einschränkungen](#einschränkungen)
 - [Fehlerbehebung](#fehlerbehebung)
 - [Lizenz](#lizenz)
 - [Danksagung](#danksagung)
@@ -150,6 +151,19 @@ dann findet keine Ersetzung statt. Ein Platzhalter ist der Name einer Eigenschaf
 der in geschweifte Klammern eingeschlossen ist, z.B. `{name}`.
 Es ist zu beachten, dass gewählt werden kann, dass bestehende Markierung ersetzt
 werden, was nützlich ist wenn ein aktualisiertes GeoJSON erneut import wird.
+
+## Einschränkungen
+
+Ist eine [Content Security Policy](https://de.wikipedia.org/wiki/Content_Security_Policy)
+aktiv, die das Laden von Bildern vom gewählten Kachel-Anbieter verhindert,
+sind die Karten leer, und eine Verletzung der Content Security Policy wird in
+der Browserkonsole gemeldet.
+Beispielsweise unterbindet [Sec-Header_XH](https://olaf.penschke.net/?CMSimple_XH/Plugins/Sec-Header_XH) 1.1
+standardmäßig das Laden von Bildern von anderen Domains. Damit Bilder vom
+voreingestellten Kachel-Server geladen werden können, muss dessen Konfigurationsoption
+`Img-src` etwa wie folgt geändert werden:
+
+    'self' https://tile.openstreetmap.org/ data: blob:
 
 ## Fehlerbehebung
 

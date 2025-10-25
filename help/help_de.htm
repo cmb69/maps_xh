@@ -53,6 +53,7 @@ Landkarten</a></li>
 Kartenbilder</a></li>
 <li><a href="#import-von-geojson">Import von GeoJSON</a></li>
 </ul></li>
+<li><a href="#einschränkungen">Einschränkungen</a></li>
 <li><a href="#fehlerbehebung">Fehlerbehebung</a></li>
 <li><a href="#lizenz">Lizenz</a></li>
 <li><a href="#danksagung">Danksagung</a></li>
@@ -179,6 +180,19 @@ Platzhalter ist der Name einer Eigenschaft, der in geschweifte Klammern
 eingeschlossen ist, z.B. <code>{name}</code>. Es ist zu beachten, dass
 gewählt werden kann, dass bestehende Markierung ersetzt werden, was
 nützlich ist wenn ein aktualisiertes GeoJSON erneut import wird.</p>
+<h2 id="einschränkungen">Einschränkungen</h2>
+<p>Ist eine <a
+href="https://de.wikipedia.org/wiki/Content_Security_Policy">Content
+Security Policy</a> aktiv, die das Laden von Bildern vom gewählten
+Kachel-Anbieter verhindert, sind die Karten leer, und eine Verletzung
+der Content Security Policy wird in der Browserkonsole gemeldet.
+Beispielsweise unterbindet <a
+href="https://olaf.penschke.net/?CMSimple_XH/Plugins/Sec-Header_XH">Sec-Header_XH</a>
+1.1 standardmäßig das Laden von Bildern von anderen Domains. Damit
+Bilder vom voreingestellten Kachel-Server geladen werden können, muss
+dessen Konfigurationsoption <code>Img-src</code> etwa wie folgt geändert
+werden:</p>
+<pre><code>&#39;self&#39; https://tile.openstreetmap.org/ data: blob:</code></pre>
 <h2 id="fehlerbehebung">Fehlerbehebung</h2>
 <p>Melden Sie Programmfehler und stellen Sie Supportanfragen entweder
 auf <a href="https://github.com/cmb69/maps_xh/issues">Github</a> oder im

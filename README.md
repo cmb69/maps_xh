@@ -17,6 +17,7 @@ and there is basic support for importing GeoJSON features.
   - [Defining Maps](#defining-maps)
   - [Creating Images](#creating-images)
   - [Importing GeoJSON](#importing-geojson)
+- [Limitations](#limitations)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
 - [Credits](#credits)
@@ -141,6 +142,19 @@ replacement is done.  A placeholders is the name of a property enclosed
 in curly braces, e.g. `{name}`.
 Note that you can choose to replace the existing markers, what is useful when
 reimporting updated GeoJSON.
+
+## Limitations
+
+If a [content security policy](https://en.wikipedia.org/wiki/Content_Security_Policy)
+is in place which prevents loading images from the chosen tile provider, the maps
+will be empty, and a content security policy violation will be reported in the
+browser console.
+For instance, [Sec-Header_XH](https://olaf.penschke.net/?CMSimple_XH/Plugins/Sec-Header_XH) 1.1
+prevents loading of images from other domains by default.  To allow
+images to be loaded from the default tile server, you have to change its
+configuration option `Img-src` to something like:
+
+    'self' https://tile.openstreetmap.org/ data: blob:
 
 ## Troubleshooting
 
