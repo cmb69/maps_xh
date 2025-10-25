@@ -57,6 +57,8 @@ class InfoCommand
                 $this->checkWritability($this->pluginFolder . "config/"),
                 $this->checkWritability($this->pluginFolder . "css/"),
                 $this->checkWritability($this->pluginFolder . "languages/"),
+                $this->checkWritability($this->pluginFolder . "static/"),
+                $this->checkWritability($this->pluginFolder . "static/cache/"),
                 $this->checkWritability($this->store->folder()),
             ]
         ]))->withTitle("Maps " . $this->view->esc(Dic::VERSION));

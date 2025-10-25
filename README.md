@@ -43,8 +43,8 @@ The installation is done as with many other CMSimple_XH plugins.
 1.  Unzip the distribution on your computer.
 1.  Upload the whole folder `maps/` to your server into
     the `plugins/` folder of CMSimple_XH.
-1.  Set write permissions to the subfolders `config/`, `css/`, and
-    `languages/`.
+1.  Set write permissions to the subfolders `config/`, `css/`,
+    `languages/`, `static/` and `static/cache/`.
 1.  Check under `Plugins` → `Maps` in the back-end of the website,
     if all requirements are fulfilled.
 

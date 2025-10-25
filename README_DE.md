@@ -43,8 +43,8 @@ Die Installation erfolgt wie bei vielen anderen CMSimple_XH-Plugins auch.
 1. Entpacken Sie die ZIP-Datei auf Ihrem Rechner.
 1. Laden Sie das ganzen Ordner `maps/` auf Ihren Server in das
    `plugins/` Verzeichnis von CMSimple_XH  hoch.
-1. Machen Sie die Unterordner `config/`, `css/` und `languages/`
-   beschreibbar.
+1. Machen Sie die Unterordner `config/`, `css/`, `languages/`, `static/` und
+   `static/cache/` beschreibbar.
 1. Prüfen Sie unter `Plugins` → `Maps` im Administrationsbereich,
    ob alle Voraussetzungen erfüllt sind.
 

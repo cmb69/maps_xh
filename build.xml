@@ -115,7 +115,6 @@
         <exclude name=".phive/**"/>
         <exclude name="help/template.htm"/>
         <exclude name="js/*.d.ts"/>
-        <exclude name="static/cache/.gitignore"/>
         <exclude name="tests/**"/>
         <exclude name=".jshintrc"/>
         <exclude name="README*.md"/>
