@@ -61,6 +61,14 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
         <input type="number" name="max_zoom" value="<?=$this->esc($map->maxZoom)?>" min="0" max="20">
       </label>
     </p>
+    <script type="text/x-template">
+      <p>
+        <label>
+          <span><?=$this->text("label_geo_uri")?></span>
+          <input name="geo_uri" value="" pattern="geo:[\d.]+,[\d.]+\?z=\d+">
+        </label>
+      </p>
+    </script>
     <p>
       <label>
         <span><?=$this->text("label_aspect_ratio")?></span>

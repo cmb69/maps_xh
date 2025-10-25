@@ -43,6 +43,14 @@
         <input type="number" name="max_zoom" value="0" min="0" max="20">
       </label>
     </p>
+    <script type="text/x-template">
+      <p>
+        <label>
+          <span>Geo URI</span>
+          <input name="geo_uri" value="" pattern="geo:[\d.]+,[\d.]+\?z=\d+">
+        </label>
+      </p>
+    </script>
     <p>
       <label>
         <span>Aspect Ratio</span>
@@ -53,7 +61,7 @@
     <p>
       <label>
         <span>Markers</span>
-        <textarea name="markers"></textarea>
+        <textarea name="markers">[]</textarea>
       </label>
     </p>
     <script type="text/x-template">

@@ -98,8 +98,11 @@ notes are in order:
   If you want to change the name, you need to rename the respective file via FTP.
 
 * The coordinates (latitude/longitude) determine the center of the map, and
-  are given as decimal numbers (not degrees and minutes).  Search the Web to
-  find the coordinates for the desired location.
+  are given as decimal numbers (not degrees and minutes).
+  You can use the [OpenStreeMap website](https://www.openstreetmap.org/)
+  to find the desired location, adjust the map according to your liking,
+  then copy the Geo URI from the Share tab, and paste it into the Geo URI
+  form field to set the coordinates and the zoom level.
 
 * Zoom level 0 means the whole world, level 20 is roughly a building.
   [Definition of the zoom levels](https://wiki.openstreetmap.org/wiki/Zoom_levels).

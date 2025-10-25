@@ -10,6 +10,7 @@ $plugin_tx['maps']['label_aspect_ratio']="Aspect Ratio";
 $plugin_tx['maps']['label_create_image']="Create image";
 $plugin_tx['maps']['label_delete_marker']="Delete this marker";
 $plugin_tx['maps']['label_edit']="Edit";
+$plugin_tx['maps']['label_geo_uri']="Geo URI";
 $plugin_tx['maps']['label_geojson']="GeoJSON";
 $plugin_tx['maps']['label_import']="Import";
 $plugin_tx['maps']['label_info']="Info";

@@ -43,6 +43,26 @@
             return this.element.querySelector("textarea[name=markers]");
         },
 
+        /** @type {HTMLInputElement} */
+        get latitude() {
+            return this.element.querySelector("input[name=latitude");
+        },
+
+        /** @type {HTMLInputElement} */
+        get longitude() {
+            return this.element.querySelector("input[name=longitude");
+        },
+
+        /** @type {HTMLInputElement} */
+        get zoom() {
+            return this.element.querySelector("input[name=zoom");
+        },
+
+        /** @type {HTMLInputElement} */
+        get geoUri() {
+            return this.element.querySelector("input[name=geo_uri");
+        },
+
         /** @type {HTMLTableSectionElement} */
         get tbody() {
             return this.element.querySelector("tbody");
@@ -63,8 +83,10 @@
             scripts.forEach(function (script) {
                 script.outerHTML = script.text;
             });
+            this.buildGeoUri();
             this.hydrateMarkerRows();
             this.element.addEventListener("click", this);
+            this.element.addEventListener("change", this);
             this.element.addEventListener("submit", this);
         },
 
@@ -73,6 +95,8 @@
             switch (event.type) {
                 case "click":
                     return this.handleClickEvent(event);
+                case "change":
+                    return this.handleChangeEvent(event);
                 case "submit":
                     return this.dehydrateMarkerRows();
             }
@@ -89,6 +113,40 @@
                 case "maps_delete_row":
                     return this.deleteMarkerRow(button.closest("tr"));
             }
+        },
+
+        /** @type {(event: Event) => void} */
+        handleChangeEvent: function (event) {
+            var target = /** @type {Element} */ (event.target);
+            var input = target.closest("input");
+            if (!input) return;
+            switch (input.name) {
+                case "latitude":
+                case "longitude":
+                case "zoom":
+                    return this.buildGeoUri();
+                case "geo_uri":
+                    return this.parseGeoUri();
+            }
+        },
+
+        buildGeoUri: function () {
+            var latitude = this.latitude.value;
+            var longitude = this.longitude.value;
+            var zoom = this.zoom.value;
+            this.geoUri.value = "geo:" + latitude + "," + longitude + "?z=" + zoom;
+        },
+
+        parseGeoUri: function () {
+            var geoUri = this.geoUri.value;
+            var matches = geoUri.match(/^geo:([\d.]+),([\d.]+)\?z=(\d+)$/);
+            if (!matches) return;
+            var latitude = matches[1];
+            var longitude = matches[2];
+            var zoom = matches[3];
+            this.latitude.value = latitude;
+            this.longitude.value = longitude;
+            this.zoom.value = zoom;
         },
 
         /** @type {() => void} */
@@ -113,6 +171,7 @@
             var rows = array(this.tbody.querySelectorAll("tr"));
             var markers = rows.map(this.dehydrateMarkerRow.bind(this));
             this.textarea.value = JSON.stringify(markers);
+            this.geoUri.name = "";
             var controls = /** @type {NodeListOf<HTMLInputElement|HTMLTextAreaElement>} */ (
                 this.tbody.querySelectorAll("[name]")
             );

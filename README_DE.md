@@ -103,8 +103,10 @@ Hinweise scheinen angebracht:
 
 * Die Koordinaten (Breiten-/Längengrad) bestimmen den Mittelpunkt der Landkarte,
   und werden als Dezimalzahlen (nicht Grad und Bogenminuten) angegeben.
-  Eine Websuche kann nützlich sein, um die Koordinaten für den gewünschten Ort
-  zu finden.
+  Es ist möglich die [OpenStreeMap Website](https://www.openstreetmap.org/) zu
+  nutzen, um den gewünschten Ort zu finden, die Karte wunschgemäß anzupassen,
+  dann die Geo-URI aus dem Teilen-Tab zu kopieren, und sie in das Geo-URI
+  Formularfeld einzufügen, um die Koordinaten und die Zoom-Stufe zu setzen.
 
 * Zoom-Stufe 0 bedeutet die ganze Welt; Stufe 20 ist ungefähr ein Gebäude.
   [Definition der Zoom-Stufen](https://wiki.openstreetmap.org/wiki/Zoom_levels).

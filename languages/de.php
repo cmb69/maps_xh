@@ -10,6 +10,7 @@ $plugin_tx['maps']['label_aspect_ratio']="Seitenverhältnis";
 $plugin_tx['maps']['label_create_image']="Kartenbild erzeugen";
 $plugin_tx['maps']['label_delete_marker']="Diese Markierung löschen";
 $plugin_tx['maps']['label_edit']="Bearbeiten";
+$plugin_tx['maps']['label_geo_uri']="Geo-URI";
 $plugin_tx['maps']['label_geojson']="GeoJSON";
 $plugin_tx['maps']['label_import']="Importieren";
 $plugin_tx['maps']['label_info']="Info";
